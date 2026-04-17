@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { cleanupExpiredAuditLogs } from '@/lib/audit';
-import type { AuditLog } from '@prisma/client';
+import type { AuditLog } from '@/generated/prisma';
 
 export async function GET(request: NextRequest) {
   try {

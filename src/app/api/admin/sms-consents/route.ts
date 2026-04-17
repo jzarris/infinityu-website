@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import type { SmsConsent } from '@prisma/client';
+import type { SmsConsent } from '@/generated/prisma';
 
 export async function GET(request: NextRequest) {
   try {
