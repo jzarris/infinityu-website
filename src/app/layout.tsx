@@ -14,6 +14,7 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import { DEFAULT_THEME } from '@/lib/themes';
 import { DEFAULT_HEADLINE } from '@/lib/headlines';
+import { FaviconProvider } from '@/components/providers/FaviconProvider';
 import './globals.css';
 
 const playfair = Playfair_Display({
@@ -99,6 +100,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <ThemeProvider />
+        <FaviconProvider />
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />

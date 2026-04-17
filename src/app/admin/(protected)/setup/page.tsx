@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Settings, Eye, EyeOff, Save, Trash2, RefreshCw, CheckCircle, AlertCircle, ExternalLink, Plus, X } from 'lucide-react';
+import { Settings, Eye, EyeOff, Save, Trash2, RefreshCw, CheckCircle, AlertCircle, ExternalLink, Plus, X, Upload, Image as ImageIcon } from 'lucide-react';
+import Image from 'next/image';
 
 interface SettingStatus {
   configured: boolean;
@@ -216,6 +217,117 @@ function InstagramUrlsCard({ urls, onSave }: { urls: string; onSave: (value: str
   );
 }
 
+interface BrandingData {
+  logo: string | null;
+  favicon: string | null;
+}
+
+function BrandingSection() {
+  const [branding, setBranding] = useState<BrandingData>({ logo: null, favicon: null });
+  const [uploading, setUploading] = useState<'logo' | 'favicon' | null>(null);
+
+  const fetchBranding = useCallback(async () => {
+    try {
+      const res = await fetch('/api/admin/branding');
+      if (res.ok) setBranding(await res.json());
+    } catch (err) { console.error('Failed to fetch branding:', err); }
+  }, []);
+
+  useEffect(() => { fetchBranding(); }, [fetchBranding]);
+
+  const handleUpload = async (type: 'logo' | 'favicon', file: File) => {
+    setUploading(type);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('type', type);
+      const res = await fetch('/api/admin/branding', { method: 'POST', body: formData });
+      if (!res.ok) {
+        const data = await res.json();
+        alert(data.error || 'Upload failed');
+      }
+      await fetchBranding();
+    } catch { alert('Upload failed'); }
+    setUploading(null);
+  };
+
+  const handleRemove = async (type: 'logo' | 'favicon') => {
+    if (!confirm(`Remove the ${type}?`)) return;
+    setUploading(type);
+    try {
+      await fetch('/api/admin/branding', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type }) });
+      await fetchBranding();
+    } catch { alert('Failed to remove'); }
+    setUploading(null);
+  };
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Logo */}
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-semibold text-gray-900">Logo</h3>
+          {branding.logo && (
+            <button onClick={() => handleRemove('logo')} className="text-red-400 hover:text-red-600" title="Remove logo">
+              <Trash2 className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+        <div className="border border-gray-200 rounded-lg p-4 mb-4 flex items-center justify-center bg-gray-50 min-h-[120px]">
+          {branding.logo ? (
+            <Image src={branding.logo} alt="Logo" width={300} height={100} className="max-h-[100px] w-auto object-contain" unoptimized />
+          ) : (
+            <div className="text-gray-300 flex flex-col items-center gap-2">
+              <ImageIcon className="h-10 w-10" />
+              <span className="text-xs">No logo uploaded</span>
+            </div>
+          )}
+        </div>
+        <label className="block">
+          <span className="flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-[#2E2865] text-white font-medium rounded-lg hover:bg-[#231f50] cursor-pointer transition-colors">
+            {uploading === 'logo' ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+            Upload Logo
+          </span>
+          <input type="file" className="hidden" accept="image/png,image/jpeg,image/svg+xml,image/webp"
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) handleUpload('logo', f); e.target.value = ''; }} />
+        </label>
+        <p className="text-xs text-gray-400 mt-2">PNG, JPG, SVG, or WebP. Max 5MB.</p>
+      </div>
+
+      {/* Favicon */}
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-semibold text-gray-900">Favicon</h3>
+          {branding.favicon && (
+            <button onClick={() => handleRemove('favicon')} className="text-red-400 hover:text-red-600" title="Remove favicon">
+              <Trash2 className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+        <div className="border border-gray-200 rounded-lg p-4 mb-4 flex items-center justify-center bg-gray-50 min-h-[120px]">
+          {branding.favicon ? (
+            <Image src={branding.favicon} alt="Favicon" width={64} height={64} className="h-16 w-16 object-contain" unoptimized />
+          ) : (
+            <div className="text-gray-300 flex flex-col items-center gap-2">
+              <ImageIcon className="h-10 w-10" />
+              <span className="text-xs">No favicon uploaded</span>
+            </div>
+          )}
+        </div>
+        <label className="block">
+          <span className="flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-[#2E2865] text-white font-medium rounded-lg hover:bg-[#231f50] cursor-pointer transition-colors">
+            {uploading === 'favicon' ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+            Upload Favicon
+          </span>
+          <input type="file" className="hidden" accept="image/png,image/x-icon,image/vnd.microsoft.icon,image/svg+xml"
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) handleUpload('favicon', f); e.target.value = ''; }} />
+        </label>
+        <p className="text-xs text-gray-400 mt-2">PNG, ICO, or SVG. Max 1MB.</p>
+      </div>
+    </div>
+  );
+}
+
 export default function AdminSetupPage() {
   const [settings, setSettings] = useState<Record<string, SettingStatus | null>>({});
   const [loading, setLoading] = useState(true);
@@ -259,6 +371,12 @@ export default function AdminSetupPage() {
       </div>
 
       <div className="space-y-8">
+        <section>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">🎨 Branding</h2>
+          <p className="text-sm text-gray-500 mb-4">Upload a custom logo and favicon for your site. The logo will appear in the header next to your site name.</p>
+          <BrandingSection />
+        </section>
+
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-4">🔑 API Keys</h2>
           <div className="space-y-4">

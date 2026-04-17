@@ -39,8 +39,9 @@ COPY --from=builder /app/prisma ./prisma
 # Generated Prisma client (standalone may not trace custom output path)
 COPY --from=builder --chown=nextjs:nodejs /app/src/generated/prisma ./src/generated/prisma
 
-# Writable directory for file-based settings
+# Writable directories for file-based settings and branding uploads
 RUN mkdir -p /app/data/config && chown -R nextjs:nodejs /app/data
+RUN mkdir -p /app/public/branding && chown -R nextjs:nodejs /app/public/branding
 
 USER nextjs
 

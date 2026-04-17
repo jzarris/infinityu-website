@@ -7,7 +7,8 @@ export type AuditAction =
   | 'login_success' | 'login_failed' | 'logout' | 'unauthorized_access'
   | 'password_change' | 'password_set' | 'totp_enabled' | 'totp_disabled'
   | 'setting_updated' | 'setting_removed'
-  | 'trusted_browser_added' | 'trusted_browser_revoked';
+  | 'trusted_browser_added' | 'trusted_browser_revoked'
+  | 'user_created' | 'user_updated' | 'user_deleted';
 
 export interface AuditLogEntry {
   action: AuditAction;
