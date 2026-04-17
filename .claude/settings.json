@@ -13,7 +13,18 @@
       "WebFetch(domain:radiancemedspaatlanta.com)",
       "Bash(sips -g pixelWidth -g pixelHeight /Users/jackzarris/GitHub/infinityu-website/public/images/tilepuzzle.png)",
       "Bash(npx tsc:*)",
-      "Bash(npx prisma:*)"
+      "Bash(npx prisma:*)",
+      "Bash(railway run:*)",
+      "Bash(railway variables:*)",
+      "Bash(railway service:*)",
+      "Bash(railway status:*)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d.get\\(''''DATABASE_URL'''',''''not found''''\\)\\)\")",
+      "Bash(DATABASE_URL=\"postgresql://postgres:AGTxiZVoNTGxEDiciIQWfyInJnNSkwoU@postgres-production-7846e.up.railway.app:5432/railway\" npx prisma db push)",
+      "Bash(nc -z -w 5 postgres-production-7846e.up.railway.app 5432)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:AGTxiZVoNTGxEDiciIQWfyInJnNSkwoU@nozomi.proxy.rlwy.net:19125/railway\" npx prisma db push)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:AGTxiZVoNTGxEDiciIQWfyInJnNSkwoU@nozomi.proxy.rlwy.net:19125/railway\" npx tsx prisma/seed.ts)",
+      "Bash(find /Users/jackzarris/GitHub/meltawaymd/src/app/admin -type f -name *.tsx -o -name *.ts)",
+      "Bash(git add:*)"
     ],
     "additionalDirectories": [
       "/Users/jackzarris/GitHub/infinityu-website/.next",
