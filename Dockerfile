@@ -36,6 +36,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Prisma schema needed at runtime for migrations/queries
 COPY --from=builder /app/prisma ./prisma
 
+# Generated Prisma client (standalone may not trace custom output path)
+COPY --from=builder --chown=nextjs:nodejs /app/src/generated/prisma ./src/generated/prisma
+
 # Writable directory for file-based settings
 RUN mkdir -p /app/data/config && chown -R nextjs:nodejs /app/data
 
