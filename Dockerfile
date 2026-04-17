@@ -16,6 +16,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
+RUN npx prisma generate
 RUN npm run build
 
 # Stage 3: Production Runner
@@ -31,6 +32,12 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Prisma schema needed at runtime for migrations/queries
+COPY --from=builder /app/prisma ./prisma
+
+# Writable directory for file-based settings
+RUN mkdir -p /app/data/config && chown -R nextjs:nodejs /app/data
 
 USER nextjs
 

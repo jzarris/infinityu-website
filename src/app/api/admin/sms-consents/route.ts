@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import type { SmsConsent } from '@prisma/client';
 
 export async function GET(request: NextRequest) {
   try {
@@ -38,7 +39,7 @@ export async function GET(request: NextRequest) {
         return str.includes(',') || str.includes('"') || str.includes('\n') ? `"${str.replace(/"/g, '""')}"` : str;
       };
       const headers = ['ID','Timestamp','First Name','Last Name','Email','Phone','Consent Type','Consented','Source','IP Address','Consent Text'];
-      const rows = allConsents.map(c => [escapeCSV(c.id), escapeCSV(c.createdAt.toISOString()), escapeCSV(c.firstName), escapeCSV(c.lastName), escapeCSV(c.email), escapeCSV(c.phone), escapeCSV(c.consentType), c.consented ? 'Yes' : 'No', escapeCSV(c.source), escapeCSV(c.ipAddress), escapeCSV(c.consentText)]);
+      const rows = allConsents.map((c: SmsConsent) => [escapeCSV(c.id), escapeCSV(c.createdAt.toISOString()), escapeCSV(c.firstName), escapeCSV(c.lastName), escapeCSV(c.email), escapeCSV(c.phone), escapeCSV(c.consentType), c.consented ? 'Yes' : 'No', escapeCSV(c.source), escapeCSV(c.ipAddress), escapeCSV(c.consentText)]);
       const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
       return new Response(csv, { headers: { 'Content-Type': 'text/csv', 'Content-Disposition': `attachment; filename="sms-consents-${new Date().toISOString().split('T')[0]}.csv"` } });
     }

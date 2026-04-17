@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { cleanupExpiredAuditLogs } from '@/lib/audit';
+import type { AuditLog } from '@prisma/client';
 
 export async function GET(request: NextRequest) {
   try {
@@ -40,7 +41,7 @@ export async function GET(request: NextRequest) {
         return str.includes(',') || str.includes('"') || str.includes('\n') ? `"${str.replace(/"/g, '""')}"` : str;
       };
       const headers = ['ID','Timestamp','Action','Actor','IP Address','Country','Success','Details'];
-      const rows = allLogs.map(l => [escapeCSV(l.id), escapeCSV(l.timestamp.toISOString()), escapeCSV(l.action), escapeCSV(l.actor), escapeCSV(l.ipAddress), escapeCSV(l.country), l.success ? 'Yes' : 'No', escapeCSV(l.details)]);
+      const rows = allLogs.map((l: AuditLog) => [escapeCSV(l.id), escapeCSV(l.timestamp.toISOString()), escapeCSV(l.action), escapeCSV(l.actor), escapeCSV(l.ipAddress), escapeCSV(l.country), l.success ? 'Yes' : 'No', escapeCSV(l.details)]);
       const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
       return new Response(csv, { headers: { 'Content-Type': 'text/csv', 'Content-Disposition': `attachment; filename="audit-log-${new Date().toISOString().split('T')[0]}.csv"` } });
     }
