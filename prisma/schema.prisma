@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id              String           @id @default(cuid())
+  name            String?
+  email           String?          @unique
+  emailVerified   DateTime?
+  image           String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  role            String           @default("user")
+  password        String?
+  totpSecret      String?
+  totpEnabled     Boolean          @default(false)
+  isActive        Boolean          @default(true)
+  accounts        Account[]
+  sessions        Session[]
+  trustedBrowsers TrustedBrowser[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  timestamp DateTime @default(now())
+  action    String
+  actor     String?
+  actorId   String?
+  actorRole String?
+  target    String?
+  targetId  String?
+  ipAddress String?
+  country   String?
+  userAgent String?
+  details   String?
+  success   Boolean  @default(true)
+  expiresAt DateTime
+
+  @@index([timestamp])
+  @@index([action])
+  @@index([actor])
+  @@index([expiresAt])
+}
+
+model SmsConsent {
+  id          String   @id @default(cuid())
+  email       String
+  phone       String?
+  firstName   String?
+  lastName    String?
+  consentType String
+  consented   Boolean
+  ipAddress   String?
+  userAgent   String?
+  source      String
+  consentText String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([email])
+  @@index([createdAt])
+}
+
+model TrustedBrowser {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  userAgent String?
+  ipAddress String?
+  lastUsed  DateTime @default(now())
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+  @@index([expiresAt])
+}

@@ -1,0 +1,285 @@
+@import "tailwindcss";
+
+/* ========================================
+   InfinityU - Multi-Theme Design System
+   Switch themes by adding a class to <html>:
+   - .theme-spa        → Spa Minimalism (default)
+   - .theme-editorial  → Editorial Luxury
+   - .theme-clinical   → Clean Clinical
+   - .theme-organic    → Organic Wellness
+   - .theme-gradient   → Bold Gradient
+   ======================================== */
+
+:root,
+.theme-spa {
+  /* Spa Minimalism — deep forest + gold, warm white */
+  --color-primary: #2D4A3E;
+  --color-primary-light: #3E6253;
+  --color-primary-dark: #1F332A;
+  --color-secondary: #C5D3BF;
+  --color-secondary-light: #D8E2D3;
+  --color-secondary-dark: #A3B69C;
+  --color-accent: #B8A270;
+  --color-accent-light: #CAB88C;
+  --color-accent-dark: #9C8654;
+  --color-background: #FAF8F4;
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #F0EDE5;
+  --color-border: #E4DFD3;
+  --color-text: #2D4A3E;
+  --color-text-muted: #6B7368;
+  --color-text-light: #9CA298;
+  --font-heading: var(--font-cormorant), Georgia, serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+  --hero-gradient: linear-gradient(135deg, #2D4A3E 0%, #1F332A 100%);
+  --accent-gradient: linear-gradient(135deg, #B8A270 0%, #CAB88C 100%);
+}
+
+.theme-editorial {
+  /* Editorial Luxury — deep indigo on cream with emerald */
+  --color-primary: #1E1B3A;
+  --color-primary-light: #312D55;
+  --color-primary-dark: #120F26;
+  --color-secondary: #A8B89A;
+  --color-secondary-light: #C0CDB5;
+  --color-secondary-dark: #8D9D7F;
+  --color-accent: #5B7C3F;
+  --color-accent-light: #759957;
+  --color-accent-dark: #466130;
+  --color-background: #F5F0E8;
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #EDE6DA;
+  --color-border: #DDD3C0;
+  --color-text: #1E1B3A;
+  --color-text-muted: #6B6458;
+  --color-text-light: #9C8E78;
+  --font-heading: var(--font-playfair), Georgia, serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+  --hero-gradient: linear-gradient(135deg, #1E1B3A 0%, #312D55 100%);
+  --accent-gradient: linear-gradient(135deg, #5B7C3F 0%, #759957 100%);
+}
+
+.theme-clinical {
+  /* Clean Clinical — ink navy + sage on white */
+  --color-primary: #1A1F3A;
+  --color-primary-light: #2D3558;
+  --color-primary-dark: #0F1226;
+  --color-secondary: #C4D1B8;
+  --color-secondary-light: #D6DFC9;
+  --color-secondary-dark: #A5B599;
+  --color-accent: #8FA876;
+  --color-accent-light: #A8BD91;
+  --color-accent-dark: #70895A;
+  --color-background: #FFFFFF;
+  --color-surface: #F8F7F4;
+  --color-surface-alt: #EFEDE8;
+  --color-border: #E5E3DE;
+  --color-text: #1A1F3A;
+  --color-text-muted: #6B6B7B;
+  --color-text-light: #9A9AAA;
+  --font-heading: var(--font-manrope), system-ui, sans-serif;
+  --font-body: var(--font-manrope), system-ui, sans-serif;
+  --hero-gradient: linear-gradient(135deg, #1A1F3A 0%, #2D3558 100%);
+  --accent-gradient: linear-gradient(135deg, #8FA876 0%, #A8BD91 100%);
+}
+
+.theme-organic {
+  /* Organic Wellness — deep plum + sage on warm cream */
+  --color-primary: #3B2E5A;
+  --color-primary-light: #4F3E74;
+  --color-primary-dark: #2A2040;
+  --color-secondary: #D4A59A;
+  --color-secondary-light: #E2BDB4;
+  --color-secondary-dark: #B88A7F;
+  --color-accent: #9BAE84;
+  --color-accent-light: #BDCAB0;
+  --color-accent-dark: #7D906A;
+  --color-background: #F4EFE6;
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #EAE2D5;
+  --color-border: #D9CEBA;
+  --color-text: #3B2E5A;
+  --color-text-muted: #6B5E7A;
+  --color-text-light: #9C8EAA;
+  --font-heading: var(--font-dm-serif), Georgia, serif;
+  --font-body: var(--font-dm-sans), system-ui, sans-serif;
+  --hero-gradient: linear-gradient(135deg, #6B5E8A 0%, #7F6EA4 100%);
+  --accent-gradient: linear-gradient(135deg, #9BAE84 0%, #BDCAB0 100%);
+}
+
+.theme-gradient {
+  /* Bold Gradient — logo colors directly, white canvas */
+  --color-primary: #0A0A0A;
+  --color-primary-light: #2A2A2A;
+  --color-primary-dark: #000000;
+  --color-secondary: #2E2865;
+  --color-secondary-light: #403B7A;
+  --color-secondary-dark: #201B4B;
+  --color-accent: #84B341;
+  --color-accent-light: #9CC15D;
+  --color-accent-dark: #6B9432;
+  --color-background: #FFFFFF;
+  --color-surface: #FAFAFA;
+  --color-surface-alt: #F0F0F0;
+  --color-border: #E5E5E5;
+  --color-text: #0A0A0A;
+  --color-text-muted: #5A5A5A;
+  --color-text-light: #9A9A9A;
+  --font-heading: var(--font-inter), system-ui, sans-serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+  --hero-gradient: linear-gradient(135deg, #2E2865 0%, #84B341 100%);
+  --accent-gradient: linear-gradient(135deg, #84B341 0%, #2E2865 100%);
+}
+
+/* Shared variables across all themes */
+:root {
+  --color-success: #22c55e;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+
+  --container-max: 1280px;
+  --section-padding-y: 5rem;
+  --section-padding-x: 1.5rem;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
+}
+
+/* Tailwind theme integration */
+@theme inline {
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-text);
+  --color-primary: var(--color-primary);
+  --color-primary-light: var(--color-primary-light);
+  --color-primary-dark: var(--color-primary-dark);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-light: var(--color-secondary-light);
+  --color-accent: var(--color-accent);
+  --color-accent-light: var(--color-accent-light);
+  --color-accent-dark: var(--color-accent-dark);
+  --color-surface: var(--color-surface);
+  --color-surface-alt: var(--color-surface-alt);
+  --color-border: var(--color-border);
+  --color-text-muted: var(--color-text-muted);
+  --color-text-light: var(--color-text-light);
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
+}
+
+/* ========================================
+   Base Styles
+   ======================================== */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-background);
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-primary);
+  }
+}
+
+/* Gradient theme uses heavier weight for impact */
+.theme-gradient h1,
+.theme-gradient h2 {
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+/* Editorial theme uses italic lowercase display */
+.theme-editorial h1,
+.theme-editorial h2 {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* ========================================
+   Utility Classes
+   ======================================== */
+
+.container-custom {
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--section-padding-x);
+  padding-right: var(--section-padding-x);
+}
+
+.section-padding {
+  padding-top: var(--section-padding-y);
+  padding-bottom: var(--section-padding-y);
+}
+
+.gradient-primary {
+  background: var(--hero-gradient);
+}
+
+.gradient-accent {
+  background: var(--accent-gradient);
+}
+
+.text-gradient {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+input, textarea, select {
+  font-family: var(--font-body);
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.5s ease-out forwards;
+}

@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sips -s format png public/images/logo.webp --out public/images/logo.png)",
+      "Bash(sips -g pixelWidth -g pixelHeight public/images/logo.png)",
+      "Bash(sips -c 1061 1061 public/images/logo.png --out public/images/logo-square.png)",
+      "Bash(sips -z 512 512 public/images/logo-square.png --out src/app/icon.png)",
+      "Bash(sips -z 180 180 public/images/logo-square.png --out src/app/apple-icon.png)",
+      "WebFetch(domain:www.joinmoxie.com)",
+      "WebFetch(domain:hifinch.com)",
+      "WebFetch(domain:www.citrusaesthetics.com)",
+      "WebFetch(domain:www.opulencechicago.com)",
+      "WebFetch(domain:radiancemedspaatlanta.com)",
+      "Bash(sips -g pixelWidth -g pixelHeight /Users/jackzarris/GitHub/infinityu-website/public/images/tilepuzzle.png)",
+      "Bash(npx tsc:*)",
+      "Bash(npx prisma:*)"
+    ],
+    "additionalDirectories": [
+      "/Users/jackzarris/GitHub/infinityu-website/.next",
+      "/Users/jackzarris/GitHub/infinityu-website/src/app/api/auth"
+    ]
+  }
+}
