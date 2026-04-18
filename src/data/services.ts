@@ -11,6 +11,7 @@ export interface Treatment {
   duration: string;
   downtime: string;
   targetAreas?: string[];
+  videoUrl?: string;
   faqs: { question: string; answer: string }[];
 }
 
@@ -345,6 +346,7 @@ export const treatments: Treatment[] = [
     ],
     duration: '30-45 minutes',
     downtime: 'Minimal - possible swelling for 1-2 days',
+    videoUrl: '/videos/sculptra-reel.mp4',
     faqs: [
       { question: 'How is Sculptra different from fillers?', answer: 'Unlike hyaluronic acid fillers that provide immediate volume, Sculptra works gradually by stimulating your body\'s own collagen production for longer-lasting, more natural results.' },
       { question: 'How many sessions are needed?', answer: 'Most patients require 2-3 sessions spaced about 4-6 weeks apart for optimal results.' },

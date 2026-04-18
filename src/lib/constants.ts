@@ -41,6 +41,6 @@ export const NAV_LINKS = [
   },
   { label: 'Weight Loss', href: '/weight-loss' },
   { label: 'Our Doctors', href: '/doctors' },
-  { label: 'Gallery', href: '/gallery' },
+  // { label: 'Gallery', href: '/gallery' },
   { label: 'Contact', href: '/contact' },
 ] as const;

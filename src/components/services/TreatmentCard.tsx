@@ -86,6 +86,21 @@ export function TreatmentCard({ treatment }: TreatmentCardProps) {
             </div>
           </div>
 
+          {treatment.videoUrl && (
+            <div>
+              <h4 className="font-semibold text-sm mb-3">See It in Action</h4>
+              <div className="max-w-sm mx-auto">
+                <video
+                  src={treatment.videoUrl}
+                  controls
+                  playsInline
+                  preload="metadata"
+                  className="w-full rounded-lg"
+                />
+              </div>
+            </div>
+          )}
+
           {treatment.faqs.length > 0 && (
             <div>
               <h4 className="font-semibold text-sm mb-2">Frequently Asked Questions</h4>
