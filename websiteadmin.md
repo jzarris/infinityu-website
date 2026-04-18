@@ -33,7 +33,7 @@ src/
 │   │       ├── audit-log/page.tsx        # Security event log
 │   │       ├── sms-consents/page.tsx     # TCPA-compliant consent records
 │   │       ├── users/page.tsx            # User management (CRUD)
-│   │       └── seo/page.tsx              # SEO management (placeholder)
+│   │       └── seo/page.tsx              # SEO management with AI assist
 │   └── api/
 │       ├── auth/
 │       │   ├── [...nextauth]/route.ts    # NextAuth route handler
@@ -51,6 +51,8 @@ src/
 │           │       └── disable/route.ts  # Disable 2FA
 │           ├── audit-log/route.ts        # Paginated log with CSV export
 │           ├── sms-consents/route.ts     # Paginated consents with CSV export
+│           ├── seo/route.ts              # GET/POST SEO config
+│           ├── seo/ai/route.ts          # AI-powered SEO generation (uses Claude)
 │           ├── branding/route.ts         # Logo & favicon upload/delete (protected)
 │           ├── users/route.ts            # List & create users
 │           ├── users/[userId]/route.ts   # Update & delete users
@@ -70,7 +72,8 @@ src/
     ├── totp.ts                           # TOTP generate/verify (RFC 6238)
     ├── audit.ts                          # Audit logging + IP geolocation
     ├── trustedBrowser.ts                 # 30-day trusted device tokens
-    └── settings.ts                       # File-based settings CRUD
+    ├── settings.ts                       # File-based settings CRUD
+    └── seo-settings.ts                   # SEO config storage + page definitions
 ```
 
 ## Database Schema (Prisma)
@@ -301,7 +304,7 @@ When adding this admin panel to a new website:
 | Audit Log | `/admin/audit-log` | Security event history with filters & CSV export |
 | SMS Consents | `/admin/sms-consents` | TCPA-compliant consent records |
 | Users | `/admin/users` | User management (create, edit, deactivate, delete) |
-| SEO | `/admin/seo` | SEO management (placeholder) |
+| SEO | `/admin/seo` | AI-powered SEO metadata management |
 
 ## Branding (Logo & Favicon)
 
@@ -348,6 +351,74 @@ Admin users can be managed from `/admin/users`.
 - `POST /api/admin/users` — create user (email, name, password, role)
 - `PATCH /api/admin/users/[userId]` — update user fields
 - `DELETE /api/admin/users/[userId]` — delete user (cannot delete self)
+
+## SEO Settings (AI-Powered)
+
+The SEO page (`/admin/seo`) lets admins manage search engine metadata for every page, with Claude AI assistance for generating and improving content.
+
+### Architecture
+
+- **Config file**: `data/config/seo.json` — stores global and per-page SEO overrides
+- **Settings library**: `src/lib/seo-settings.ts` — read/write config, defines available pages
+- **API route**: `GET/POST /api/admin/seo` — CRUD for SEO config
+- **AI route**: `POST /api/admin/seo/ai` — generates/improves SEO using the configured Claude API key
+
+### Features
+
+- **Global settings** — site-wide title, description, and keywords
+- **Per-page settings** — for each page (home, services, injectables, hifu, radio-frequency, body-contouring, weight-loss, doctors, contact):
+  - Page title (with 60-char counter)
+  - Meta description (with 160-char counter)
+  - Keywords (comma-separated)
+  - Open Graph title and description (collapsible)
+  - noIndex toggle
+- **Generate with AI** — creates optimized SEO metadata from scratch, tailored to the business, page content, and local SEO for the business location
+- **Improve with AI** — analyzes existing metadata and suggests improvements with reasoning
+- Green dot indicators show which pages have SEO configured
+- All changes audit-logged
+
+### AI Integration
+
+The AI endpoint (`/api/admin/seo/ai`) uses the Anthropic API key configured in Setup. It sends structured prompts to Claude with:
+- Business name, location, and description (from `BUSINESS` constants)
+- Page label and URL path
+- Current metadata (for improvement requests)
+- Instructions for local SEO optimization, character limits, and JSON output format
+
+Supports two actions:
+- `generate` — creates metadata from scratch
+- `improve` — analyzes current metadata and suggests improvements with reasoning
+
+### Config Format
+
+```json
+{
+  "global": {
+    "siteTitle": "InfinityU Med Spa | Huntington Beach, CA",
+    "siteDescription": "Premier medical spa...",
+    "keywords": ["med spa", "Huntington Beach", ...]
+  },
+  "pages": {
+    "home": {
+      "title": "Page title",
+      "description": "Meta description",
+      "keywords": ["keyword1", "keyword2"],
+      "ogTitle": "Social sharing title",
+      "ogDescription": "Social sharing description",
+      "noIndex": false
+    }
+  },
+  "updated_at": "2026-04-18T..."
+}
+```
+
+### Adding new pages
+
+To add a new page to SEO management, add an entry to the `SEO_PAGES` array in `src/lib/seo-settings.ts`:
+
+```typescript
+{ slug: 'new-page', label: 'New Page', path: '/new-page' }
+```
 
 ## Docker / Railway Deployment
 
