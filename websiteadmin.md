@@ -372,8 +372,17 @@ The SEO page (`/admin/seo`) lets admins manage search engine metadata for every 
   - Keywords (comma-separated)
   - Open Graph title and description (collapsible)
   - noIndex toggle
-- **Generate with AI** — creates optimized SEO metadata from scratch, tailored to the business, page content, and local SEO for the business location
-- **Improve with AI** — analyzes existing metadata and suggests improvements with reasoning
+- **AI actions per page**:
+  - **Generate** — creates optimized SEO metadata from scratch, tailored to the business, page content, and local SEO
+  - **Improve** — analyzes existing metadata and suggests improvements with reasoning
+  - **Score** — rates metadata quality across 5 dimensions (title quality, description quality, keyword relevance, local SEO, CTA effectiveness) on a 1–10 scale with feedback and a top suggestion
+- **Bulk AI actions**:
+  - **Generate All Unconfigured** — generates SEO for all pages missing metadata in a single AI call
+  - **Improve All Configured** — improves all pages that already have metadata in a single AI call
+  - Shows configured/unconfigured page counts
+- **Competitor Analysis** — collapsible panel to analyze competitive positioning:
+  - Enter competitor name and/or website URL
+  - Returns keyword gaps, positioning angles, content opportunities, local SEO tips, and an executive summary
 - Green dot indicators show which pages have SEO configured
 - All changes audit-logged
 
@@ -382,12 +391,16 @@ The SEO page (`/admin/seo`) lets admins manage search engine metadata for every 
 The AI endpoint (`/api/admin/seo/ai`) uses the Anthropic API key configured in Setup. It sends structured prompts to Claude with:
 - Business name, location, and description (from `BUSINESS` constants)
 - Page label and URL path
-- Current metadata (for improvement requests)
+- Current metadata (for improvement/scoring requests)
 - Instructions for local SEO optimization, character limits, and JSON output format
 
-Supports two actions:
-- `generate` — creates metadata from scratch
-- `improve` — analyzes current metadata and suggests improvements with reasoning
+Supports six actions:
+- `generate` — creates metadata for a single page from scratch
+- `improve` — analyzes and improves a single page's metadata (includes reasoning)
+- `score` — rates a single page's metadata across 5 dimensions, returns scores 1–10 with feedback
+- `competitor` — analyzes competitive positioning given a competitor name/URL, returns keyword gaps, positioning angles, content opportunities, and local tips
+- `bulk-generate` — generates metadata for all unconfigured pages in one call, saves automatically
+- `bulk-improve` — improves metadata for all configured pages in one call, saves automatically
 
 ### Config Format
 

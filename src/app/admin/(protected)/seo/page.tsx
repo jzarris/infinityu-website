@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Search, Save, RefreshCw, Sparkles, ChevronDown, Globe, AlertCircle, CheckCircle, ExternalLink } from 'lucide-react';
+import { Search, Save, RefreshCw, Sparkles, ChevronDown, Globe, AlertCircle, CheckCircle, ExternalLink, BarChart3, Crosshair, Zap } from 'lucide-react';
 
 interface PageSeoSettings {
   title?: string;
@@ -28,6 +28,185 @@ interface SeoConfig {
   updated_at: string;
 }
 
+interface ScoreData {
+  overall: number;
+  dimensions: Record<string, { score: number; feedback: string }>;
+  topSuggestion: string;
+}
+
+interface CompetitorAnalysis {
+  keywordGaps: string[];
+  positioningAngles: { angle: string; description: string }[];
+  contentOpportunities: { topic: string; rationale: string }[];
+  localTips: string[];
+  summary: string;
+}
+
+// ── Score Badge ──
+function ScoreBadge({ score }: { score: number }) {
+  const color = score >= 8 ? 'bg-green-100 text-green-800' : score >= 5 ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800';
+  return <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${color}`}>{score}</span>;
+}
+
+// ── Score Card (shown inline per page) ──
+function ScoreCard({ score, onClose }: { score: ScoreData; onClose: () => void }) {
+  const dimLabels: Record<string, string> = {
+    titleQuality: 'Title Quality',
+    descriptionQuality: 'Description Quality',
+    keywordRelevance: 'Keyword Relevance',
+    localSeo: 'Local SEO',
+    ctaEffectiveness: 'CTA Effectiveness',
+  };
+
+  return (
+    <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 space-y-3">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <ScoreBadge score={score.overall} />
+          <span className="font-semibold text-gray-900">SEO Score</span>
+        </div>
+        <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-sm">Dismiss</button>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        {Object.entries(score.dimensions).map(([key, dim]) => (
+          <div key={key} className="flex items-start gap-2">
+            <span className={`text-xs font-bold w-5 text-center mt-0.5 ${dim.score >= 8 ? 'text-green-700' : dim.score >= 5 ? 'text-amber-700' : 'text-red-700'}`}>{dim.score}</span>
+            <div>
+              <span className="text-xs font-medium text-gray-700">{dimLabels[key] || key}</span>
+              <p className="text-xs text-gray-500">{dim.feedback}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      {score.topSuggestion && (
+        <p className="text-xs text-indigo-700 bg-indigo-100 rounded px-2 py-1">
+          Top suggestion: {score.topSuggestion}
+        </p>
+      )}
+    </div>
+  );
+}
+
+// ── Competitor Analysis Panel ──
+function CompetitorPanel({ analysis, onAnalyze }: { analysis: CompetitorAnalysis | null; onAnalyze: (name: string, url: string) => Promise<void> }) {
+  const [expanded, setExpanded] = useState(false);
+  const [name, setName] = useState('');
+  const [url, setUrl] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleAnalyze = async () => {
+    if (!name && !url) return;
+    setLoading(true);
+    setError('');
+    try {
+      await onAnalyze(name, url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Analysis failed');
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <button onClick={() => setExpanded(!expanded)}
+        className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors text-left">
+        <div className="flex items-center gap-2">
+          <Crosshair className="h-5 w-5 text-[#2E2865]" />
+          <h3 className="font-semibold text-gray-900">Competitor Analysis</h3>
+        </div>
+        <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${expanded ? 'rotate-180' : ''}`} />
+      </button>
+
+      {expanded && (
+        <div className="border-t border-gray-200 p-4 space-y-4">
+          <p className="text-sm text-gray-500">Enter a competitor&apos;s name or website to analyze keyword gaps and positioning opportunities.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Competitor Name</label>
+              <input value={name} onChange={(e) => setName(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#2E2865] focus:border-transparent"
+                placeholder="e.g., SoCal Med Spa" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Website URL (optional)</label>
+              <input value={url} onChange={(e) => setUrl(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#2E2865] focus:border-transparent"
+                placeholder="https://competitor.com" />
+            </div>
+          </div>
+          <button onClick={handleAnalyze} disabled={loading || (!name && !url)}
+            className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-medium rounded-lg hover:from-violet-700 hover:to-indigo-700 disabled:opacity-50 flex items-center gap-2 shadow-sm">
+            {loading ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+            Analyze Competitor
+          </button>
+
+          {error && (
+            <div className="p-3 rounded-lg text-sm bg-red-50 text-red-800 flex items-start gap-2">
+              <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+              {error}
+            </div>
+          )}
+
+          {analysis && (
+            <div className="space-y-4 mt-2">
+              <div className="bg-violet-50 border border-violet-200 rounded-lg p-3">
+                <p className="text-sm text-violet-900">{analysis.summary}</p>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-semibold text-gray-900 mb-2">Keyword Gaps</h4>
+                <div className="flex flex-wrap gap-1.5">
+                  {analysis.keywordGaps.map((kw) => (
+                    <span key={kw} className="px-2 py-0.5 bg-amber-50 text-amber-800 text-xs rounded-full border border-amber-200">{kw}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-semibold text-gray-900 mb-2">Positioning Angles</h4>
+                <div className="space-y-2">
+                  {analysis.positioningAngles.map((a) => (
+                    <div key={a.angle} className="text-sm">
+                      <span className="font-medium text-gray-800">{a.angle}:</span>{' '}
+                      <span className="text-gray-600">{a.description}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-semibold text-gray-900 mb-2">Content Opportunities</h4>
+                <div className="space-y-2">
+                  {analysis.contentOpportunities.map((c) => (
+                    <div key={c.topic} className="text-sm">
+                      <span className="font-medium text-gray-800">{c.topic}:</span>{' '}
+                      <span className="text-gray-600">{c.rationale}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-semibold text-gray-900 mb-2">Local SEO Tips</h4>
+                <ul className="space-y-1">
+                  {analysis.localTips.map((tip, i) => (
+                    <li key={i} className="text-sm text-gray-600 flex items-start gap-2">
+                      <CheckCircle className="h-3.5 w-3.5 text-green-600 mt-0.5 shrink-0" />
+                      {tip}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Global Settings ──
 function GlobalSettings({ config, onSave }: { config: SeoConfig; onSave: (global: SeoConfig['global']) => Promise<void> }) {
   const [siteTitle, setSiteTitle] = useState(config.global.siteTitle || '');
   const [siteDescription, setSiteDescription] = useState(config.global.siteDescription || '');
@@ -94,6 +273,7 @@ function GlobalSettings({ config, onSave }: { config: SeoConfig; onSave: (global
   );
 }
 
+// ── Per-Page Card ──
 function PageSeoCard({ page, settings, onSave }: {
   page: PageDef;
   settings: PageSeoSettings;
@@ -110,6 +290,17 @@ function PageSeoCard({ page, settings, onSave }: {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiAction, setAiAction] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [scoreData, setScoreData] = useState<ScoreData | null>(null);
+
+  // Sync with parent when settings change (e.g. after bulk operations)
+  useEffect(() => {
+    setTitle(settings.title || '');
+    setDescription(settings.description || '');
+    setKeywords(settings.keywords?.join(', ') || '');
+    setOgTitle(settings.ogTitle || '');
+    setOgDescription(settings.ogDescription || '');
+    setNoIndex(settings.noIndex || false);
+  }, [settings]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -131,7 +322,7 @@ function PageSeoCard({ page, settings, onSave }: {
     setSaving(false);
   };
 
-  const handleAI = async (action: 'generate' | 'improve') => {
+  const handleAI = async (action: 'generate' | 'improve' | 'score') => {
     setAiLoading(true);
     setAiAction(action);
     setFeedback(null);
@@ -151,21 +342,23 @@ function PageSeoCard({ page, settings, onSave }: {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'AI request failed');
 
-      const s = data.suggestion;
-      if (s.title) setTitle(s.title);
-      if (s.description) setDescription(s.description);
-      if (s.keywords) setKeywords(Array.isArray(s.keywords) ? s.keywords.join(', ') : s.keywords);
-      if (s.ogTitle) setOgTitle(s.ogTitle);
-      if (s.ogDescription) setOgDescription(s.ogDescription);
+      if (action === 'score') {
+        setScoreData(data.score);
+      } else {
+        const s = data.suggestion;
+        if (s.title) setTitle(s.title);
+        if (s.description) setDescription(s.description);
+        if (s.keywords) setKeywords(Array.isArray(s.keywords) ? s.keywords.join(', ') : s.keywords);
+        if (s.ogTitle) setOgTitle(s.ogTitle);
+        if (s.ogDescription) setOgDescription(s.ogDescription);
 
-      setFeedback({
-        type: 'success',
-        message: s.reasoning
-          ? `${s.reasoning}`
-          : 'AI suggestion applied. Review and save to keep changes.',
-      });
+        setFeedback({
+          type: 'success',
+          message: s.reasoning || 'AI suggestion applied. Review and save to keep changes.',
+        });
+      }
     } catch (err) {
-      setFeedback({ type: 'error', message: err instanceof Error ? err.message : 'AI generation failed' });
+      setFeedback({ type: 'error', message: err instanceof Error ? err.message : 'AI request failed' });
     }
     setAiLoading(false);
     setAiAction(null);
@@ -196,13 +389,22 @@ function PageSeoCard({ page, settings, onSave }: {
               Generate with AI
             </button>
             {hasContent && (
-              <button onClick={() => handleAI('improve')} disabled={aiLoading}
-                className="px-3 py-1.5 border border-violet-300 text-violet-700 text-sm rounded-lg hover:bg-violet-50 disabled:opacity-50 flex items-center gap-1.5">
-                {aiLoading && aiAction === 'improve' ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
-                Improve with AI
-              </button>
+              <>
+                <button onClick={() => handleAI('improve')} disabled={aiLoading}
+                  className="px-3 py-1.5 border border-violet-300 text-violet-700 text-sm rounded-lg hover:bg-violet-50 disabled:opacity-50 flex items-center gap-1.5">
+                  {aiLoading && aiAction === 'improve' ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+                  Improve
+                </button>
+                <button onClick={() => handleAI('score')} disabled={aiLoading}
+                  className="px-3 py-1.5 border border-indigo-300 text-indigo-700 text-sm rounded-lg hover:bg-indigo-50 disabled:opacity-50 flex items-center gap-1.5">
+                  {aiLoading && aiAction === 'score' ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <BarChart3 className="h-3.5 w-3.5" />}
+                  Score
+                </button>
+              </>
             )}
           </div>
+
+          {scoreData && <ScoreCard score={scoreData} onClose={() => setScoreData(null)} />}
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Page Title</label>
@@ -280,10 +482,14 @@ function PageSeoCard({ page, settings, onSave }: {
   );
 }
 
+// ── Main Page ──
 export default function SeoPage() {
   const [config, setConfig] = useState<SeoConfig | null>(null);
   const [pages, setPages] = useState<PageDef[]>([]);
   const [loading, setLoading] = useState(true);
+  const [bulkLoading, setBulkLoading] = useState<string | null>(null);
+  const [bulkFeedback, setBulkFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [competitorAnalysis, setCompetitorAnalysis] = useState<CompetitorAnalysis | null>(null);
 
   const fetchConfig = useCallback(async () => {
     try {
@@ -318,8 +524,50 @@ export default function SeoPage() {
     await fetchConfig();
   };
 
+  const handleBulk = async (action: 'bulk-generate' | 'bulk-improve') => {
+    setBulkLoading(action);
+    setBulkFeedback(null);
+    try {
+      const res = await fetch('/api/admin/seo/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Bulk operation failed');
+      setBulkFeedback({ type: 'success', message: data.message });
+      await fetchConfig();
+    } catch (err) {
+      setBulkFeedback({ type: 'error', message: err instanceof Error ? err.message : 'Failed' });
+    }
+    setBulkLoading(null);
+  };
+
+  const handleCompetitor = async (name: string, url: string) => {
+    const globalKeywords = config?.global.keywords;
+    const res = await fetch('/api/admin/seo/ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'competitor',
+        competitorName: name,
+        competitorUrl: url,
+        currentKeywords: globalKeywords,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Analysis failed');
+    setCompetitorAnalysis(data.analysis);
+  };
+
   if (loading) return <div className="flex items-center justify-center py-20"><RefreshCw className="h-8 w-8 text-gray-400 animate-spin" /></div>;
   if (!config) return <div className="text-center py-20 text-gray-500">Failed to load SEO settings.</div>;
+
+  const configuredCount = pages.filter(p => {
+    const s = config.pages[p.slug];
+    return s && (s.title || s.description);
+  }).length;
+  const unconfiguredCount = pages.length - configuredCount;
 
   return (
     <div>
@@ -328,10 +576,44 @@ export default function SeoPage() {
         <h1 className="text-2xl font-bold text-gray-900">SEO Settings</h1>
       </div>
       <p className="text-sm text-gray-500 mb-8">
-        Manage search engine metadata for each page. Use AI to generate optimized titles, descriptions, and keywords.
+        Manage search engine metadata for each page. Use AI to generate, improve, and score your SEO.
       </p>
 
       <div className="space-y-8">
+        {/* Bulk Actions */}
+        <div className="bg-gradient-to-r from-violet-50 to-indigo-50 rounded-xl border border-violet-200 p-6">
+          <div className="flex items-center gap-2 mb-3">
+            <Zap className="h-5 w-5 text-violet-600" />
+            <h3 className="font-semibold text-gray-900">Bulk AI Actions</h3>
+          </div>
+          <p className="text-sm text-gray-600 mb-4">
+            {configuredCount}/{pages.length} pages configured.
+            {unconfiguredCount > 0 && ` ${unconfiguredCount} page${unconfiguredCount === 1 ? '' : 's'} need${unconfiguredCount === 1 ? 's' : ''} SEO metadata.`}
+          </p>
+          <div className="flex flex-wrap gap-3">
+            {unconfiguredCount > 0 && (
+              <button onClick={() => handleBulk('bulk-generate')} disabled={bulkLoading !== null}
+                className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-medium rounded-lg hover:from-violet-700 hover:to-indigo-700 disabled:opacity-50 flex items-center gap-2 shadow-sm">
+                {bulkLoading === 'bulk-generate' ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                Generate All Unconfigured ({unconfiguredCount})
+              </button>
+            )}
+            {configuredCount > 0 && (
+              <button onClick={() => handleBulk('bulk-improve')} disabled={bulkLoading !== null}
+                className="px-4 py-2 border border-violet-300 text-violet-700 text-sm font-medium rounded-lg hover:bg-violet-100 disabled:opacity-50 flex items-center gap-2">
+                {bulkLoading === 'bulk-improve' ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                Improve All Configured ({configuredCount})
+              </button>
+            )}
+          </div>
+          {bulkFeedback && (
+            <div className={`mt-3 p-3 rounded-lg text-sm flex items-start gap-2 ${bulkFeedback.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}`}>
+              {bulkFeedback.type === 'success' ? <CheckCircle className="h-4 w-4 mt-0.5 shrink-0" /> : <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />}
+              {bulkFeedback.message}
+            </div>
+          )}
+        </div>
+
         <GlobalSettings config={config} onSave={handleSaveGlobal} />
 
         <section>
@@ -346,6 +628,11 @@ export default function SeoPage() {
               />
             ))}
           </div>
+        </section>
+
+        {/* Competitor Analysis */}
+        <section>
+          <CompetitorPanel analysis={competitorAnalysis} onAnalyze={handleCompetitor} />
         </section>
 
         {config.updated_at && (
