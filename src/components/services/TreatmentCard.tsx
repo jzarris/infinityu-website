@@ -59,7 +59,7 @@ export function TreatmentCard({ treatment }: TreatmentCardProps) {
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className={cn('grid gap-6', treatment.videoUrl ? 'grid-cols-1 lg:grid-cols-3' : 'grid-cols-1 md:grid-cols-2')}>
             <div>
               <h4 className="font-semibold text-sm mb-3">Benefits</h4>
               <ul className="space-y-2">
@@ -84,22 +84,19 @@ export function TreatmentCard({ treatment }: TreatmentCardProps) {
                 ))}
               </ol>
             </div>
-          </div>
-
-          {treatment.videoUrl && (
-            <div>
-              <h4 className="font-semibold text-sm mb-3">See It in Action</h4>
-              <div className="max-w-sm mx-auto">
+            {treatment.videoUrl && (
+              <div>
+                <h4 className="font-semibold text-sm mb-3">See It in Action</h4>
                 <video
                   src={treatment.videoUrl}
                   controls
                   playsInline
                   preload="metadata"
-                  className="w-full rounded-lg"
+                  className="w-full rounded-xl shadow-md aspect-[9/16] object-cover bg-black"
                 />
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {treatment.faqs.length > 0 && (
             <div>
