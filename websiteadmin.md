@@ -28,10 +28,11 @@ src/
 │   │   └── (protected)/
 │   │       ├── layout.tsx                # Session guard + AdminNav sidebar
 │   │       ├── page.tsx                  # Dashboard
-│   │       ├── setup/page.tsx            # API keys & integrations
+│   │       ├── setup/page.tsx            # API keys, integrations, branding
 │   │       ├── security/page.tsx         # Password & 2FA management
 │   │       ├── audit-log/page.tsx        # Security event log
 │   │       ├── sms-consents/page.tsx     # TCPA-compliant consent records
+│   │       ├── users/page.tsx            # User management (CRUD)
 │   │       └── seo/page.tsx              # SEO management (placeholder)
 │   └── api/
 │       ├── auth/
@@ -50,10 +51,19 @@ src/
 │           │       └── disable/route.ts  # Disable 2FA
 │           ├── audit-log/route.ts        # Paginated log with CSV export
 │           ├── sms-consents/route.ts     # Paginated consents with CSV export
+│           ├── branding/route.ts         # Logo & favicon upload/delete (protected)
+│           ├── users/route.ts            # List & create users
+│           ├── users/[userId]/route.ts   # Update & delete users
 │           └── test-integration/route.ts # Test API key connectivity
+│   ├── branding/route.ts                 # Public: get branding URLs
+│   └── branding/[filename]/route.ts      # Public: serve branding files dynamically
 ├── components/
-│   └── admin/
-│       └── AdminNav.tsx                  # Sidebar (collapsible desktop, drawer mobile)
+│   ├── admin/
+│   │   └── AdminNav.tsx                  # Sidebar (collapsible desktop, drawer mobile)
+│   ├── layout/
+│   │   └── Header.tsx                    # Site header (loads dynamic logo from branding API)
+│   └── providers/
+│       └── FaviconProvider.tsx           # Client component: dynamic favicon injection
 └── lib/
     ├── auth.ts                           # NextAuth config + requireAdmin() helper
     ├── prisma.ts                         # Singleton PrismaClient
@@ -194,7 +204,7 @@ Custom RFC 6238 implementation in `src/lib/totp.ts`:
 
 - **90-day retention** — `expiresAt` set on creation, cleanup on each new log entry
 - **IP geolocation** — uses `ip-api.com` free tier with 24h in-memory cache
-- **Actions tracked**: `login_success`, `login_failed`, `logout`, `password_change`, `totp_enabled`, `totp_disabled`, `settings_updated`, `settings_removed`
+- **Actions tracked**: `login_success`, `login_failed`, `logout`, `password_change`, `totp_enabled`, `totp_disabled`, `settings_updated`, `settings_removed`, `user_created`, `user_updated`, `user_deleted`
 - **CSV export** — `GET /api/admin/audit-log?export=csv`
 
 ## Settings Storage
@@ -286,8 +296,112 @@ When adding this admin panel to a new website:
 | Section | Route | Purpose |
 |---------|-------|---------|
 | Dashboard | `/admin` | Quick links to all sections |
-| Setup | `/admin/setup` | API keys, Instagram URLs, contact email |
+| Setup | `/admin/setup` | API keys, Instagram URLs, contact email, branding (logo/favicon) |
 | Security | `/admin/security` | Password change, 2FA enable/disable |
 | Audit Log | `/admin/audit-log` | Security event history with filters & CSV export |
 | SMS Consents | `/admin/sms-consents` | TCPA-compliant consent records |
+| Users | `/admin/users` | User management (create, edit, deactivate, delete) |
 | SEO | `/admin/seo` | SEO management (placeholder) |
+
+## Branding (Logo & Favicon)
+
+The Setup page includes a branding section for uploading a custom logo and favicon.
+
+### How it works
+
+- **Upload API** (`POST /api/admin/branding`) — accepts `multipart/form-data` with `file` and `type` (logo or favicon)
+  - Logo: PNG, JPG, SVG, WebP — max 5MB
+  - Favicon: PNG, ICO, SVG — max 1MB
+- **Files stored** at `public/branding/` (e.g., `logo.png`, `favicon.ico`)
+- **Config stored** at `data/config/branding.json` — maps type to filename
+- **Public API** (`GET /api/branding`) — returns `{ logo: string | null, favicon: string | null }` URLs
+- **Dynamic file serving** (`GET /branding/[filename]`) — required because Next.js standalone mode doesn't serve files added to `public/` after build time. This API route reads files from the filesystem and serves them with correct Content-Type and cache headers.
+
+### Frontend integration
+
+- **Header.tsx** — fetches `/api/branding` on mount, uses custom logo URL (falls back to static `/images/logo.png`)
+- **FaviconProvider.tsx** — client component added to root layout, dynamically injects `<link rel="icon">` and `<link rel="apple-touch-icon">` tags
+
+### Important: Ephemeral filesystem
+
+On platforms with ephemeral filesystems (Railway, Heroku, Fly.io), uploaded branding files are lost on each deploy. For persistent storage, consider:
+- S3/R2 bucket with presigned upload URLs
+- Database blob storage
+- Volume mounts (Railway volumes, Fly volumes)
+
+## User Management
+
+Admin users can be managed from `/admin/users`.
+
+### Features
+
+- **List users** — table showing name, email, role, active status, 2FA status, created date
+- **Create user** — email, name, password (min 12 chars), role selection
+- **Edit user** — inline edit name, email, role; toggle active status
+- **Reset password** — set a new password for any user
+- **Delete user** — with confirmation, prevents self-deletion
+- **Audit logged** — all user CRUD actions are recorded (`user_created`, `user_updated`, `user_deleted`)
+
+### API
+
+- `GET /api/admin/users` — list all users
+- `POST /api/admin/users` — create user (email, name, password, role)
+- `PATCH /api/admin/users/[userId]` — update user fields
+- `DELETE /api/admin/users/[userId]` — delete user (cannot delete self)
+
+## Docker / Railway Deployment
+
+### Dockerfile (multi-stage)
+
+```dockerfile
+FROM node:22-alpine AS deps
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+FROM node:22-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" npx prisma generate
+RUN npm run build
+
+FROM node:22-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder --chown=nextjs:nodejs /app/src/generated/prisma ./src/generated/prisma
+RUN mkdir -p /app/data/config && chown -R nextjs:nodejs /app/data
+RUN mkdir -p /app/public/branding && chown -R nextjs:nodejs /app/public/branding
+USER nextjs
+EXPOSE 3000
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD wget -q --spider http://localhost:3000/api/health || exit 1
+CMD ["node", "server.js"]
+```
+
+### Key deployment notes
+
+- **Prisma output** must be set to `../src/generated/prisma` in `schema.prisma` so the standalone build can trace and include the generated client
+- **`serverExternalPackages`** in `next.config.ts` must include `['bcryptjs', '@prisma/client']`
+- **Dummy DATABASE_URL** is required for `prisma generate` at build time (the real URL is only available at runtime)
+- **NEXTAUTH_SECRET** must be a single line with no spaces or newlines — use `openssl rand -base64 32 | tr -d '\n'`
+- **Database setup** after first deploy: `npx prisma db push` and `npx tsx prisma/seed.ts` (via Railway CLI with TCP proxy connection)
+
+### Railway environment variables
+
+| Variable | Example |
+|----------|---------|
+| `DATABASE_URL` | `postgresql://postgres:pass@postgres.railway.internal:5432/railway` |
+| `NEXTAUTH_SECRET` | Single-line base64 string |
+| `NEXTAUTH_URL` | `https://yourdomain.up.railway.app` |
+| `NEXT_PUBLIC_SITE_URL` | `https://yourdomain.com` |
