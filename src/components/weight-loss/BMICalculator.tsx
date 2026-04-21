@@ -45,16 +45,26 @@ export function BMICalculator() {
     const heightParam = searchParams.get('height');
     const weightParam = searchParams.get('weight');
 
+    let h = 0;
+    let w = 0;
+
     if (heightParam) {
       const totalInches = parseFloat(heightParam);
       if (totalInches > 0) {
         setFeet(String(Math.floor(totalInches / 12)));
         setInches(String(totalInches % 12));
+        h = totalInches;
       }
     }
     if (weightParam) {
-      const w = parseFloat(weightParam);
+      w = parseFloat(weightParam);
       if (w > 0) setWeight(String(w));
+    }
+
+    if (h > 0 && w > 0) {
+      const bmi = calcBMI(w, h, 'imperial');
+      const { category, color } = getCategory(bmi);
+      setResult({ bmi, category, color });
     }
   }, [searchParams]);
 
