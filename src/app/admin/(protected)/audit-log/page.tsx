@@ -31,6 +31,10 @@ const actionLabels: Record<string, { label: string; color: string }> = {
   setting_removed: { label: 'Setting Removed', color: 'bg-yellow-50 text-yellow-700' },
   trusted_browser_added: { label: 'Browser Trusted', color: 'bg-green-50 text-green-700' },
   trusted_browser_revoked: { label: 'Browser Revoked', color: 'bg-yellow-50 text-yellow-700' },
+  user_created: { label: 'User Created', color: 'bg-green-50 text-green-700' },
+  user_updated: { label: 'User Updated', color: 'bg-blue-50 text-blue-700' },
+  user_deleted: { label: 'User Deleted', color: 'bg-red-50 text-red-700' },
+  contact_form_submitted: { label: 'Contact Form', color: 'bg-purple-50 text-purple-700' },
 };
 
 export default function AuditLogPage() {

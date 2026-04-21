@@ -8,7 +8,8 @@ export type AuditAction =
   | 'password_change' | 'password_set' | 'totp_enabled' | 'totp_disabled'
   | 'setting_updated' | 'setting_removed'
   | 'trusted_browser_added' | 'trusted_browser_revoked'
-  | 'user_created' | 'user_updated' | 'user_deleted';
+  | 'user_created' | 'user_updated' | 'user_deleted'
+  | 'contact_form_submitted';
 
 export interface AuditLogEntry {
   action: AuditAction;
