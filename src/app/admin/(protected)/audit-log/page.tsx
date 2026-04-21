@@ -130,19 +130,52 @@ export default function AuditLogPage() {
                 {logs.map((log) => {
                   const actionInfo = actionLabels[log.action] || { label: log.action, color: 'bg-gray-100 text-gray-600' };
                   const isExpanded = expandedRow === log.id;
+                  let parsedDetails: Record<string, unknown> | null = null;
+                  if (log.details) {
+                    try { parsedDetails = JSON.parse(log.details); } catch { /* ignore */ }
+                  }
                   return (
-                    <tr key={log.id} className="hover:bg-gray-50">
-                      <td className="px-4 py-3 whitespace-nowrap text-gray-600">{new Date(log.timestamp).toLocaleString()}</td>
-                      <td className="px-4 py-3"><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${actionInfo.color}`}>{actionInfo.label}</span></td>
-                      <td className="px-4 py-3 text-gray-600">{log.actor || '—'}</td>
-                      <td className="px-4 py-3 text-gray-600 font-mono text-xs">{log.ipAddress || '—'}{log.country ? ` (${log.country})` : ''}</td>
-                      <td className="px-4 py-3">{log.success ? <CheckCircle className="h-4 w-4 text-green-500" /> : <XCircle className="h-4 w-4 text-red-500" />}</td>
-                      <td className="px-4 py-3">
-                        <button onClick={() => setExpandedRow(isExpanded ? null : log.id)} className="text-gray-400 hover:text-gray-600">
-                          {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                        </button>
-                      </td>
-                    </tr>
+                    <>
+                      <tr key={log.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => setExpandedRow(isExpanded ? null : log.id)}>
+                        <td className="px-4 py-3 whitespace-nowrap text-gray-600">{new Date(log.timestamp).toLocaleString()}</td>
+                        <td className="px-4 py-3"><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${actionInfo.color}`}>{actionInfo.label}</span></td>
+                        <td className="px-4 py-3 text-gray-600">{log.actor || '—'}</td>
+                        <td className="px-4 py-3 text-gray-600 font-mono text-xs">{log.ipAddress || '—'}{log.country ? ` (${log.country})` : ''}</td>
+                        <td className="px-4 py-3">{log.success ? <CheckCircle className="h-4 w-4 text-green-500" /> : <XCircle className="h-4 w-4 text-red-500" />}</td>
+                        <td className="px-4 py-3">
+                          <button onClick={(e) => { e.stopPropagation(); setExpandedRow(isExpanded ? null : log.id); }} className="text-gray-400 hover:text-gray-600">
+                            {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                          </button>
+                        </td>
+                      </tr>
+                      {isExpanded && (
+                        <tr key={`${log.id}-details`} className="bg-gray-50">
+                          <td colSpan={6} className="px-4 py-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                              <div className="space-y-2">
+                                {log.target && (
+                                  <div><span className="font-medium text-gray-700">Target:</span> <span className="text-gray-600">{log.target}</span></div>
+                                )}
+                                {log.actorRole && (
+                                  <div><span className="font-medium text-gray-700">Role:</span> <span className="text-gray-600">{log.actorRole}</span></div>
+                                )}
+                                {log.userAgent && (
+                                  <div><span className="font-medium text-gray-700">User Agent:</span> <span className="text-gray-500 text-xs break-all">{log.userAgent}</span></div>
+                                )}
+                              </div>
+                              {parsedDetails && (
+                                <div>
+                                  <span className="font-medium text-gray-700">Details:</span>
+                                  <pre className="mt-1 p-3 bg-white rounded-lg border border-gray-200 text-xs text-gray-600 overflow-x-auto max-h-64 overflow-y-auto whitespace-pre-wrap break-words">
+                                    {JSON.stringify(parsedDetails, null, 2)}
+                                  </pre>
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </>
                   );
                 })}
               </tbody>
