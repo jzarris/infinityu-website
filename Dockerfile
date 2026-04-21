@@ -33,21 +33,14 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Prisma schema + CLI needed at runtime for db push on startup
+# Prisma schema (kept for reference)
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 # Generated Prisma client (standalone may not trace custom output path)
 COPY --from=builder --chown=nextjs:nodejs /app/src/generated/prisma ./src/generated/prisma
 
 # Writable directories for branding uploads
 RUN mkdir -p /app/public/branding && chown -R nextjs:nodejs /app/public/branding
-
-# Remove prisma.config.ts from standalone (requires dotenv + TS, unavailable in runner)
-# The schema.prisma datasource url reads DATABASE_URL directly
-RUN rm -f prisma.config.ts
 
 # Startup script: runs prisma db push before starting the server
 COPY --chown=nextjs:nodejs start.sh ./start.sh
