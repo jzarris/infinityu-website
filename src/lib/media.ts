@@ -74,7 +74,7 @@ export const WEIGHT_LOSS_IMAGES = {
   } satisfies MediaAsset,
   lifestyle: {
     src: '/images/weight-loss/lifestyle.jpg',
-    alt: 'Active healthy lifestyle',
+    alt: 'Person stepping on a scale during a weight loss program',
   } satisfies MediaAsset,
 };
 

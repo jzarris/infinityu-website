@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Image from 'next/image';
 import { Metadata } from 'next';
 import { Section } from '@/components/ui/Section';
@@ -117,7 +118,7 @@ export default function WeightLossPage() {
       </Section>
 
       {/* BMI Calculator */}
-      <Section>
+      <Section id="bmi-calculator">
         <div className="text-center mb-8">
           <p className="text-accent font-medium tracking-wider uppercase text-sm mb-3">
             Free Tool
@@ -131,7 +132,9 @@ export default function WeightLossPage() {
             physicians.
           </p>
         </div>
-        <BMICalculator />
+        <Suspense>
+          <BMICalculator />
+        </Suspense>
       </Section>
 
       {/* FAQ */}

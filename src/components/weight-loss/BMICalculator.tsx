@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { BUSINESS } from '@/lib/constants';
@@ -32,12 +33,30 @@ function getCategory(bmi: number): { category: string; color: string } {
 }
 
 export function BMICalculator() {
+  const searchParams = useSearchParams();
   const [unit, setUnit] = useState<Unit>('imperial');
   const [feet, setFeet] = useState('');
   const [inches, setInches] = useState('');
   const [heightCm, setHeightCm] = useState('');
   const [weight, setWeight] = useState('');
   const [result, setResult] = useState<BMIResult | null>(null);
+
+  useEffect(() => {
+    const heightParam = searchParams.get('height');
+    const weightParam = searchParams.get('weight');
+
+    if (heightParam) {
+      const totalInches = parseFloat(heightParam);
+      if (totalInches > 0) {
+        setFeet(String(Math.floor(totalInches / 12)));
+        setInches(String(totalInches % 12));
+      }
+    }
+    if (weightParam) {
+      const w = parseFloat(weightParam);
+      if (w > 0) setWeight(String(w));
+    }
+  }, [searchParams]);
 
   function handleCalculate(e: React.FormEvent) {
     e.preventDefault();
