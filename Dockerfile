@@ -45,6 +45,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/src/generated/prisma ./src/genera
 # Writable directories for branding uploads
 RUN mkdir -p /app/public/branding && chown -R nextjs:nodejs /app/public/branding
 
+# Remove prisma.config.ts from standalone (requires dotenv + TS, unavailable in runner)
+# The schema.prisma datasource url reads DATABASE_URL directly
+RUN rm -f prisma.config.ts
+
 # Startup script: runs prisma db push before starting the server
 COPY --chown=nextjs:nodejs start.sh ./start.sh
 RUN chmod +x start.sh
