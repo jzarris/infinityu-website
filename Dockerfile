@@ -39,9 +39,12 @@ COPY --from=builder /app/prisma ./prisma
 # Generated Prisma client (standalone may not trace custom output path)
 COPY --from=builder --chown=nextjs:nodejs /app/src/generated/prisma ./src/generated/prisma
 
-# Writable directories for file-based settings and branding uploads
-RUN mkdir -p /app/data/config && chown -R nextjs:nodejs /app/data
+# Writable directories for branding uploads
 RUN mkdir -p /app/public/branding && chown -R nextjs:nodejs /app/public/branding
+
+# Startup script: runs prisma db push before starting the server
+COPY --chown=nextjs:nodejs start.sh ./start.sh
+RUN chmod +x start.sh
 
 USER nextjs
 
@@ -53,4 +56,4 @@ ENV HOSTNAME="0.0.0.0"
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD wget -q --spider http://localhost:3000/api/health || exit 1
 
-CMD ["node", "server.js"]
+CMD ["./start.sh"]
