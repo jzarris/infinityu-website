@@ -25,6 +25,9 @@ export function generateSiteMetadata(): Metadata {
     ],
     authors: [{ name: BUSINESS.legalName }],
     metadataBase: new URL(BUSINESS.url),
+    alternates: {
+      canonical: BUSINESS.url,
+    },
     openGraph: {
       type: 'website',
       locale: 'en_US',
@@ -32,11 +35,20 @@ export function generateSiteMetadata(): Metadata {
       siteName: BUSINESS.legalName,
       title: `${BUSINESS.legalName} | ${BUSINESS.address.city}, ${BUSINESS.address.state}`,
       description: BUSINESS.description,
+      images: [
+        {
+          url: `${BUSINESS.url}/images/og-default.jpg`,
+          width: 1200,
+          height: 630,
+          alt: BUSINESS.legalName,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: `${BUSINESS.legalName} | ${BUSINESS.address.city}, ${BUSINESS.address.state}`,
       description: BUSINESS.description,
+      images: [`${BUSINESS.url}/images/og-default.jpg`],
     },
     robots: {
       index: true,

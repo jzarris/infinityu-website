@@ -23,7 +23,7 @@ export const BUSINESS = {
     instagram: 'https://www.instagram.com/infinityu_medspa/',
     facebook: '',
   },
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://infinity-u.com',
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.infinity-u.com',
   bookingUrl: process.env.NEXT_PUBLIC_BOOKING_URL || '',
 } as const;
 
