@@ -70,7 +70,7 @@ export const HOME_IMAGES = {
 export const WEIGHT_LOSS_IMAGES = {
   hero: {
     src: '/images/weight-loss/hero.jpg',
-    alt: 'Healthy fresh food',
+    alt: 'Person stepping on a scale, representing a weight loss journey',
   } satisfies MediaAsset,
   lifestyle: {
     src: '/images/weight-loss/lifestyle.jpg',

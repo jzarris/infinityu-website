@@ -24,11 +24,20 @@
       "Bash(DATABASE_URL=\"postgresql://postgres:AGTxiZVoNTGxEDiciIQWfyInJnNSkwoU@nozomi.proxy.rlwy.net:19125/railway\" npx prisma db push)",
       "Bash(DATABASE_URL=\"postgresql://postgres:AGTxiZVoNTGxEDiciIQWfyInJnNSkwoU@nozomi.proxy.rlwy.net:19125/railway\" npx tsx prisma/seed.ts)",
       "Bash(find /Users/jackzarris/GitHub/meltawaymd/src/app/admin -type f -name *.tsx -o -name *.ts)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(yt-dlp -o \"public/videos/sculptra-reel.mp4\" -f \"mp4\" \"https://www.instagram.com/reels/DVXhxkvkSy9/\")",
+      "Bash(pip3 show:*)",
+      "Bash(brew install:*)",
+      "Bash(git -C /Users/jackzarris/GitHub/infinityu-website status)",
+      "Bash(git -C /Users/jackzarris/GitHub/infinityu-website log --oneline -3)",
+      "Bash(ls -la \"/Users/jackzarris/GitHub/infinityu-website/src/app/admin/\\(protected\\)/audit-log/\")",
+      "Bash(chmod +x /Users/jackzarris/GitHub/infinityu-website/start.sh)",
+      "Bash(railway logs:*)"
     ],
     "additionalDirectories": [
       "/Users/jackzarris/GitHub/infinityu-website/.next",
-      "/Users/jackzarris/GitHub/infinityu-website/src/app/api/auth"
+      "/Users/jackzarris/GitHub/infinityu-website/src/app/api/auth",
+      "/Users/jackzarris/.claude/projects/-Users-jackzarris-GitHub-infinityu-website/memory"
     ]
   }
 }
