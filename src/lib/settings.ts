@@ -1,7 +1,4 @@
-import { readFile, writeFile, mkdir } from 'fs/promises';
-import path from 'path';
-
-const SETTINGS_FILE = path.join(process.cwd(), 'data', 'config', 'settings.json');
+import { prisma } from '@/lib/prisma';
 
 export interface Settings {
   anthropic_api_key?: string;
@@ -13,19 +10,43 @@ export interface Settings {
   [key: string]: string | undefined;
 }
 
+const VALID_KEYS = [
+  'anthropic_api_key',
+  'resend_api_key',
+  'instagram_access_token',
+  'instagram_post_urls',
+  'contact_notification_email',
+];
+
 export async function getSettings(): Promise<Settings> {
   try {
-    const data = await readFile(SETTINGS_FILE, 'utf-8');
-    return JSON.parse(data);
+    const rows = await prisma.setting.findMany();
+    const settings: Settings = { updated_at: new Date().toISOString() };
+    for (const row of rows) {
+      settings[row.key] = row.value;
+      if (row.updatedAt.toISOString() > settings.updated_at) {
+        settings.updated_at = row.updatedAt.toISOString();
+      }
+    }
+    return settings;
   } catch {
     return { updated_at: new Date().toISOString() };
   }
 }
 
 export async function saveSettings(settings: Settings): Promise<void> {
-  const dir = path.dirname(SETTINGS_FILE);
-  await mkdir(dir, { recursive: true });
-  await writeFile(SETTINGS_FILE, JSON.stringify(settings, null, 2));
+  for (const key of VALID_KEYS) {
+    const value = settings[key];
+    if (value) {
+      await prisma.setting.upsert({
+        where: { key },
+        update: { value },
+        create: { key, value },
+      });
+    } else {
+      await prisma.setting.deleteMany({ where: { key } });
+    }
+  }
 }
 
 export function maskApiKey(key: string | undefined): string | null {
