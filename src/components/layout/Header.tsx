@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, ChevronDown } from 'lucide-react';
+import { Menu, ChevronDown, Instagram } from 'lucide-react';
 import { NAV_LINKS, BUSINESS } from '@/lib/constants';
 import { Button } from '@/components/ui/Button';
 import { MobileNav } from './MobileNav';
@@ -108,6 +108,17 @@ export function Header() {
 
           {/* Right side */}
           <div className="flex items-center gap-4">
+            {BUSINESS.social.instagram && (
+              <a
+                href={BUSINESS.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Follow us on Instagram"
+                className="hidden lg:flex p-2 hover:bg-surface rounded-lg transition-colors"
+              >
+                <Instagram className="h-5 w-5 text-primary hover:text-accent" />
+              </a>
+            )}
             {BUSINESS.bookingUrl && (
               <Button
                 href={BUSINESS.bookingUrl}

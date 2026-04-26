@@ -20,7 +20,7 @@ export const BUSINESS = {
     structured: 'Mo-Fr 10:00-18:00',
   },
   social: {
-    instagram: 'https://www.instagram.com/infinityu_medspa/',
+    instagram: 'https://www.instagram.com/infinityuhuntingtonbeach/',
     facebook: '',
   },
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.infinity-u.com',
