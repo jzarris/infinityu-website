@@ -118,6 +118,11 @@ export function Footer() {
         {/* Bottom */}
         <div className="border-t border-white/10 mt-12 pt-8 text-center text-sm text-white/50">
           <p>&copy; {new Date().getFullYear()} {BUSINESS.legalName}. All rights reserved.</p>
+          <div className="mt-3 flex items-center justify-center gap-4">
+            <Link href="/privacy" className="hover:text-accent transition-colors">Privacy Policy</Link>
+            <span>|</span>
+            <Link href="/terms" className="hover:text-accent transition-colors">Terms & Conditions</Link>
+          </div>
         </div>
       </div>
     </footer>
