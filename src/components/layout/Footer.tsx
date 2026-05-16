@@ -122,6 +122,8 @@ export function Footer() {
             <Link href="/privacy" className="hover:text-accent transition-colors">Privacy Policy</Link>
             <span>|</span>
             <Link href="/terms" className="hover:text-accent transition-colors">Terms & Conditions</Link>
+            <span>|</span>
+            <Link href="/sms-policy" className="hover:text-accent transition-colors">SMS Policy</Link>
           </div>
         </div>
       </div>

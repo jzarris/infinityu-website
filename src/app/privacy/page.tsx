@@ -17,7 +17,7 @@ export default function PrivacyPolicyPage() {
           <h1 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">
             Privacy Policy
           </h1>
-          <p className="text-white/70 text-sm">Last updated: May 2, 2026</p>
+          <p className="text-white/70 text-sm">Last updated: May 16, 2026</p>
         </div>
       </section>
 
@@ -66,6 +66,10 @@ export default function PrivacyPolicyPage() {
             <li>Legal authorities when required by law</li>
             <li>Healthcare providers involved in your treatment, as permitted by applicable law</li>
           </ul>
+          <h3>SMS/Text Messaging Data</h3>
+          <p>
+            No mobile information, text messaging originator opt-in data, or consent will be shared with or sold to third parties or affiliates for marketing or promotional purposes. SMS opt-in consent and phone numbers collected for text messaging are excluded from all the sharing categories listed above. This data is used solely to deliver the messaging you requested and is shared only with our SMS delivery provider as needed to operate the service, or as required by law.
+          </p>
 
           <h2>5. Data Security</h2>
           <p>
