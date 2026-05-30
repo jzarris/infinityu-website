@@ -33,6 +33,9 @@ export default function SmsPolicyPage() {
             Consent is collected via a web form on our contact page at{' '}
             <Link href="/contact">https://www.infinity-u.com/contact</Link>, under the &ldquo;SMS Communication Preferences&rdquo; section. SMS consent is collected through two separate, independent checkboxes. The promotional checkbox is a distinct, unchecked-by-default opt-in. SMS consent is never a condition of receiving any service, scheduling an appointment, or submitting the form.
           </p>
+          <p>
+            This SMS policy and the toll-free number registered against it are associated specifically with our promotional/marketing messaging, governed by the second (promotional) consent checkbox shown below. Transactional and account messaging is governed by the first (transactional) checkbox and operates on a separate, independently registered toll-free number.
+          </p>
 
           <h2>Consent Form</h2>
           {/* TODO: Drop the actual screenshot file at /public/sms-optin-form.png. */}
