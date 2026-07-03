@@ -32,6 +32,18 @@ export const SERVICE_CARD_IMAGES: Record<string, MediaAsset> = {
     src: '/images/services/card-weight-loss.jpg',
     alt: 'Healthy lifestyle and nutrition',
   },
+  'hair-restoration': {
+    src: '/images/services/card-hair-restoration.jpg',
+    alt: 'Close-up of healthy, thick hair',
+  },
+  laser: {
+    src: '/images/services/card-laser.jpg',
+    alt: 'Smooth skin after laser treatment',
+  },
+  'hormone-wellness': {
+    src: '/images/services/card-hormone-wellness.jpg',
+    alt: 'Person experiencing vitality and well-being',
+  },
 };
 
 /** Service category hero background images. */
@@ -51,6 +63,18 @@ export const SERVICE_HERO_IMAGES: Record<string, MediaAsset> = {
   'body-contouring': {
     src: '/images/services/hero-body-contouring.jpg',
     alt: 'Sculpted figure in studio light',
+  },
+  'hair-restoration': {
+    src: '/images/services/hero-hair-restoration.jpg',
+    alt: 'Close-up of healthy, thick hair',
+  },
+  laser: {
+    src: '/images/services/hero-laser.jpg',
+    alt: 'Smooth radiant skin after laser treatment',
+  },
+  'hormone-wellness': {
+    src: '/images/services/hero-hormone-wellness.jpg',
+    alt: 'Person experiencing vitality and well-being',
   },
 };
 

@@ -3,13 +3,13 @@ import Link from 'next/link';
 import { Section } from '@/components/ui/Section';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { ArrowRight, Syringe, Waves, Zap, Sparkles } from 'lucide-react';
+import { ArrowRight, Syringe, Waves, Zap, Sparkles, Scissors, Sun, Heart } from 'lucide-react';
 import { serviceCategories } from '@/data/services';
 import { generatePageMetadata } from '@/lib/seo';
 
 export const metadata: Metadata = generatePageMetadata(
   'Our Services',
-  'Explore our full range of aesthetic treatments including injectables, HiFu, radio frequency, and body contouring at InfinityU Med Spa in Huntington Beach.'
+  'Explore our full range of aesthetic treatments including injectables, hair restoration, laser treatments, HiFu, radio frequency, body contouring, and hormone & wellness at InfinityU Med Spa in Huntington Beach.'
 );
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -17,6 +17,9 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Waves,
   Zap,
   Sparkles,
+  Scissors,
+  Sun,
+  Heart,
 };
 
 export default function ServicesPage() {

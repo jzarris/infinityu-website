@@ -1,4 +1,4 @@
-export type ServiceCategory = 'injectables' | 'hifu' | 'radio-frequency' | 'body-contouring';
+export type ServiceCategory = 'injectables' | 'hifu' | 'radio-frequency' | 'body-contouring' | 'hair-restoration' | 'laser' | 'hormone-wellness';
 
 export interface Treatment {
   slug: string;
@@ -211,6 +211,114 @@ export const serviceCategories: ServiceCategoryInfo[] = [
       },
     ],
   },
+  {
+    slug: 'hair-restoration',
+    name: 'Hair Restoration',
+    headline: 'Restore Your Hair, Restore Your Confidence',
+    description: 'From advanced PRP and exosome therapies to surgical hair transplantation, our hair restoration programs combine cutting-edge science with personalized care to address thinning and loss for men and women.',
+    icon: 'Scissors',
+    metaTitle: 'Hair Restoration in Huntington Beach',
+    metaDescription: 'Hair transplant, exosome therapy, and PRP hair restoration at InfinityU Med Spa in Huntington Beach, CA.',
+    faqs: [
+      {
+        question: 'Am I a candidate for hair restoration?',
+        answer:
+          'Most adults experiencing hair thinning or loss — whether from genetics, hormonal changes, or other factors — are candidates for at least one of our hair restoration options. A consultation helps us evaluate your degree of loss and match you to the right treatment or combination.',
+      },
+      {
+        question: 'What is the difference between PRP, exosomes, and a hair transplant?',
+        answer:
+          'PRP and exosome therapies are non-surgical treatments that stimulate and strengthen existing follicles using your own growth factors or concentrated cell-signaling molecules. A hair transplant surgically relocates healthy follicles from a donor area to fill in areas of significant loss. We often combine them for the best long-term outcome.',
+      },
+      {
+        question: 'How many sessions do I need?',
+        answer:
+          'PRP and exosome treatments typically require an initial series of 3–4 sessions spaced 4–6 weeks apart, followed by maintenance every 6–12 months. Hair transplantation is usually a single procedure, with supportive PRP/exosome sessions recommended afterward to optimize graft survival.',
+      },
+      {
+        question: 'When will I see results?',
+        answer:
+          'Non-surgical therapies show gradual improvement starting around 3–6 months, with continued thickening over 12 months. Hair transplant results begin to appear at 3–4 months as new growth cycles in, with full density visible at 9–12 months.',
+      },
+      {
+        question: 'Is there downtime?',
+        answer:
+          'PRP and exosome injections have minimal downtime — mild scalp tenderness and possible redness for 24–48 hours. Hair transplant recovery involves a few days of scalp care and activity restrictions; most patients return to normal routines within a week.',
+      },
+    ],
+  },
+  {
+    slug: 'laser',
+    name: 'Laser Treatments',
+    headline: 'Precision Light-Based Skin & Hair Solutions',
+    description: 'Our laser treatments harness targeted light energy to rejuvenate skin, reduce unwanted hair, and address pigmentation concerns — with precision, safety, and minimal downtime.',
+    icon: 'Sun',
+    metaTitle: 'Laser Treatments in Huntington Beach',
+    metaDescription: 'Laser facial and laser hair removal at InfinityU Med Spa in Huntington Beach, CA.',
+    faqs: [
+      {
+        question: 'Is laser treatment safe for my skin tone?',
+        answer:
+          'Safety depends on the specific laser and your Fitzpatrick skin type. During your consultation, we select the appropriate wavelength and settings for your skin to minimize risk and maximize results.',
+      },
+      {
+        question: 'How many sessions will I need?',
+        answer:
+          'Laser facials are often done as a series of 4–6 sessions for skin rejuvenation goals. Laser hair removal requires multiple sessions (typically 6–8) spaced 4–6 weeks apart to address hair at all growth stages.',
+      },
+      {
+        question: 'Is there any downtime?',
+        answer:
+          'Laser facials may involve 1–3 days of mild redness or flaking. Laser hair removal has virtually no downtime — you may notice temporary redness that resolves within a few hours.',
+      },
+      {
+        question: 'Does laser hair removal hurt?',
+        answer:
+          'Most patients describe it as a brief snapping or warming sensation. We use cooling techniques to minimize discomfort, and settings can be adjusted for sensitive areas.',
+      },
+      {
+        question: 'How permanent is laser hair removal?',
+        answer:
+          'After a full series, most patients achieve an 80–90% permanent reduction in hair. Occasional maintenance sessions address any regrowth, which tends to be finer and lighter.',
+      },
+    ],
+  },
+  {
+    slug: 'hormone-wellness',
+    name: 'Hormone & Wellness',
+    headline: 'Balance, Vitality & Whole-Body Wellness',
+    description: 'Our hormone and wellness therapies address root causes of fatigue, weight changes, and reduced vitality. From hormone pellet therapy to IV infusions, stem cell treatments, and massage, we help you feel your best from the inside out.',
+    icon: 'Heart',
+    metaTitle: 'Hormone & Wellness Therapies in Huntington Beach',
+    metaDescription: 'Hormone pellet therapy, stem cell therapy, IV infusions, and massage at InfinityU Med Spa in Huntington Beach, CA.',
+    faqs: [
+      {
+        question: 'How do I know if hormone pellet therapy is right for me?',
+        answer:
+          'Lab work and a thorough health history are the starting point. If your testosterone, estrogen, or other hormones are out of balance — contributing to fatigue, low libido, brain fog, or weight gain — pellet therapy may be an excellent option. We review your results and symptoms together before recommending treatment.',
+      },
+      {
+        question: 'What are the benefits of IV infusions?',
+        answer:
+          'IV therapy delivers vitamins, minerals, and hydration directly to your bloodstream for 100% absorption — bypassing the digestive system. Benefits vary by formulation and can include improved energy, immune support, faster recovery, enhanced skin health, and mental clarity.',
+      },
+      {
+        question: 'What conditions can stem cell therapy help with?',
+        answer:
+          'Stem cell therapy is used to support tissue repair, reduce inflammation, and promote healing in areas such as joints, tendons, and skin. It is particularly valuable for regenerative applications where the body\'s own healing capacity needs a boost.',
+      },
+      {
+        question: 'Is massage therapy medical or relaxation-focused?',
+        answer:
+          'We offer therapeutic massage that complements your wellness plan — whether that\'s reducing muscle tension, supporting lymphatic drainage, or promoting recovery alongside other treatments.',
+      },
+      {
+        question: 'Can these therapies be combined?',
+        answer:
+          'Absolutely. Many patients pair hormone optimization with IV infusions, or complement stem cell therapy with massage for recovery. We design a personalized wellness plan during your consultation.',
+      },
+    ],
+  },
 ];
 
 export const treatments: Treatment[] = [
@@ -350,6 +458,115 @@ export const treatments: Treatment[] = [
     faqs: [
       { question: 'How is Sculptra different from fillers?', answer: 'Unlike hyaluronic acid fillers that provide immediate volume, Sculptra works gradually by stimulating your body\'s own collagen production for longer-lasting, more natural results.' },
       { question: 'How many sessions are needed?', answer: 'Most patients require 2-3 sessions spaced about 4-6 weeks apart for optimal results.' },
+    ],
+  },
+
+  {
+    slug: 'dermal-fillers',
+    name: 'Dermal Fillers',
+    category: 'injectables',
+    shortDescription: 'Restore volume, smooth deep lines, and sculpt facial contours with hyaluronic acid fillers.',
+    fullDescription: 'Dermal fillers use hyaluronic acid and other biocompatible materials to replace lost volume, soften deep folds, and enhance facial features. Results are immediate, natural-looking, and reversible, making fillers one of the most versatile tools in aesthetic medicine.',
+    benefits: [
+      'Immediate volume restoration',
+      'Softens nasolabial folds and marionette lines',
+      'Enhances lips, cheeks, and jawline',
+      'Reversible with hyaluronidase if needed',
+      'Results last 6–18 months depending on product',
+    ],
+    whatToExpect: [
+      'Consultation to map target areas and choose the right filler',
+      'Topical or injected numbing for comfort',
+      'Precise placement with fine needle or cannula',
+      'Immediate results with possible mild swelling',
+      'Treatment takes approximately 30–45 minutes',
+    ],
+    duration: '30–45 minutes',
+    downtime: 'Minimal — possible swelling or bruising 1–3 days',
+    faqs: [
+      { question: 'How long do fillers last?', answer: 'Lip fillers typically last 6–9 months; cheek and jawline fillers can last 12–18 months or longer depending on the product and your metabolism.' },
+      { question: 'Can fillers be combined with Botox?', answer: 'Yes — Botox and fillers are often done in the same visit. Botox relaxes dynamic wrinkles while fillers restore volume and structure for a comprehensive result.' },
+    ],
+  },
+  {
+    slug: 'p-shot',
+    name: 'P-Shot (Priapus Shot)',
+    category: 'injectables',
+    shortDescription: 'PRP therapy for men to enhance sexual function, sensitivity, and performance.',
+    fullDescription: 'The P-Shot (Priapus Shot) uses Platelet-Rich Plasma drawn from your own blood to stimulate tissue regeneration in penile tissue. This non-surgical treatment can improve erectile function, enhance sensitivity, and support performance — with no synthetic drugs or surgery required.',
+    benefits: [
+      'Improves erectile function and firmness',
+      'Enhances sensitivity and pleasure',
+      'Stimulates natural tissue regeneration',
+      'Drug-free and non-surgical',
+      'Uses your own growth factors',
+    ],
+    whatToExpect: [
+      'Private, discreet consultation to discuss goals and medical history',
+      'Blood draw and PRP preparation',
+      'Topical numbing applied for comfort',
+      'PRP injected into targeted tissue',
+      'Treatment takes approximately 45–60 minutes',
+    ],
+    duration: '45–60 minutes',
+    downtime: 'Minimal to none',
+    faqs: [
+      { question: 'Is the P-Shot painful?', answer: 'Topical numbing is applied before treatment to minimize discomfort. Most men report mild pressure but no significant pain.' },
+      { question: 'How soon will I notice a difference?', answer: 'Some men notice improvements within a few weeks; full results typically develop over 2–3 months as tissue regeneration takes effect.' },
+    ],
+  },
+  {
+    slug: 'o-shot',
+    name: 'O-Shot (Orgasm Shot)',
+    category: 'injectables',
+    shortDescription: 'PRP therapy for women to enhance sexual pleasure, sensitivity, and vaginal health.',
+    fullDescription: 'The O-Shot (Orgasm Shot) uses Platelet-Rich Plasma to stimulate regeneration in vaginal and clitoral tissue. This natural, non-surgical treatment can enhance sensitivity, improve lubrication, address stress urinary incontinence, and support overall sexual wellness.',
+    benefits: [
+      'Enhances sexual sensitivity and pleasure',
+      'Improves natural lubrication',
+      'May reduce stress urinary incontinence',
+      'Stimulates natural tissue rejuvenation',
+      'Non-surgical, drug-free treatment',
+    ],
+    whatToExpect: [
+      'Confidential consultation to review goals and health history',
+      'Blood draw and PRP preparation',
+      'Topical numbing cream applied for comfort',
+      'PRP injected into targeted areas',
+      'Treatment takes approximately 45–60 minutes',
+    ],
+    duration: '45–60 minutes',
+    downtime: 'Minimal to none',
+    faqs: [
+      { question: 'Is the O-Shot safe?', answer: 'Yes. Because PRP is derived from your own blood, there is virtually no risk of allergic reaction. The procedure is performed by experienced medical providers in a clinical setting.' },
+      { question: 'When will I feel results?', answer: 'Many women notice improvements in sensitivity and comfort within 3–6 weeks, with continued improvement over 3 months.' },
+    ],
+  },
+  {
+    slug: 'prp-exosome-joint-injections',
+    name: 'PRP & Exosome Joint Injections',
+    category: 'injectables',
+    shortDescription: 'Regenerative joint therapy using PRP and exosomes to reduce pain and promote healing.',
+    fullDescription: 'PRP and Exosome joint injections deliver concentrated growth factors and cell-signaling molecules directly into affected joints, tendons, or soft tissue. This regenerative approach reduces inflammation, stimulates natural healing, and can improve pain and mobility — without surgery or steroids.',
+    benefits: [
+      'Reduces joint pain and inflammation',
+      'Promotes natural tissue repair',
+      'Improves mobility and function',
+      'Non-surgical alternative to steroid injections',
+      'Uses your body\'s own regenerative potential',
+    ],
+    whatToExpect: [
+      'Assessment of the target joint and medical history review',
+      'Blood draw and PRP or exosome preparation',
+      'Area cleaned and numbed',
+      'Injection guided to the target site',
+      'Treatment takes approximately 30–60 minutes',
+    ],
+    duration: '30–60 minutes',
+    downtime: 'Mild soreness 24–48 hours; return to light activity within a day',
+    faqs: [
+      { question: 'Which joints can be treated?', answer: 'Common areas include knees, hips, shoulders, ankles, and elbows. We evaluate your specific joint during consultation to confirm candidacy.' },
+      { question: 'How many injections are needed?', answer: 'Many patients see meaningful improvement after 1–2 injections, with a second treatment at 4–6 weeks for enhanced results. Maintenance injections can be done annually as needed.' },
     ],
   },
 
@@ -605,6 +822,228 @@ export const treatments: Treatment[] = [
       { question: 'How many body contouring sessions do I need?', answer: 'Most patients achieve optimal results with 4-8 sessions, depending on treatment area and goals.' },
       { question: 'Is body contouring a weight loss solution?', answer: 'Body contouring is designed for targeted fat reduction and skin tightening, not overall weight loss. It works best for those at or near their goal weight with stubborn areas.' },
       { question: 'When will I see results?', answer: 'Initial results may be visible after 2-4 weeks, with continued improvement over 2-3 months as your body naturally processes treated fat cells.' },
+    ],
+  },
+
+  // Hair Restoration
+  {
+    slug: 'hair-transplant',
+    name: 'Hair Transplant',
+    category: 'hair-restoration',
+    shortDescription: 'Surgical follicle relocation for permanent, natural-looking hair restoration.',
+    fullDescription: 'Hair transplantation surgically moves healthy hair follicles from a donor area (typically the back or sides of the scalp) to areas of thinning or loss. Modern techniques produce natural-looking hairlines and density with permanent results. We pair transplants with PRP or exosome therapy to optimize graft survival.',
+    benefits: [
+      'Permanent hair restoration',
+      'Natural hairline design tailored to your face',
+      'Transplanted hair behaves like natural hair',
+      'Suitable for men and women',
+      'Can be combined with PRP/exosomes for enhanced graft survival',
+    ],
+    whatToExpect: [
+      'Comprehensive consultation to assess donor supply and design hairline',
+      'Procedure performed under local anesthesia',
+      'Follicles harvested and implanted in a single session',
+      'Scalp care instructions and follow-up provided',
+      'Procedure takes several hours depending on graft count',
+    ],
+    duration: 'Several hours (varies by graft count)',
+    downtime: '5–7 days of scalp care; light activity within a week',
+    faqs: [
+      { question: 'What technique is used?', answer: 'We use follicular unit extraction (FUE), which harvests individual follicles without a linear scar for a more natural-looking result and faster recovery.' },
+      { question: 'When will transplanted hair grow?', answer: 'Transplanted hair sheds in the first few weeks — this is normal. New growth begins around 3–4 months, with full density visible at 9–12 months.' },
+    ],
+  },
+  {
+    slug: 'exosome-hair-restoration',
+    name: 'Exosome Hair Restoration',
+    category: 'hair-restoration',
+    shortDescription: 'Next-generation cell-signaling therapy to reawaken dormant follicles and boost hair density.',
+    fullDescription: 'Exosome hair restoration delivers concentrated exosomes — nano-sized cell-signaling particles packed with growth factors and regenerative signals — directly into the scalp. Exosomes communicate with follicular cells to stimulate growth activity, improve density, and slow progression of hair loss. This is one of the most advanced non-surgical options available.',
+    benefits: [
+      'Highly concentrated regenerative signals',
+      'Stimulates dormant hair follicles',
+      'Improves hair thickness and density',
+      'Non-surgical with minimal downtime',
+      'Can complement or enhance hair transplant results',
+    ],
+    whatToExpect: [
+      'Scalp assessment to identify treatment areas',
+      'Topical numbing applied for comfort',
+      'Exosome solution injected into targeted scalp zones',
+      'Treatment takes approximately 30–45 minutes',
+      'Gradual improvement over 3–6 months',
+    ],
+    duration: '30–45 minutes',
+    downtime: 'Minimal — mild scalp tenderness 24–48 hours',
+    faqs: [
+      { question: 'How do exosomes compare to PRP for hair restoration?', answer: 'Exosomes contain a higher concentration of growth factors and cell-signaling molecules than PRP, making them a more potent option. They are particularly effective for patients who have had limited results with PRP alone.' },
+      { question: 'How many sessions are recommended?', answer: 'Most patients start with 2–3 sessions spaced 4–6 weeks apart, followed by annual maintenance. Results continue to improve over 6–12 months.' },
+    ],
+  },
+
+  // Laser Treatments
+  {
+    slug: 'laser-facial',
+    name: 'Laser Facial',
+    category: 'laser',
+    shortDescription: 'Targeted laser energy to resurface skin, reduce pigmentation, and stimulate collagen renewal.',
+    fullDescription: 'Laser facials use focused light energy to address pigmentation, fine lines, uneven texture, and dull skin tone. By delivering precise wavelengths to targeted skin layers, laser facials trigger controlled rejuvenation and collagen remodeling — revealing clearer, smoother, more radiant skin.',
+    benefits: [
+      'Reduces sun damage and hyperpigmentation',
+      'Smooths fine lines and skin texture',
+      'Stimulates collagen production',
+      'Improves overall skin tone and clarity',
+      'Minimal downtime compared to ablative lasers',
+    ],
+    whatToExpect: [
+      'Skin assessment and treatment area mapping',
+      'Protective eyewear provided',
+      'Laser handpiece passed over treatment zones',
+      'Mild warmth or tingling sensation during treatment',
+      'Treatment takes approximately 30–45 minutes',
+    ],
+    duration: '30–45 minutes',
+    downtime: '1–3 days of mild redness or flaking',
+    faqs: [
+      { question: 'How many laser facial sessions do I need?', answer: 'A series of 4–6 sessions spaced 3–4 weeks apart is typical for skin rejuvenation goals. Maintenance sessions every few months help sustain results.' },
+      { question: 'Can laser facials treat acne or acne scarring?', answer: 'Yes. Certain laser wavelengths target acne-causing bacteria and stimulate collagen to soften the appearance of acne scars. We assess your specific concerns during consultation.' },
+    ],
+  },
+  {
+    slug: 'laser-hair-removal',
+    name: 'Laser Hair Removal',
+    category: 'laser',
+    shortDescription: 'Long-lasting reduction of unwanted hair on face and body using targeted laser energy.',
+    fullDescription: 'Laser hair removal uses precise wavelengths of light to target pigment in hair follicles, disabling them at the root without damaging surrounding skin. Over a series of sessions, patients achieve significant, long-lasting reduction of unwanted hair on virtually any area of the face or body.',
+    benefits: [
+      'Permanent hair reduction after a full series',
+      'Smooth, stubble-free skin between sessions',
+      'Treats face, underarms, legs, bikini, back, and more',
+      'Faster and more precise than waxing or shaving',
+      'Each session covers large areas quickly',
+    ],
+    whatToExpect: [
+      'Consultation to assess hair color, skin tone, and target area',
+      'Area shaved and cleaned before treatment',
+      'Cooling applied to protect skin and minimize discomfort',
+      'Laser delivered in quick pulses across the treatment zone',
+      'Session time varies from 10 minutes (small areas) to 60+ minutes (full legs)',
+    ],
+    duration: 'Varies by area (10–60+ minutes)',
+    downtime: 'None — possible redness for a few hours',
+    faqs: [
+      { question: 'How many sessions will I need?', answer: 'Most patients need 6–8 sessions spaced 4–6 weeks apart to treat hair across all growth cycles. Touch-up sessions once or twice a year handle any remaining regrowth.' },
+      { question: 'Does laser hair removal work on blonde or gray hair?', answer: 'Laser targets melanin (pigment) in hair. Very light blonde, red, or gray hair contains less pigment and responds less predictably. We assess your hair and skin during consultation to set realistic expectations.' },
+    ],
+  },
+
+  // Hormone & Wellness
+  {
+    slug: 'hormone-pellet-therapy',
+    name: 'Hormone Pellet Therapy',
+    category: 'hormone-wellness',
+    shortDescription: 'Bioidentical hormone pellets that deliver consistent, personalized hormone optimization.',
+    fullDescription: 'Hormone pellet therapy uses small, custom-compounded bioidentical hormone pellets inserted just beneath the skin to deliver a steady, physiologic stream of hormones. Unlike pills or patches, pellets release hormones in response to your body\'s needs — providing consistent levels without the peaks and troughs of other delivery methods. Pellets are replaced every 3–6 months.',
+    benefits: [
+      'Consistent, physiologic hormone delivery',
+      'Reduces fatigue, brain fog, and mood changes',
+      'Supports healthy libido and sexual function',
+      'Aids weight management and muscle tone',
+      'No daily pills or topical creams to remember',
+    ],
+    whatToExpect: [
+      'Comprehensive lab work and health history review',
+      'Custom pellet formulation based on your results',
+      'In-office insertion procedure (10–15 minutes)',
+      'Local anesthesia for comfort; minor soreness 1–2 days',
+      'Pellets replaced every 3–6 months',
+    ],
+    duration: '10–15 minutes (insertion procedure)',
+    downtime: 'Minimal — mild soreness at insertion site 1–2 days',
+    faqs: [
+      { question: 'Is hormone pellet therapy safe?', answer: 'Bioidentical hormones are structurally identical to the hormones your body naturally produces. Treatment is individualized based on your labs and monitored with follow-up testing. Our providers follow evidence-based protocols.' },
+      { question: 'Who is a good candidate?', answer: 'Men and women experiencing symptoms of hormone imbalance — fatigue, low libido, weight gain, mood changes, or poor sleep — who have labs confirming suboptimal hormone levels.' },
+    ],
+  },
+  {
+    slug: 'stem-cell-therapy',
+    name: 'Stem Cell Therapy',
+    category: 'hormone-wellness',
+    shortDescription: 'Regenerative stem cell treatments to support healing, reduce inflammation, and restore tissue.',
+    fullDescription: 'Stem cell therapy harnesses the body\'s most fundamental regenerative cells to support healing in tissues that have difficulty repairing on their own. By delivering concentrated stem cells or stem cell-derived signals to target areas, we can reduce inflammation, stimulate tissue repair, and support functional recovery in joints, skin, and other structures.',
+    benefits: [
+      'Promotes natural tissue regeneration',
+      'Reduces chronic inflammation',
+      'Supports joint and soft-tissue healing',
+      'Can complement other regenerative treatments',
+      'Non-surgical approach to repair',
+    ],
+    whatToExpect: [
+      'In-depth consultation to evaluate the target area and candidacy',
+      'Treatment protocol designed around your specific needs',
+      'Stem cells prepared and delivered to target tissue',
+      'Post-treatment care instructions provided',
+      'Session time varies by treatment area',
+    ],
+    duration: 'Varies by protocol',
+    downtime: 'Mild soreness in treated area; varies by application',
+    faqs: [
+      { question: 'What source are the stem cells from?', answer: 'Depending on the application, we use either autologous (from your own body) or ethically sourced allogeneic stem cell preparations. Your provider will discuss the most appropriate option during consultation.' },
+      { question: 'How soon will I feel results?', answer: 'Regenerative therapies work gradually. Some patients notice improvement within a few weeks; optimal results often develop over 2–3 months as tissue remodeling occurs.' },
+    ],
+  },
+  {
+    slug: 'iv-infusions',
+    name: 'IV Infusions',
+    category: 'hormone-wellness',
+    shortDescription: 'Customized IV vitamin and hydration therapy for energy, immunity, recovery, and wellness.',
+    fullDescription: 'IV infusion therapy delivers a customized blend of vitamins, minerals, antioxidants, and hydration directly into your bloodstream — bypassing the digestive system for 100% absorption. Whether you\'re seeking an energy boost, immune support, athletic recovery, hangover relief, or skin health enhancement, we have a formulation designed for your goals.',
+    benefits: [
+      '100% bioavailability — far more effective than oral supplements',
+      'Fast-acting energy and hydration',
+      'Immune system support',
+      'Improved athletic recovery',
+      'Enhanced skin health and glow',
+    ],
+    whatToExpect: [
+      'Brief health screen and goal discussion',
+      'IV line placed comfortably in the arm',
+      'Relaxing infusion session (30–60 minutes)',
+      'Most patients feel energized immediately or within hours',
+      'Can be combined with other wellness treatments on the same visit',
+    ],
+    duration: '30–60 minutes',
+    downtime: 'None',
+    faqs: [
+      { question: 'How often can I get IV infusions?', answer: 'Frequency depends on your goals and formulation. Some patients come weekly for performance or recovery; others come monthly for general wellness maintenance.' },
+      { question: 'Is IV therapy safe?', answer: 'Yes, when administered by qualified medical professionals. We review your health history and current medications before treatment to ensure the formulation is safe and appropriate for you.' },
+    ],
+  },
+  {
+    slug: 'massage-therapy',
+    name: 'Massage Therapy',
+    category: 'hormone-wellness',
+    shortDescription: 'Therapeutic massage for relaxation, recovery, and whole-body wellness.',
+    fullDescription: 'Our therapeutic massage services complement your wellness and aesthetic treatment plan. Whether you need deep tissue work for chronic tension, lymphatic drainage to support recovery after procedures, or a restorative relaxation massage, our skilled therapists tailor each session to your specific needs and goals.',
+    benefits: [
+      'Relieves muscle tension and chronic pain',
+      'Promotes lymphatic drainage and detoxification',
+      'Reduces stress and cortisol levels',
+      'Supports recovery after aesthetic procedures',
+      'Improves circulation and overall well-being',
+    ],
+    whatToExpect: [
+      'Brief intake to discuss areas of focus and any contraindications',
+      'Customized technique based on your needs',
+      'Comfortable, private treatment room',
+      'Session tailored in pressure and focus areas',
+      'Sessions available in 60 or 90 minutes',
+    ],
+    duration: '60–90 minutes',
+    downtime: 'None — possible mild soreness after deep tissue work',
+    faqs: [
+      { question: 'Can massage be combined with other treatments?', answer: 'Yes — massage pairs well with IV infusions, body contouring, and post-procedure recovery. Your provider can help build a same-day wellness plan.' },
+      { question: 'What types of massage do you offer?', answer: 'We offer Swedish relaxation, deep tissue, lymphatic drainage, and sports massage. Discuss your goals during booking and we\'ll match you with the right technique.' },
     ],
   },
 ];

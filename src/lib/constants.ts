@@ -34,9 +34,12 @@ export const NAV_LINKS = [
     href: '/services',
     children: [
       { label: 'Injectables & Regenerative', href: '/services/injectables' },
+      { label: 'Hair Restoration', href: '/services/hair-restoration' },
+      { label: 'Laser Treatments', href: '/services/laser' },
       { label: 'HiFu', href: '/services/hifu' },
       { label: 'Radio Frequency', href: '/services/radio-frequency' },
       { label: 'Body Contouring', href: '/services/body-contouring' },
+      { label: 'Hormone & Wellness', href: '/services/hormone-wellness' },
     ],
   },
   { label: 'Weight Loss', href: '/weight-loss' },

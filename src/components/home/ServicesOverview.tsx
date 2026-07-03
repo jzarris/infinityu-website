@@ -1,16 +1,30 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Section } from '@/components/ui/Section';
-import { Syringe, Waves, Zap, Sparkles, Scale, ArrowRight } from 'lucide-react';
+import { Syringe, Waves, Zap, Sparkles, Scale, Scissors, Sun, Heart, ArrowRight } from 'lucide-react';
 import { SERVICE_CARD_IMAGES } from '@/lib/media';
 
 const services = [
   {
     name: 'Injectables & Regenerative',
-    description: 'Botox, PRP, PRF, Sculptra, and more to refresh and rejuvenate.',
+    description: 'Botox, fillers, PRP, PRF, Sculptra, P-Shot, O-Shot, and more.',
     href: '/services/injectables',
     icon: Syringe,
     image: SERVICE_CARD_IMAGES.injectables,
+  },
+  {
+    name: 'Hair Restoration',
+    description: 'Hair transplant, exosome therapy, and PRP for lasting hair regrowth.',
+    href: '/services/hair-restoration',
+    icon: Scissors,
+    image: SERVICE_CARD_IMAGES['hair-restoration'],
+  },
+  {
+    name: 'Laser Treatments',
+    description: 'Laser facials and laser hair removal with precision light energy.',
+    href: '/services/laser',
+    icon: Sun,
+    image: SERVICE_CARD_IMAGES['laser'],
   },
   {
     name: 'HiFu',
@@ -32,6 +46,13 @@ const services = [
     href: '/services/body-contouring',
     icon: Sparkles,
     image: SERVICE_CARD_IMAGES['body-contouring'],
+  },
+  {
+    name: 'Hormone & Wellness',
+    description: 'Hormone pellets, stem cell therapy, IV infusions, and massage.',
+    href: '/services/hormone-wellness',
+    icon: Heart,
+    image: SERVICE_CARD_IMAGES['hormone-wellness'],
   },
   {
     name: 'Weight Loss',
