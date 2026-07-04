@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+
 import Link from 'next/link';
 import { Section } from '@/components/ui/Section';
 import { Card } from '@/components/ui/Card';
