@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/Button';
 import { BUSINESS } from '@/lib/constants';
-import { TilePuzzle } from '@/components/TilePuzzle';
 import { HeroHeadline } from '@/components/home/HeroHeadline';
+import { InteractivePuzzle } from '@/components/home/InteractivePuzzle';
 
 export function HeroSection() {
   return (
@@ -55,7 +55,7 @@ export function HeroSection() {
           </div>
 
           <div className="mx-auto w-full max-w-md lg:ml-auto lg:mr-0">
-            <TilePuzzle
+            <InteractivePuzzle
               imageSrc="/images/tilepuzzle.jpg"
               cols={3}
               rows={4}
