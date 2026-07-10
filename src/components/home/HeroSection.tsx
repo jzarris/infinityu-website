@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { BUSINESS } from '@/lib/constants';
 import { TilePuzzle } from '@/components/TilePuzzle';
@@ -55,16 +54,38 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Mobile: server-rendered image for fast LCP — no JS hydration needed */}
+          {/* Mobile: server-rendered CSS puzzle grid — no JS hydration, benefits from preload */}
           <div className="sm:hidden mx-auto w-full max-w-md">
-            <Image
-              src="/images/tilepuzzle.jpg"
-              alt="InfinityU feature image"
-              width={448}
-              height={597}
-              priority
-              className="rounded-2xl w-full h-auto"
-            />
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: 6,
+                background: 'var(--color-surface-alt)',
+                borderRadius: 'var(--radius-xl)',
+                boxShadow: 'var(--shadow-lg)',
+              }}
+            >
+              {Array.from({ length: 12 }, (_, i) => {
+                const col = i % 3;
+                const row = Math.floor(i / 3);
+                // tiles are square in a 3-wide 4-tall grid (3:4 container)
+                if (i === 11) return <div key={i} style={{ aspectRatio: '1' }} />;
+                return (
+                  <div
+                    key={i}
+                    style={{
+                      aspectRatio: '1',
+                      backgroundImage: 'url(/images/tilepuzzle.jpg)',
+                      backgroundSize: '300% 400%',
+                      backgroundPosition: `${(col / 2) * 100}% ${(row / 3) * 100}%`,
+                      borderRadius: 'var(--radius-md)',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.18)',
+                    }}
+                  />
+                );
+              })}
+            </div>
           </div>
 
           {/* Tablet/desktop: interactive tile puzzle */}
