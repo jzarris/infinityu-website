@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Section } from '@/components/ui/Section';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -25,10 +26,12 @@ export function DoctorsPreview() {
             {/* Placeholder headshot */}
             <div className="w-32 h-32 rounded-full bg-gradient-to-br from-accent/20 to-secondary/20 mx-auto mb-6 flex items-center justify-center">
               {doctor.headshotUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <Image
                   src={doctor.headshotUrl}
                   alt={doctor.name}
+                  width={128}
+                  height={128}
+                  sizes="128px"
                   className="w-full h-full rounded-full object-cover"
                 />
               ) : (

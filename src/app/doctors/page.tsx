@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { Section } from '@/components/ui/Section';
 import { Badge } from '@/components/ui/Badge';
 import { doctors } from '@/data/doctors';
@@ -35,10 +36,12 @@ export default function DoctorsPage() {
             <div className="shrink-0">
               <div className="w-64 h-64 lg:w-80 lg:h-80 rounded-2xl bg-gradient-to-br from-accent/20 to-secondary/20 flex items-center justify-center overflow-hidden">
                 {doctor.headshotUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
+                  <Image
                     src={doctor.headshotUrl}
                     alt={doctor.name}
+                    width={320}
+                    height={320}
+                    sizes="(min-width: 1024px) 320px, 256px"
                     className="w-full h-full object-cover"
                   />
                 ) : (

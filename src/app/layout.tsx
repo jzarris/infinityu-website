@@ -93,7 +93,7 @@ export default function RootLayout({
     <html lang="en" className={fontClasses}>
       <head>
         {/* Preload puzzle image early — it's a CSS background-image so browsers discover it late */}
-        <link rel="preload" as="image" href="/images/tilepuzzle.jpg" />
+        <link rel="preload" as="image" href="/images/tilepuzzle.jpg" fetchPriority="high" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <script
           type="application/ld+json"
