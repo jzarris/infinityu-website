@@ -57,7 +57,7 @@ export function HeroSection() {
           {/* Tile puzzle */}
           <div className="mx-auto w-full max-w-md lg:ml-auto lg:mr-0">
             <TilePuzzle
-              imageSrc="/images/tilepuzzle.png"
+              imageSrc="/images/tilepuzzle.jpg"
               cols={3}
               rows={4}
               alt="InfinityU feature image"
