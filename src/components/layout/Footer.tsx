@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Phone, Mail, MapPin, Clock, Instagram } from 'lucide-react';
 import { BUSINESS, NAV_LINKS } from '@/lib/constants';
+import { EmailLink } from '@/components/ui/EmailLink';
 
 export function Footer() {
   return (
@@ -100,9 +101,7 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-accent shrink-0" />
-                <a href={`mailto:${BUSINESS.email}`} className="text-white/70 hover:text-accent transition-colors">
-                  {BUSINESS.email}
-                </a>
+                <EmailLink email={BUSINESS.email} className="text-white/70 hover:text-accent transition-colors" />
               </li>
               <li className="flex items-start gap-3">
                 <Clock className="h-5 w-5 text-accent shrink-0 mt-0.5" />
