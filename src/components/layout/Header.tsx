@@ -14,7 +14,6 @@ export function Header() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [logoUrl, setLogoUrl] = useState<string | null>(null);
 
   useEffect(() => {
     function handleScroll() {
@@ -22,13 +21,6 @@ export function Header() {
     }
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    fetch('/api/branding')
-      .then(res => res.json())
-      .then(data => { if (data.logo) setLogoUrl(data.logo); })
-      .catch(() => {});
   }, []);
 
   return (
@@ -46,12 +38,12 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center" aria-label={`${BUSINESS.legalName} home`}>
             <Image
-              src={logoUrl || '/images/logo.png'}
+              src="/images/logo.png"
               alt={BUSINESS.legalName}
-              width={1500}
-              height={1061}
+              width={200}
+              height={142}
               priority
-              unoptimized={!!logoUrl}
+              sizes="200px"
               className="h-14 w-auto"
             />
           </Link>
