@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { BUSINESS } from '@/lib/constants';
 import { TilePuzzle } from '@/components/TilePuzzle';
@@ -54,8 +55,20 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Tile puzzle */}
-          <div className="mx-auto w-full max-w-md lg:ml-auto lg:mr-0">
+          {/* Mobile: server-rendered image for fast LCP — no JS hydration needed */}
+          <div className="sm:hidden mx-auto w-full max-w-md">
+            <Image
+              src="/images/tilepuzzle.jpg"
+              alt="InfinityU feature image"
+              width={448}
+              height={597}
+              priority
+              className="rounded-2xl w-full h-auto"
+            />
+          </div>
+
+          {/* Tablet/desktop: interactive tile puzzle */}
+          <div className="hidden sm:block mx-auto w-full max-w-md lg:ml-auto lg:mr-0">
             <TilePuzzle
               imageSrc="/images/tilepuzzle.jpg"
               cols={3}
