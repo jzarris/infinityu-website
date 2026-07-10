@@ -1,9 +1,10 @@
 'use client';
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
-// Server-rendered placeholder that appears instantly as the LCP element.
-// Same URL as <link rel="preload"> in layout.tsx, so image is already in cache.
-// Dimensions match TilePuzzle (3:4 container, square tiles) to avoid CLS on swap.
+// Rendered on the server → in initial HTML → becomes the LCP element.
+// Uses same /images/tilepuzzle.jpg URL as the <link rel="preload"> in layout.tsx,
+// so the image is already in the browser cache when these tiles try to paint.
 function StaticPuzzleGrid() {
   return (
     <div
@@ -38,12 +39,10 @@ function StaticPuzzleGrid() {
   );
 }
 
-// TilePuzzle deferred until after initial paint so its JS doesn't block LCP.
-// The loading fallback (StaticPuzzleGrid) is rendered on the server and in the
-// initial HTML, becoming the LCP element. TilePuzzle loads async and takes over.
+// Code-split so TilePuzzle's JS is not in the main bundle.
 const TilePuzzle = dynamic(
   () => import('@/components/TilePuzzle').then((m) => ({ default: m.TilePuzzle })),
-  { ssr: false, loading: () => <StaticPuzzleGrid /> }
+  { ssr: false }
 );
 
 interface Props {
@@ -53,6 +52,13 @@ interface Props {
   alt: string;
 }
 
+// Server renders StaticPuzzleGrid (mounted=false during SSR) → goes into HTML → fast LCP.
+// useEffect fires after the browser paints → mounted=true → TilePuzzle loads
+// and animates. Animation is preserved; it just starts after initial paint.
 export function InteractivePuzzle({ imageSrc, cols, rows, alt }: Props) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
+  if (!mounted) return <StaticPuzzleGrid />;
   return <TilePuzzle imageSrc={imageSrc} cols={cols} rows={rows} alt={alt} />;
 }
