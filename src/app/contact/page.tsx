@@ -12,9 +12,12 @@ import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
 const serviceOptions = [
   'Botox / Injectables',
   'PRP / PRF Treatments',
+  'Hair Restoration',
+  'Laser Treatments',
   'HiFu Skin Tightening',
   'Radio Frequency',
   'Body Contouring',
+  'Hormone Optimization (BHRT)',
   'Weight Loss Program',
   'Sculptra',
   'Other / General Inquiry',
