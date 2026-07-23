@@ -48,8 +48,8 @@ const services = [
     image: SERVICE_CARD_IMAGES['body-contouring'],
   },
   {
-    name: 'Hormone & Wellness',
-    description: 'Hormone pellets, stem cell therapy, IV infusions, and massage.',
+    name: 'Hormone Optimization',
+    description: 'Purepell Certified BHRT pellet therapy for men & women, plus IV infusions and wellness.',
     href: '/services/hormone-wellness',
     icon: Heart,
     image: SERVICE_CARD_IMAGES['hormone-wellness'],

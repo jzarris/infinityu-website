@@ -285,17 +285,27 @@ export const serviceCategories: ServiceCategoryInfo[] = [
   },
   {
     slug: 'hormone-wellness',
-    name: 'Hormone & Wellness',
-    headline: 'Balance, Vitality & Whole-Body Wellness',
-    description: 'Our hormone and wellness therapies address root causes of fatigue, weight changes, and reduced vitality. From hormone pellet therapy to IV infusions, stem cell treatments, and massage, we help you feel your best from the inside out.',
+    name: 'Hormone Optimization',
+    headline: 'Restore Balance, Reclaim Your Vitality',
+    description: 'InfinityU is a Purepell Certified Provider of Bioidentical Hormone Replacement Therapy (BHRT). Our hormone optimization program uses Purepell\'s precision-compounded bioidentical pellets to help men and women restore hormone balance, reclaim energy, improve libido, and feel their best — without daily pills, creams, or patches.',
     icon: 'Heart',
-    metaTitle: 'Hormone & Wellness Therapies in Huntington Beach',
-    metaDescription: 'Hormone pellet therapy, stem cell therapy, IV infusions, and massage at InfinityU Med Spa in Huntington Beach, CA.',
+    metaTitle: 'Hormone Optimization & BHRT in Huntington Beach | Purepell Certified',
+    metaDescription: 'InfinityU is a Purepell Certified Provider of bioidentical hormone replacement therapy (BHRT) in Huntington Beach. Pellet therapy for men & women, plus IV infusions, stem cell therapy, and massage.',
     faqs: [
+      {
+        question: 'What is Purepell Bioidentical Hormone Replacement Therapy (BHRT)?',
+        answer:
+          'Purepell is a bioidentical hormone replacement therapy program that uses precision-compounded hormone pellets to restore balanced, consistent hormone levels. InfinityU is a Purepell Certified Provider, meaning our team is specially trained in Purepell protocols for both men and women. Unlike synthetic hormones, Purepell pellets are bioidentical — structurally identical to the hormones your body naturally produces.',
+      },
       {
         question: 'How do I know if hormone pellet therapy is right for me?',
         answer:
-          'Lab work and a thorough health history are the starting point. If your testosterone, estrogen, or other hormones are out of balance — contributing to fatigue, low libido, brain fog, or weight gain — pellet therapy may be an excellent option. We review your results and symptoms together before recommending treatment.',
+          'Lab work and a thorough health history are the starting point. If your testosterone, estrogen, or other hormones are out of balance — contributing to fatigue, low libido, brain fog, weight gain, hot flashes, or poor sleep — BHRT may be an excellent option. Our Purepell-certified providers review your results and symptoms before recommending any treatment.',
+      },
+      {
+        question: 'How long does BHRT take to work?',
+        answer:
+          'Most patients notice meaningful improvements in energy, mood, and libido within 2–4 weeks of their first pellet insertion, with optimal results at 4–6 weeks as hormone levels stabilize. Purepell pellets are replaced only 3–4 times per year, so you maintain consistent levels without daily maintenance.',
       },
       {
         question: 'What are the benefits of IV infusions?',
@@ -305,17 +315,12 @@ export const serviceCategories: ServiceCategoryInfo[] = [
       {
         question: 'What conditions can stem cell therapy help with?',
         answer:
-          'Stem cell therapy is used to support tissue repair, reduce inflammation, and promote healing in areas such as joints, tendons, and skin. It is particularly valuable for regenerative applications where the body\'s own healing capacity needs a boost.',
-      },
-      {
-        question: 'Is massage therapy medical or relaxation-focused?',
-        answer:
-          'We offer therapeutic massage that complements your wellness plan — whether that\'s reducing muscle tension, supporting lymphatic drainage, or promoting recovery alongside other treatments.',
+          'Stem cell therapy supports tissue repair, reduces inflammation, and promotes healing in joints, tendons, and soft tissue. It is particularly valuable for regenerative applications where the body\'s own healing capacity needs a boost.',
       },
       {
         question: 'Can these therapies be combined?',
         answer:
-          'Absolutely. Many patients pair hormone optimization with IV infusions, or complement stem cell therapy with massage for recovery. We design a personalized wellness plan during your consultation.',
+          'Absolutely. Many patients pair hormone optimization with IV infusions for enhanced energy and recovery, or complement BHRT with massage for stress reduction. We design a personalized wellness plan during your consultation.',
       },
     ],
   },
@@ -937,32 +942,36 @@ export const treatments: Treatment[] = [
     ],
   },
 
-  // Hormone & Wellness
+  // Hormone Optimization
   {
     slug: 'hormone-pellet-therapy',
-    name: 'Hormone Pellet Therapy',
+    name: 'Bioidentical Hormone Pellet Therapy (BHRT)',
     category: 'hormone-wellness',
-    shortDescription: 'Bioidentical hormone pellets that deliver consistent, personalized hormone optimization.',
-    fullDescription: 'Hormone pellet therapy uses small, custom-compounded bioidentical hormone pellets inserted just beneath the skin to deliver a steady, physiologic stream of hormones. Unlike pills or patches, pellets release hormones in response to your body\'s needs — providing consistent levels without the peaks and troughs of other delivery methods. Pellets are replaced every 3–6 months.',
+    shortDescription: 'Purepell-certified BHRT pellet therapy delivering consistent, 24/7 hormone optimization for men and women — no daily pills or creams.',
+    fullDescription: 'InfinityU is a Purepell Certified Provider, offering Bioidentical Hormone Replacement Therapy (BHRT) using Purepell\'s precision-compounded bioidentical hormone pellets. Each pellet is inserted just beneath the skin during a quick in-office procedure. Unlike creams, patches, or daily pills, Purepell pellets release hormones 24/7 — responding dynamically to your body\'s actual needs and delivering consistent levels without the peaks and troughs of other delivery methods. Most patients require pellet replacement only 3–4 times per year.\n\nPurepell BHRT is available for both men and women. Men commonly seek hormone optimization for low testosterone, reduced energy, low libido, and difficulty maintaining muscle mass. Women often pursue BHRT for relief from hot flashes, night sweats, mood changes, low libido, and fatigue associated with perimenopause or menopause.',
     benefits: [
-      'Consistent, physiologic hormone delivery',
+      'Consistent, 24/7 bioidentical hormone delivery',
       'Reduces fatigue, brain fog, and mood changes',
-      'Supports healthy libido and sexual function',
+      'Supports healthy libido and sexual wellness for men and women',
       'Aids weight management and muscle tone',
-      'No daily pills or topical creams to remember',
+      'Reduces or eliminates hot flashes and night sweats',
+      'No daily pills, creams, or patches',
+      'Only 3–4 procedures per year',
     ],
     whatToExpect: [
       'Comprehensive lab work and health history review',
-      'Custom pellet formulation based on your results',
-      'In-office insertion procedure (10–15 minutes)',
+      'Custom Purepell pellet formulation based on your results',
+      'Quick in-office insertion procedure (10–15 minutes)',
       'Local anesthesia for comfort; minor soreness 1–2 days',
-      'Pellets replaced every 3–6 months',
+      'Follow-up labs at 4–6 weeks to confirm optimal hormone levels',
+      'Pellets replaced every 3–6 months depending on activity level',
     ],
     duration: '10–15 minutes (insertion procedure)',
     downtime: 'Minimal — mild soreness at insertion site 1–2 days',
     faqs: [
-      { question: 'Is hormone pellet therapy safe?', answer: 'Bioidentical hormones are structurally identical to the hormones your body naturally produces. Treatment is individualized based on your labs and monitored with follow-up testing. Our providers follow evidence-based protocols.' },
-      { question: 'Who is a good candidate?', answer: 'Men and women experiencing symptoms of hormone imbalance — fatigue, low libido, weight gain, mood changes, or poor sleep — who have labs confirming suboptimal hormone levels.' },
+      { question: 'Is Purepell BHRT safe?', answer: 'Bioidentical hormones are structurally identical to the hormones your body naturally produces. Purepell Certified Providers follow evidence-based protocols and monitor outcomes with follow-up lab work to ensure optimal results.' },
+      { question: 'Who is a good candidate for BHRT?', answer: 'Men and women experiencing symptoms of hormone imbalance — fatigue, low libido, weight gain, mood changes, poor sleep, hot flashes, or brain fog — who have labs confirming suboptimal hormone levels.' },
+      { question: 'How long until I feel results from Purepell BHRT?', answer: 'Most patients notice meaningful improvements in energy, mood, and libido within 2–4 weeks of their first insertion, with optimal results at 4–6 weeks as hormone levels stabilize.' },
     ],
   },
   {
