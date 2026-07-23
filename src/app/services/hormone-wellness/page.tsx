@@ -21,7 +21,12 @@ export const metadata: Metadata = generatePageMetadata(
 // Paste YouTube video IDs from https://www.purepell.com/testimonials
 // e.g. 'dQw4w9WgXcQ' from https://youtube.com/watch?v=dQw4w9WgXcQ
 const purepellTestimonialVideoIds: string[] = [
-  // TODO: add video IDs here once provided
+  '7rkz6bOhk6I',
+  '9GqpTUMppeI',
+  '96yHzzoakvA',
+  'vTKk9ARgcgo',
+  'awa8WCc9ZfY',
+  '2AUyaBA7w6k',
 ];
 
 const bhrtBenefits = [
