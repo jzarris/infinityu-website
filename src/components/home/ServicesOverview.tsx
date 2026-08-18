@@ -49,7 +49,7 @@ const services = [
   },
   {
     name: 'Hormone Optimization',
-    description: 'Purepell Certified BHRT pellet therapy for men & women, plus IV infusions and wellness.',
+    description: 'Purepell Certified BHRT, anti-aging protocols, longevity programs, IV infusions, and stem cell therapy.',
     href: '/services/hormone-wellness',
     icon: Heart,
     image: SERVICE_CARD_IMAGES['hormone-wellness'],

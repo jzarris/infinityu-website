@@ -289,8 +289,8 @@ export const serviceCategories: ServiceCategoryInfo[] = [
     headline: 'Restore Balance, Reclaim Your Vitality',
     description: 'InfinityU is a Purepell Certified Provider of Bioidentical Hormone Replacement Therapy (BHRT). Our hormone optimization program uses Purepell\'s precision-compounded bioidentical pellets to help men and women restore hormone balance, reclaim energy, improve libido, and feel their best — without daily pills, creams, or patches.',
     icon: 'Heart',
-    metaTitle: 'Hormone Optimization & BHRT in Huntington Beach | Purepell Certified',
-    metaDescription: 'InfinityU is a Purepell Certified Provider of bioidentical hormone replacement therapy (BHRT) in Huntington Beach. Pellet therapy for men & women, plus IV infusions, stem cell therapy, and massage.',
+    metaTitle: 'Hormone Optimization, Anti-Aging & Longevity in Huntington Beach | Purepell Certified',
+    metaDescription: 'InfinityU is a Purepell Certified Provider of BHRT in Huntington Beach. Pellet therapy for men & women, anti-aging protocols, longevity programs, IV infusions, and stem cell therapy.',
     faqs: [
       {
         question: 'What is Purepell Bioidentical Hormone Replacement Therapy (BHRT)?',
@@ -1026,6 +1026,72 @@ export const treatments: Treatment[] = [
     faqs: [
       { question: 'How often can I get IV infusions?', answer: 'Frequency depends on your goals and formulation. Some patients come weekly for performance or recovery; others come monthly for general wellness maintenance.' },
       { question: 'Is IV therapy safe?', answer: 'Yes, when administered by qualified medical professionals. We review your health history and current medications before treatment to ensure the formulation is safe and appropriate for you.' },
+    ],
+  },
+  {
+    slug: 'anti-aging-protocol',
+    name: 'Anti-Aging Protocol',
+    category: 'hormone-wellness',
+    shortDescription: 'A personalized, multi-modality program designed to slow cellular aging and preserve vitality from the inside out.',
+    fullDescription: 'Aging is multi-factorial — it happens at the cellular, hormonal, and structural level simultaneously. Our Anti-Aging Protocol takes a whole-body approach, combining hormone optimization, regenerative therapies, and targeted IV nutrition to address the root causes of aging rather than just surface symptoms. After a comprehensive assessment, your provider designs a personalized program drawing from BHRT, stem cell therapy, IV infusions, PRP, and other modalities to match your biology, goals, and lifestyle.',
+    benefits: [
+      'Addresses aging at the hormonal, cellular, and structural level',
+      'Personalized to your labs, symptoms, and goals',
+      'Combines proven modalities for compounded results',
+      'Improves energy, skin quality, mental clarity, and body composition',
+      'Ongoing optimization as your body and needs evolve',
+    ],
+    whatToExpect: [
+      'Comprehensive intake, health history review, and lab work',
+      'Provider consultation to design your personalized protocol',
+      'Treatments scheduled and paced to your program plan',
+      'Regular follow-up assessments to track progress and refine your protocol',
+      'Ongoing support from your care team throughout the program',
+    ],
+    duration: 'Ongoing program — initial consultation 60 minutes',
+    downtime: 'Varies by treatments included in your protocol',
+    faqs: [
+      {
+        question: 'What treatments are included in an Anti-Aging Protocol?',
+        answer: 'Protocols are fully individualized. Common components include BHRT (hormone pellets), IV vitamin infusions, PRP or PRF, stem cell therapy, and aesthetic treatments. Your provider selects the combination best matched to your labs and goals.',
+      },
+      {
+        question: 'How is this different from just booking individual treatments?',
+        answer: 'The protocol approach integrates treatments strategically — sequencing and combining modalities to maximize how they work together. Your provider monitors your response and adjusts over time, producing more consistent and compounded improvements than ad-hoc treatments.',
+      },
+    ],
+  },
+  {
+    slug: 'longevity-program',
+    name: 'Longevity Program',
+    category: 'hormone-wellness',
+    shortDescription: 'Science-based wellness designed to extend healthspan — optimizing your biology for more years of peak performance.',
+    fullDescription: 'Longevity medicine focuses on maintaining optimal health function for as long as possible — not just treating illness, but actively optimizing the biological systems that decline with age. Our Longevity Program begins with an in-depth assessment of key biomarkers, then builds a personalized plan combining hormone optimization, NAD+ and advanced IV therapies, regenerative treatments, and lifestyle protocols. The goal is more than a longer life — it is more years lived at your best.',
+    benefits: [
+      'Optimizes key longevity biomarkers (hormones, inflammation, metabolic health)',
+      'Supports mitochondrial health and cellular energy production',
+      'Reduces chronic inflammation — a root driver of age-related decline',
+      'Improves cognitive clarity, physical performance, and resilience',
+      'Personalized and data-driven with ongoing monitoring',
+    ],
+    whatToExpect: [
+      'Comprehensive biomarker lab panel and health history intake',
+      'Provider consultation to review results and design your longevity plan',
+      'Structured treatment schedule combining selected modalities',
+      'Periodic re-testing to track biomarker improvement',
+      'Ongoing protocol refinement as results evolve',
+    ],
+    duration: 'Ongoing program — initial consultation 60 minutes',
+    downtime: 'Varies by treatments included in your program',
+    faqs: [
+      {
+        question: 'What biomarkers do you assess?',
+        answer: 'We evaluate a comprehensive panel including hormone levels, inflammatory markers, metabolic health indicators, and nutrient status. Results guide which therapies will have the greatest impact for your specific biology.',
+      },
+      {
+        question: 'Is this program only for older patients?',
+        answer: 'No — longevity optimization is most effective when started proactively. Many patients in their 30s and 40s use the program to establish and maintain peak health rather than waiting for decline to begin.',
+      },
     ],
   },
   {
