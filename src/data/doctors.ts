@@ -20,12 +20,14 @@ export const doctors: Doctor[] = [
       'Advanced Aesthetic Medicine',
     ],
     specializations: [
+      'Bioidentical Hormone Replacement Therapy (BHRT)',
+      'Regenerative Medicine',
       'Body Contouring',
       'Radio Frequency Treatments',
       'Sculptra & Dermal Fillers',
       'Medical Weight Loss',
     ],
-    bio: 'Dr. Mike is a dedicated aesthetic physician with a focus on body contouring, advanced skin tightening technologies, and comprehensive weight management programs. His approach combines the latest in medical aesthetics with a commitment to natural-looking results that enhance each patient\'s confidence and well-being.',
+    bio: 'Dr. Mike is a dedicated aesthetic and regenerative medicine physician with expertise in Bioidentical Hormone Replacement Therapy (BHRT), body contouring, and advanced skin tightening technologies. As a Purepell Certified Provider, he specializes in precision hormone optimization for men and women alongside comprehensive weight management programs. His approach integrates the latest in regenerative and aesthetic medicine with a commitment to natural-looking results that enhance each patient\'s confidence and well-being.',
     headshotUrl: '/images/doctors/dr_le.png',
   },
   {
