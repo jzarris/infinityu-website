@@ -17,7 +17,7 @@ export function Footer() {
                 alt={BUSINESS.legalName}
                 width={600}
                 height={400}
-                className="h-16 w-auto"
+                className="h-24 w-auto"
               />
             </Link>
             <p className="text-white/70 text-sm leading-relaxed mb-6">

@@ -34,7 +34,7 @@ export function Header() {
             : 'bg-background'
         )}
       >
-        <div className="container-custom flex items-center justify-between h-20">
+        <div className="container-custom flex items-center justify-between h-24">
           {/* Logo */}
           <Link href="/" className="flex items-center" aria-label={`${BUSINESS.legalName} home`}>
             <Image
@@ -44,7 +44,7 @@ export function Header() {
               height={400}
               priority
               sizes="200px"
-              className="h-14 w-auto"
+              className="h-[84px] w-auto"
             />
           </Link>
 
