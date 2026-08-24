@@ -40,8 +40,8 @@ export function Header() {
             <Image
               src="/images/logo.png"
               alt={BUSINESS.legalName}
-              width={200}
-              height={142}
+              width={600}
+              height={400}
               priority
               sizes="200px"
               className="h-14 w-auto"

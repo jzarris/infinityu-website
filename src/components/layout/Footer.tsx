@@ -15,8 +15,8 @@ export function Footer() {
               <Image
                 src="/images/logo.png"
                 alt={BUSINESS.legalName}
-                width={1500}
-                height={1061}
+                width={600}
+                height={400}
                 className="h-16 w-auto"
               />
             </Link>

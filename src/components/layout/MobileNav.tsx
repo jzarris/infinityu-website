@@ -35,8 +35,8 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
           <Image
             src="/images/logo.png"
             alt={BUSINESS.legalName}
-            width={1500}
-            height={1061}
+            width={600}
+            height={400}
             className="h-10 w-auto"
           />
           <button onClick={onClose} className="p-2 hover:bg-surface rounded-lg" aria-label="Close menu">
