@@ -29,7 +29,7 @@ export function ServiceHero({
             className="absolute inset-0"
             style={{
               background:
-                'linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.7) 100%)',
+                'linear-gradient(180deg, rgba(58,27,48,0.5) 0%, rgba(58,27,48,0.65) 100%)',
             }}
           />
         </>

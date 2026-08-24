@@ -30,7 +30,7 @@ function StaticPuzzleGrid() {
               backgroundSize: '300% 400%',
               backgroundPosition: `${(col / 2) * 100}% ${(row / 3) * 100}%`,
               borderRadius: 'var(--radius-md)',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.18)',
+              boxShadow: '0 2px 8px rgba(58,27,48,0.15)',
             }}
           />
         );

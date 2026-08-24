@@ -98,7 +98,7 @@ export function ServicesOverview() {
                   className="absolute inset-0"
                   style={{
                     background:
-                      'linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.35) 100%)',
+                      'linear-gradient(180deg, rgba(58,27,48,0) 40%, rgba(58,27,48,0.4) 100%)',
                   }}
                 />
                 <div className="absolute top-4 left-4 w-11 h-11 rounded-lg bg-white/95 backdrop-blur flex items-center justify-center shadow-sm">

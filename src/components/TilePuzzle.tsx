@@ -267,7 +267,7 @@ export function TilePuzzle({
                   backgroundSize: `${cols * 100}% ${rows * 100}%`,
                   backgroundPosition: `${(origC / colDen) * 100}% ${(origR / rowDen) * 100}%`,
                   borderRadius: 'var(--radius-md)',
-                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)',
+                  boxShadow: '0 2px 8px rgba(58, 27, 48, 0.15)',
                 }}
               />
             </button>

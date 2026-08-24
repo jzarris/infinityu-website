@@ -30,8 +30,8 @@ export function Header() {
         className={cn(
           'sticky top-0 z-30 transition-all duration-300',
           scrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-md'
-            : 'bg-white'
+            ? 'bg-background/95 backdrop-blur-md shadow-md'
+            : 'bg-background'
         )}
       >
         <div className="container-custom flex items-center justify-between h-20">

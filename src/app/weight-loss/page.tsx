@@ -41,7 +41,7 @@ export default function WeightLossPage() {
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.6) 100%)',
+              'linear-gradient(180deg, rgba(58,27,48,0.45) 0%, rgba(58,27,48,0.65) 100%)',
           }}
         />
         <div className="container-custom relative z-10 py-20 text-center">

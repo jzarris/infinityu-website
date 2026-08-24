@@ -92,6 +92,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={fontClasses}>
       <head>
+        <meta name="theme-color" content="#FDF9FB" />
         {/* Preload puzzle image early — it's a CSS background-image so browsers discover it late */}
         <link rel="preload" as="image" href="/images/tilepuzzle.jpg" fetchPriority="high" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />

@@ -21,12 +21,12 @@ export const THEMES: Theme[] = [
   {
     id: 'spa',
     name: 'Spa Minimalism',
-    tagline: 'Quiet Luxury',
-    description: 'Deep forest green with gold accents. Cormorant serif + Inter. Calming and trustworthy.',
+    tagline: 'Pink Beauty & Wellness',
+    description: 'Plum ink with rose and berry accents. Cormorant serif + Inter. Warm and on-brand.',
     preview: {
-      primary: '#2D4A3E',
-      accent: '#B8A270',
-      background: '#FAF8F4',
+      primary: '#3A1B30',
+      accent: '#A32463',
+      background: '#FDF9FB',
     },
   },
   {

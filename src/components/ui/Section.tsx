@@ -9,7 +9,7 @@ interface SectionProps {
 }
 
 const bgStyles = {
-  white: 'bg-white',
+  white: 'bg-surface',
   surface: 'bg-surface',
   'surface-alt': 'bg-surface-alt',
   primary: 'gradient-primary text-white',

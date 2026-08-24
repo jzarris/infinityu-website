@@ -17,7 +17,7 @@ export function CTABand() {
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(120deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.7) 100%)',
+            'linear-gradient(120deg, rgba(58,27,48,0.6) 0%, rgba(58,27,48,0.45) 50%, rgba(58,27,48,0.65) 100%)',
         }}
       />
       <div className="container-custom relative z-10 text-center">
