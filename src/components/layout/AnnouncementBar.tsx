@@ -24,9 +24,9 @@ export function AnnouncementBar() {
     <div className="bg-accent text-primary-dark text-sm py-2.5 px-4 relative">
       <div className="container-custom flex items-center justify-center">
         <p className="font-medium">
-          Welcome Dr. SiSii & Dr. Mike to InfinityU!{' '}
-          <Link href="/doctors" className="underline hover:no-underline font-semibold">
-            Meet our doctors
+          Welcome Dr. Mike to InfinityU!{' '}
+          <Link href="/medical-professionals" className="underline hover:no-underline font-semibold">
+            Meet our doctor
           </Link>
         </p>
         <button

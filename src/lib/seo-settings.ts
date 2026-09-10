@@ -47,6 +47,6 @@ export const SEO_PAGES = [
   { slug: 'radio-frequency', label: 'Radio Frequency', path: '/services/radio-frequency' },
   { slug: 'body-contouring', label: 'Body Contouring', path: '/services/body-contouring' },
   { slug: 'weight-loss', label: 'Weight Loss', path: '/weight-loss' },
-  { slug: 'doctors', label: 'Our Doctors', path: '/doctors' },
+  { slug: 'medical-professionals', label: 'Our Doctor', path: '/medical-professionals' },
   { slug: 'contact', label: 'Contact', path: '/contact' },
 ] as const;

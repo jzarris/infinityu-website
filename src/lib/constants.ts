@@ -43,7 +43,7 @@ export const NAV_LINKS = [
     ],
   },
   { label: 'Weight Loss', href: '/weight-loss' },
-  { label: 'Our Doctors', href: '/doctors' },
+  { label: 'Our Doctor', href: '/medical-professionals' },
   // { label: 'Gallery', href: '/gallery' },
   { label: 'Contact', href: '/contact' },
 ] as const;

@@ -12,18 +12,17 @@ export function DoctorsPreview() {
       <div className="text-center mb-12">
         <p className="text-accent font-medium tracking-wider uppercase text-sm mb-3">Our Team</p>
         <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">
-          Meet Our Doctors
+          Meet Our Doctor
         </h2>
         <p className="text-text-muted max-w-2xl mx-auto">
-          Board-certified physicians dedicated to helping you achieve your aesthetic goals
+          Board-certified physician dedicated to helping you achieve your aesthetic goals
           with expertise, compassion, and personalized care.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-        {doctors.map((doctor) => (
+      <div className="max-w-sm mx-auto">
+        {doctors.slice(0, 1).map((doctor) => (
           <Card key={doctor.slug} hover className="text-center">
-            {/* Placeholder headshot */}
             <div className="w-32 h-32 rounded-full bg-gradient-to-br from-accent/20 to-secondary/20 mx-auto mb-6 flex items-center justify-center">
               {doctor.headshotUrl ? (
                 <Image
@@ -46,7 +45,7 @@ export function DoctorsPreview() {
               ))}
             </div>
             <p className="text-text-muted text-sm line-clamp-3 mb-6">{doctor.bio}</p>
-            <Button href="/doctors" variant="outline" size="sm">
+            <Button href="/medical-professionals" variant="outline" size="sm">
               View Full Profile
             </Button>
           </Card>

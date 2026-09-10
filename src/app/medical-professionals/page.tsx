@@ -7,11 +7,13 @@ import { generatePageMetadata } from '@/lib/seo';
 import { User, Award } from 'lucide-react';
 
 export const metadata: Metadata = generatePageMetadata(
-  'Our Doctors',
-  'Meet the board-certified physicians at InfinityU Med Spa in Huntington Beach. Expertise in aesthetic medicine, injectables, body contouring, and weight loss.'
+  'Our Doctor',
+  'Meet the board-certified physician at InfinityU Med Spa in Huntington Beach. Expertise in aesthetic medicine, regenerative medicine, BHRT, body contouring, and weight loss.'
 );
 
-export default function DoctorsPage() {
+export default function MedicalProfessionalsPage() {
+  const doctor = doctors[0];
+
   return (
     <>
       {/* Hero */}
@@ -19,19 +21,19 @@ export default function DoctorsPage() {
         <div className="container-custom text-center">
           <p className="text-accent font-medium tracking-wider uppercase text-sm mb-3">Our Team</p>
           <h1 className="font-heading text-4xl md:text-5xl font-bold text-white mb-6">
-            Meet Our Doctors
+            Meet Our Doctor
           </h1>
           <p className="text-white/70 text-lg max-w-2xl mx-auto">
-            Our board-certified physicians combine years of experience with a genuine
+            Our board-certified physician combines years of experience with a genuine
             passion for helping patients look and feel their best.
           </p>
         </div>
       </section>
 
-      {/* Doctor Profiles */}
-      {doctors.map((doctor, index) => (
-        <Section key={doctor.slug} background={index % 2 === 0 ? 'white' : 'surface'}>
-          <div className={`flex flex-col lg:flex-row items-center gap-12 ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
+      {/* Doctor Profile */}
+      {doctor && (
+        <Section background="white">
+          <div className="flex flex-col lg:flex-row items-center gap-12">
             {/* Headshot */}
             <div className="shrink-0">
               <div className="w-64 h-64 lg:w-80 lg:h-80 rounded-2xl bg-gradient-to-br from-accent/20 to-secondary/20 flex items-center justify-center overflow-hidden">
@@ -74,11 +76,10 @@ export default function DoctorsPage() {
                   ))}
                 </div>
               </div>
-
             </div>
           </div>
         </Section>
-      ))}
+      )}
     </>
   );
 }

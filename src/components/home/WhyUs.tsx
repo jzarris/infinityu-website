@@ -6,7 +6,7 @@ const reasons = [
   {
     icon: ShieldCheck,
     title: 'Board-Certified Physicians',
-    description: 'Our doctors bring years of specialized training and expertise in medical aesthetics.',
+    description: 'Our doctor brings years of specialized training and expertise in medical aesthetics.',
   },
   {
     icon: UserCheck,

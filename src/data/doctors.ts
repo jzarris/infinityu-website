@@ -30,21 +30,4 @@ export const doctors: Doctor[] = [
     bio: 'Dr. Mike is a dedicated aesthetic and regenerative medicine physician with expertise in Bioidentical Hormone Replacement Therapy (BHRT), body contouring, and advanced skin tightening technologies. As a Purepell Certified Provider, he specializes in precision hormone optimization for men and women alongside comprehensive weight management programs. His approach integrates the latest in regenerative and aesthetic medicine with a commitment to natural-looking results that enhance each patient\'s confidence and well-being.',
     headshotUrl: '/images/doctors/dr_le.png',
   },
-  {
-    slug: 'dr-sisii',
-    name: 'Dr. Sepideh "Sisii" Yadollahi',
-    title: 'Aesthetic Physician',
-    credentials: [
-      'Board Certified',
-      'Advanced Aesthetic Medicine',
-    ],
-    specializations: [
-      'Injectables & Neuromodulators',
-      'Regenerative Aesthetics (PRP/PRF)',
-      'High-Intensity Focused Ultrasound (HiFu)',
-      'Medical Weight Loss',
-    ],
-    bio: 'Dr. SiSii brings extensive expertise in medical aesthetics and regenerative medicine to InfinityU. With a passion for helping patients achieve their aesthetic goals through evidence-based treatments, she specializes in advanced injectable techniques, skin rejuvenation, and personalized treatment plans tailored to each patient\'s unique needs.',
-    headshotUrl: '/images/doctors/dr-sisii.png',
-  },
 ];
