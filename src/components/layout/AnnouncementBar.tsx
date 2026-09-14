@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import Link from 'next/link';
 
-const STORAGE_KEY = 'infinityu-announcement-dismissed';
+const STORAGE_KEY = 'infinityu-announcement-grand-opening';
 
 export function AnnouncementBar() {
   const [dismissed, setDismissed] = useState(true);
@@ -24,10 +23,10 @@ export function AnnouncementBar() {
     <div className="bg-accent text-primary-dark text-sm py-2.5 px-4 relative">
       <div className="container-custom flex items-center justify-center">
         <p className="font-medium">
-          Welcome Dr. Mike to InfinityU!{' '}
-          <Link href="/medical-professionals" className="underline hover:no-underline font-semibold">
-            Meet our doctor
-          </Link>
+          🎉 Grand Opening — September 26, 2026 · 4–8 PM{' '}
+          <a href="https://rsvp.infinity-u.com" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline font-semibold">
+            RSVP now
+          </a>
         </p>
         <button
           onClick={handleDismiss}
