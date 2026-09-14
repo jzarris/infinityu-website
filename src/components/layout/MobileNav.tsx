@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { X, ChevronDown } from 'lucide-react';
@@ -14,6 +14,11 @@ interface MobileNavProps {
 
 export function MobileNav({ isOpen, onClose }: MobileNavProps) {
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
+  const [showRsvp, setShowRsvp] = useState(false);
+
+  useEffect(() => {
+    setShowRsvp(new Date() < new Date('2026-09-27T00:00:00'));
+  }, []);
 
   return (
     <>
@@ -88,6 +93,19 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
               )}
             </div>
           ))}
+          {showRsvp && (
+            <div className="pt-2">
+              <a
+                href="https://rsvp.infinity-u.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={onClose}
+                className="flex items-center gap-2 py-3 text-accent font-semibold hover:text-accent-dark transition-colors"
+              >
+                🎉 Grand Opening RSVP
+              </a>
+            </div>
+          )}
         </nav>
 
         {BUSINESS.bookingUrl && (

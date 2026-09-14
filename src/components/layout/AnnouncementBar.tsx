@@ -9,6 +9,10 @@ export function AnnouncementBar() {
   const [dismissed, setDismissed] = useState(true);
 
   useEffect(() => {
+    if (new Date() >= new Date('2026-09-27T00:00:00')) {
+      setDismissed(true);
+      return;
+    }
     setDismissed(localStorage.getItem(STORAGE_KEY) === 'true');
   }, []);
 

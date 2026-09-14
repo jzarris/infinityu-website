@@ -14,6 +14,7 @@ export function Header() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [showRsvp, setShowRsvp] = useState(false);
 
   useEffect(() => {
     function handleScroll() {
@@ -21,6 +22,10 @@ export function Header() {
     }
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setShowRsvp(new Date() < new Date('2026-09-27T00:00:00'));
   }, []);
 
   return (
@@ -96,6 +101,16 @@ export function Header() {
                 )}
               </div>
             ))}
+            {showRsvp && (
+              <a
+                href="https://rsvp.infinity-u.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-semibold text-white bg-accent hover:bg-accent-dark transition-colors px-3 py-1.5 rounded-full"
+              >
+                🎉 RSVP
+              </a>
+            )}
           </nav>
 
           {/* Right side */}
