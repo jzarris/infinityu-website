@@ -94,17 +94,30 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
             </div>
           ))}
           {showRsvp && (
-            <div className="pt-2">
-              <a
-                href="https://rsvp.infinity-u.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={onClose}
-                className="flex items-center gap-2 py-3 text-accent font-semibold hover:text-accent-dark transition-colors"
-              >
-                🎉 Grand Opening RSVP
-              </a>
-            </div>
+            <>
+              <div className="pt-2">
+                <a
+                  href="https://rsvp.infinity-u.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={onClose}
+                  className="flex items-center gap-2 py-3 text-accent font-semibold hover:text-accent-dark transition-colors"
+                >
+                  🎉 Grand Opening RSVP
+                </a>
+              </div>
+              <div>
+                <a
+                  href="https://shop.infinity-u.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={onClose}
+                  className="flex items-center gap-2 py-3 text-accent font-semibold hover:text-accent-dark transition-colors"
+                >
+                  🛍️ Grand Opening Deals
+                </a>
+              </div>
+            </>
           )}
         </nav>
 

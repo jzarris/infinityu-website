@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 
-const STORAGE_KEY = 'infinityu-announcement-grand-opening';
+const STORAGE_KEY = 'infinityu-announcement-grand-opening-v2';
 
 export function AnnouncementBar() {
   const [dismissed, setDismissed] = useState(true);
@@ -30,6 +30,10 @@ export function AnnouncementBar() {
           🎉 Grand Opening — September 26, 2026 · 4–8 PM{' '}
           <a href="https://rsvp.infinity-u.com" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline font-semibold">
             RSVP now
+          </a>
+          {' · '}
+          <a href="https://shop.infinity-u.com" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline font-semibold">
+            🛍️ Grand Opening Deals
           </a>
         </p>
         <button

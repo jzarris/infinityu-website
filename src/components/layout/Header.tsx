@@ -102,14 +102,24 @@ export function Header() {
               </div>
             ))}
             {showRsvp && (
-              <a
-                href="https://rsvp.infinity-u.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm font-semibold text-white bg-accent hover:bg-accent-dark transition-colors px-3 py-1.5 rounded-full"
-              >
-                🎉 RSVP
-              </a>
+              <>
+                <a
+                  href="https://rsvp.infinity-u.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-semibold text-white bg-accent hover:bg-accent-dark transition-colors px-3 py-1.5 rounded-full"
+                >
+                  🎉 RSVP
+                </a>
+                <a
+                  href="https://shop.infinity-u.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-semibold text-accent border border-accent hover:bg-surface-alt transition-colors px-3 py-1.5 rounded-full"
+                >
+                  🛍️ Shop Deals
+                </a>
+              </>
             )}
           </nav>
 
