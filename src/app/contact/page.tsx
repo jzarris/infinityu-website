@@ -20,6 +20,7 @@ const serviceOptions = [
   'Hormone Optimization (BHRT)',
   'Weight Loss Program',
   'Sculptra',
+  'Promo/Sales',
   'Other / General Inquiry',
 ];
 
@@ -28,7 +29,7 @@ export default function ContactPage() {
     name: '',
     email: '',
     phone: '',
-    service: '',
+    services: [] as string[],
     message: '',
     smsConsentTransactional: true,
     smsConsentMarketing: false,
@@ -37,9 +38,13 @@ export default function ContactPage() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('sms_promo') === '1') {
-      setFormState(prev => ({ ...prev, smsConsentMarketing: true }));
-    }
+    const serviceParams = params.getAll('service');
+    const preSelected = serviceOptions.filter(s => serviceParams.includes(s));
+    setFormState(prev => ({
+      ...prev,
+      ...(preSelected.length > 0 && { services: preSelected }),
+      ...(params.get('sms_promo') === '1' && { smsConsentMarketing: true }),
+    }));
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -55,6 +60,7 @@ export default function ContactPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formState,
+          service: formState.services.join(', ') || null,
           smsConsentTransactionalText: smsTransactionalText,
           smsConsentMarketingText: smsMarketingText,
         }),
@@ -62,7 +68,7 @@ export default function ContactPage() {
 
       if (res.ok) {
         setStatus('success');
-        setFormState({ name: '', email: '', phone: '', service: '', message: '', smsConsentTransactional: true, smsConsentMarketing: false });
+        setFormState({ name: '', email: '', phone: '', services: [], message: '', smsConsentTransactional: true, smsConsentMarketing: false });
       } else {
         setStatus('error');
       }
@@ -157,18 +163,25 @@ export default function ContactPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="service" className="block text-sm font-medium mb-1.5">Service of Interest</label>
-                  <select
-                    id="service"
-                    value={formState.service}
-                    onChange={(e) => setFormState({ ...formState, service: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg border border-border bg-white focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-colors"
-                  >
-                    <option value="">Select a service...</option>
+                  <p className="block text-sm font-medium mb-1.5">Services of Interest</p>
+                  <div className="rounded-lg border border-border bg-surface p-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {serviceOptions.map((option) => (
-                      <option key={option} value={option}>{option}</option>
+                      <label key={option} className="flex items-center gap-2.5 cursor-pointer group">
+                        <input
+                          type="checkbox"
+                          checked={formState.services.includes(option)}
+                          onChange={(e) => {
+                            const next = e.target.checked
+                              ? [...formState.services, option]
+                              : formState.services.filter(s => s !== option);
+                            setFormState({ ...formState, services: next });
+                          }}
+                          className="w-4 h-4 rounded border-border text-accent focus:ring-accent shrink-0"
+                        />
+                        <span className="text-sm text-text-muted group-hover:text-text transition-colors">{option}</span>
+                      </label>
                     ))}
-                  </select>
+                  </div>
                 </div>
 
                 <div>
