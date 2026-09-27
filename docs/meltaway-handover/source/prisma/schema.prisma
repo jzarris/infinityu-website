@@ -1,0 +1,340 @@
+// Prisma Schema for MeltAwayMD
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id                       String                    @id @default(cuid())
+  name                     String?
+  email                    String?                   @unique
+  emailVerified            DateTime?
+  image                    String?
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+  phone                    String?
+  phoneVerified            Boolean                   @default(false)
+  dateOfBirth              String?
+  asherPatientId           Int?                      // Asher Med patient ID for partner portal link
+  aestheticIqClientId      String?                   // AestheticIQ client ID for spa management sync
+  role                     String                    @default("patient")
+  password                 String?
+  totpSecret               String?
+  totpEnabled              Boolean                   @default(false)
+  isActive                 Boolean                   @default(true)
+  accounts                 Account[]
+  sessions                 Session[]
+  passwordResetTokens      PasswordResetToken[]
+  questionnaireSubmissions QuestionnaireSubmission[]
+  tags                     UserTag[]
+  notes                    PatientNote[]             @relation("PatientNotes")
+  authoredNotes            PatientNote[]             @relation("NoteAuthor")
+  trustedBrowsers          TrustedBrowser[]
+  photoConsents            PhotoConsent[]
+  bodyPhotos               BodyPhoto[]
+  simulations              Simulation[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model SupportMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  subject   String
+  message   String
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  type      String   @default("setup") // "setup" for new accounts, "reset" for password reset
+  expires   DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Admin audit log for security events (immutable, 90-day retention)
+model AuditLog {
+  id          String   @id @default(cuid())
+  timestamp   DateTime @default(now())
+  action      String   // "login_success", "login_failed", "unauthorized_access", "logout", "password_change", "totp_enabled", "totp_disabled", "patient_created", "patient_updated", "patient_deleted", "settings_changed"
+  actor       String?  // Email or identifier of who performed the action (null for failed logins with unknown user)
+  actorId     String?  // User ID if available
+  actorRole   String?  // "admin", "patient", or null
+  target      String?  // What was affected (e.g., patient email, setting name)
+  targetId    String?  // ID of affected resource
+  ipAddress   String?  // IP address of the request
+  country     String?  // Country code from IP geolocation (e.g., "US", "CA")
+  userAgent   String?  // Browser/client info
+  details     String?  // JSON string with additional context
+  success     Boolean  @default(true)
+  expiresAt   DateTime // Auto-calculated: createdAt + 90 days
+
+  @@index([timestamp])
+  @@index([action])
+  @@index([actor])
+  @@index([expiresAt])
+}
+
+// SMS consent records for compliance (TCPA, etc.)
+model SmsConsent {
+  id              String   @id @default(cuid())
+  email           String   // Email of the person who consented
+  phone           String?  // Phone number if provided
+  firstName       String?
+  lastName        String?
+  consentType     String   // "transactional" or "marketing"
+  consented       Boolean  // true = opted in, false = opted out
+  ipAddress       String?  // IP address at time of consent
+  userAgent       String?  // Browser user agent at time of consent
+  source          String   // Where consent was given: "contact_form", "intake_form", etc.
+  consentText     String   // The exact text shown to user when they consented
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Patient questionnaire submissions (intake assessments)
+model QuestionnaireSubmission {
+  id                 String   @id @default(cuid())
+
+  // Link to user (may be null if submitted before user account created)
+  userId             String?
+  user               User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  // Contact info at time of submission
+  email              String
+  firstName          String
+  lastName           String
+  phone              String
+  dateOfBirth        String
+  state              String
+  biologicalSex      String?
+
+  // Assessment data
+  selectedGoals      String   // JSON array of goal IDs
+  answers            String   // JSON object with all questionnaire answers
+  eligibleProducts   String   // JSON array of eligible product IDs
+  ineligibleProducts String   // JSON array of {productId, reason} objects
+
+  // Language the form was in at submission, and every language activated during the session
+  submissionLanguage String   @default("en")
+  languagesUsed      String   @default("[\"en\"]") // JSON array of language codes
+
+  // Computed summary for display
+  healthSummary      String?  // Human-readable health info summary
+
+  // Metadata
+  ipAddress          String?
+  userAgent          String?
+  submittedAt        DateTime @default(now())
+
+  // Zoho sync status
+  zohoContactId      String?
+  zohoLeadId         String?
+  zohoSyncedAt       DateTime?
+
+  @@index([userId])
+  @@index([email])
+  @@index([submittedAt])
+}
+
+// Tags for organizing patients
+model Tag {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  color     String    @default("#6366F1") // Hex color for display
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  users     UserTag[]
+
+  @@index([name])
+}
+
+// Many-to-many relationship between Users and Tags
+model UserTag {
+  id        String   @id @default(cuid())
+  userId    String
+  tagId     String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tagId])
+  @@index([userId])
+  @@index([tagId])
+}
+
+// Notes attached to patient accounts (admin-written)
+model PatientNote {
+  id        String   @id @default(cuid())
+  patientId String   // The patient this note is about
+  authorId  String   // The admin who wrote the note
+  content   String   // The note text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  patient   User     @relation("PatientNotes", fields: [patientId], references: [id], onDelete: Cascade)
+  author    User     @relation("NoteAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
+  @@index([authorId])
+  @@index([createdAt])
+}
+
+// Trusted browsers for 2FA bypass (30-day remember me)
+model TrustedBrowser {
+  id           String   @id @default(cuid())
+  userId       String
+  tokenHash    String   @unique // Hashed browser token for security
+  userAgent    String?  // Browser/device info for display
+  ipAddress    String?  // IP address when trust was established
+  lastUsed     DateTime @default(now()) // Last time this trusted browser was used
+  expiresAt    DateTime // When the trust expires (30 days from creation)
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+  @@index([expiresAt])
+}
+
+// Database-backed rate limiting for OTP endpoints (survives restarts, shared across replicas).
+// Keys are SHA-256 hashes of "purpose:identifier".
+model RateLimitBucket {
+  key         String    @id
+  count       Int       @default(0)
+  windowStart DateTime
+  lockedUntil DateTime?
+  updatedAt   DateTime  @updatedAt
+
+  @@index([windowStart])
+}
+
+// Consent to capture and store a body photo. The exact text shown is stored so a
+// later policy edit cannot rewrite what the person agreed to.
+model PhotoConsent {
+  id          String    @id @default(cuid())
+  userId      String
+  version     String
+  textShown   String
+  purposes    String    // JSON array of purpose codes, e.g. ["simulation"]
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime  @default(now())
+  withdrawnAt DateTime?
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  photos      BodyPhoto[]
+
+  @@index([userId])
+}
+
+// A stored body photo. Bytes live encrypted on the volume, never in Postgres.
+model BodyPhoto {
+  id             String       @id @default(cuid())
+  userId         String
+  consentId      String
+  storageKey     String       @unique
+  sha256         String
+  width          Int
+  height         Int
+  contentType    String       @default("image/jpeg")
+  capturedAt     DateTime     @default(now())
+  retentionAt    DateTime
+  deletedAt      DateTime?
+  status         String       @default("accepted") // "accepted" | "refused"
+  refusalReasons String?      // JSON array of codes when refused
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  consent        PhotoConsent @relation(fields: [consentId], references: [id])
+  simulations    Simulation[]
+
+  @@index([userId])
+  @@index([retentionAt])
+}
+
+// One simulation run against a stored photo.
+model Simulation {
+  id                    String    @id @default(cuid())
+  photoId               String
+  userId                String
+  cohort                String    // "pre_signup" | "post_login" | "admin_rerun"
+  units                 String    @default("imperial") // "imperial" | "metric"
+  paramsMetric          String    // JSON: height_cm, weight_kg, target_weight_kg, sex, age
+  paramsDisplay         String    // JSON: strings as entered/displayed
+  goalWeightKgRequested Float
+  goalWeightKgApplied   Float
+  status                String    @default("pending") // pending | done | refused | failed
+  remoteCallId          String?
+  outputKeys            String?   // JSON: { variantName: storageKey }
+  diagnostics           String?   // JSON: pipeline record minus identifying fields
+  refusalReasons        String?   // JSON array
+  userMessage           String?
+  modelVersion          String?
+  configOverrides       String?   // JSON, for admin re-runs
+  rerunOfId             String?
+  notifyRequested       Boolean   @default(false) // text the person when the run finishes
+  notifiedAt            DateTime?
+  createdAt             DateTime  @default(now())
+  completedAt           DateTime?
+  deletedAt             DateTime?
+  photo                 BodyPhoto @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([photoId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// Cached Instagram post thumbnails (served locally to avoid expired CDN URLs)
+model InstagramPost {
+  id          String   @id @default(cuid())
+  postUrl     String   @unique // Original Instagram post URL
+  imageData   Bytes    // Fetched thumbnail image binary data
+  contentType String   @default("image/jpeg") // MIME type
+  title       String   @default("")
+  authorName  String   @default("meltawaymd")
+  fetchedAt   DateTime @default(now())
+  sortOrder   Int      @default(0) // Display order
+
+  @@index([sortOrder])
+}
