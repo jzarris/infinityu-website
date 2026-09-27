@@ -18,7 +18,7 @@ export interface AuditLogEntry {
   action: AuditAction;
   actor?: string;
   actorId?: string;
-  actorRole?: 'admin' | null;
+  actorRole?: 'admin' | 'patient' | null;
   target?: string;
   targetId?: string;
   ipAddress?: string;
