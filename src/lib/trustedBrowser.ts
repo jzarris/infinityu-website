@@ -50,3 +50,8 @@ export async function revokeAllTrustedBrowsers(userId: string): Promise<number> 
   const result = await prisma.trustedBrowser.deleteMany({ where: { userId } });
   return result.count;
 }
+
+export async function cleanupExpiredTrustedBrowsers(): Promise<number> {
+  const result = await prisma.trustedBrowser.deleteMany({ where: { expiresAt: { lt: new Date() } } });
+  return result.count;
+}
