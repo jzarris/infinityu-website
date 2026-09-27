@@ -35,21 +35,29 @@ model Session {
 }
 
 model User {
-  id              String           @id @default(cuid())
-  name            String?
-  email           String?          @unique
-  emailVerified   DateTime?
-  image           String?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  role            String           @default("user")
-  password        String?
-  totpSecret      String?
-  totpEnabled     Boolean          @default(false)
-  isActive        Boolean          @default(true)
-  accounts        Account[]
-  sessions        Session[]
-  trustedBrowsers TrustedBrowser[]
+  id                       String                    @id @default(cuid())
+  name                     String?
+  email                    String?                   @unique
+  emailVerified            DateTime?
+  image                    String?
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+  role                     String                    @default("user")
+  password                 String?
+  totpSecret               String?
+  totpEnabled              Boolean                   @default(false)
+  isActive                 Boolean                   @default(true)
+  phone                    String?
+  phoneVerified            Boolean                   @default(false)
+  dateOfBirth              String?
+  isPatient                Boolean                   @default(false)
+  accounts                 Account[]
+  sessions                 Session[]
+  trustedBrowsers          TrustedBrowser[]
+  questionnaireSubmissions QuestionnaireSubmission[]
+  photoConsents            PhotoConsent[]
+  bodyPhotos               BodyPhoto[]
+  simulations              Simulation[]
 }
 
 model VerificationToken {
@@ -105,6 +113,114 @@ model Setting {
   key       String   @id
   value     String
   updatedAt DateTime @updatedAt
+}
+
+model QuestionnaireSubmission {
+  id                 String   @id @default(cuid())
+  userId             String?
+  user               User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  email              String
+  firstName          String
+  lastName           String
+  phone              String
+  dateOfBirth        String
+  state              String
+  biologicalSex      String?
+  selectedGoals      String
+  answers            String
+  eligibleProducts   String
+  ineligibleProducts String
+  healthSummary      String?
+  submissionLanguage String   @default("en")
+  languagesUsed      String   @default("[\"en\"]")
+  ipAddress          String?
+  userAgent          String?
+  submittedAt        DateTime @default(now())
+
+  @@index([userId])
+  @@index([email])
+  @@index([submittedAt])
+}
+
+model RateLimitBucket {
+  key         String    @id
+  count       Int       @default(0)
+  windowStart DateTime
+  lockedUntil DateTime?
+  updatedAt   DateTime  @updatedAt
+
+  @@index([windowStart])
+}
+
+model PhotoConsent {
+  id          String      @id @default(cuid())
+  userId      String
+  version     String
+  textShown   String
+  purposes    String
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime    @default(now())
+  withdrawnAt DateTime?
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  photos      BodyPhoto[]
+
+  @@index([userId])
+}
+
+model BodyPhoto {
+  id             String       @id @default(cuid())
+  userId         String
+  consentId      String
+  storageKey     String       @unique
+  sha256         String
+  width          Int
+  height         Int
+  contentType    String       @default("image/jpeg")
+  capturedAt     DateTime     @default(now())
+  retentionAt    DateTime
+  deletedAt      DateTime?
+  status         String       @default("accepted")
+  refusalReasons String?
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  consent        PhotoConsent @relation(fields: [consentId], references: [id])
+  simulations    Simulation[]
+
+  @@index([userId])
+  @@index([retentionAt])
+}
+
+model Simulation {
+  id                    String    @id @default(cuid())
+  photoId               String
+  userId                String
+  cohort                String
+  units                 String    @default("imperial")
+  paramsMetric          String
+  paramsDisplay         String
+  goalWeightKgRequested Float
+  goalWeightKgApplied   Float
+  status                String    @default("pending")
+  remoteCallId          String?
+  outputKeys            String?
+  diagnostics           String?
+  refusalReasons        String?
+  userMessage           String?
+  modelVersion          String?
+  configOverrides       String?
+  rerunOfId             String?
+  notifyRequested       Boolean   @default(false)
+  notifiedAt            DateTime?
+  createdAt             DateTime  @default(now())
+  completedAt           DateTime?
+  deletedAt             DateTime?
+  photo                 BodyPhoto @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([photoId])
+  @@index([status])
+  @@index([createdAt])
 }
 
 model TrustedBrowser {
