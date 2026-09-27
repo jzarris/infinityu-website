@@ -40,3 +40,6 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# Photo store (Railway volume; never commit photos)
+/data/photos
