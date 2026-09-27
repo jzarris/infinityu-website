@@ -71,6 +71,20 @@ export default function PrivacyPolicyPage() {
             No mobile information, text messaging originator opt-in data, or consent will be shared with or sold to third parties or affiliates for marketing or promotional purposes. SMS opt-in consent and phone numbers collected for text messaging are excluded from all the sharing categories listed above. This data is used solely to deliver the messaging you requested and is shared only with our SMS delivery provider as needed to operate the service, or as required by law.
           </p>
 
+          <section id="body-simulator-photos" className="scroll-mt-24">
+            <h2>5a. Body Simulator Photos</h2>
+            <p>
+              If you choose to use our body simulator, you may provide a full-body photo of yourself. We use that photo only to produce a computer-generated image estimating how your body might look at a goal weight you choose. The result is a simulation, not a prediction or a promise, and individual results vary.
+            </p>
+            <ul>
+              <li>Your photo and the simulated images are stored encrypted on our systems. To generate the simulation, the photo is processed by a contracted computing provider that does not retain it.</li>
+              <li>We do not use your photo for advertising, sell it, share it with anyone else, or use it to train or improve any model.</li>
+              <li>Photos and simulated images are deleted automatically after a limited period: 30 days if you do not become a patient, and up to one year if you do. Photos we could not use are deleted within 7 days.</li>
+              <li>You can delete your photo and images at any time from the simulator page, and our staff can delete them on request.</li>
+              <li>Using the simulator is optional and does not affect any care or program decision. You will be asked to agree to these terms before taking a photo.</li>
+            </ul>
+          </section>
+
           <h2>5. Data Security</h2>
           <p>
             We implement reasonable security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet is 100% secure.
