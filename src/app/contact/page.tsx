@@ -20,7 +20,7 @@ const serviceOptions = [
   'Hormone Optimization (BHRT)',
   'Weight Loss Program',
   'Sculptra',
-  'Promo/Sales',
+  'Early Access to Promos/Sales',
   'Other / General Inquiry',
 ];
 
