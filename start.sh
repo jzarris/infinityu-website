@@ -112,6 +112,8 @@ async function migrate() {
   await prisma.\$executeRawUnsafe(\`CREATE INDEX IF NOT EXISTS \"QuestionnaireSubmission_userId_idx\"      ON \"QuestionnaireSubmission\"(\"userId\")\`);
   await prisma.\$executeRawUnsafe(\`CREATE INDEX IF NOT EXISTS \"QuestionnaireSubmission_email_idx\"       ON \"QuestionnaireSubmission\"(\"email\")\`);
   await prisma.\$executeRawUnsafe(\`CREATE INDEX IF NOT EXISTS \"QuestionnaireSubmission_submittedAt_idx\" ON \"QuestionnaireSubmission\"(\"submittedAt\")\`);
+  // Column added after initial table creation — safe no-op if already present
+  await prisma.\$executeRawUnsafe(\`ALTER TABLE \"QuestionnaireSubmission\" ADD COLUMN IF NOT EXISTS \"acknowledgments\" TEXT\`);
 
   // ── PhotoConsent ────────────────────────────────────────────────────────
   await prisma.\$executeRawUnsafe(\`
