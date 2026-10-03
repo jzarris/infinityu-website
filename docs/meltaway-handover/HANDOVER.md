@@ -449,6 +449,47 @@ Retention cron: copy `source/simulator/modal_cron.py`, change the app name to
 `SITE_URL=https://www.infinity-u.com`, `modal deploy`. Or use any scheduler that
 can POST once a day with the `x-cron-secret` header.
 
+### 5.12 Results & Refund Acknowledgment step (Infinity-U specific; added 2026-10-03)
+
+The source now contains a configurable final questionnaire step, shown after
+"Review & Confirm" and before the results screen and the simulator. It is
+**off on meltawaymd.com** and **must be on for infinity-u.com**:
+
+```
+NEXT_PUBLIC_INTAKE_RESULTS_ACKNOWLEDGMENT=true
+```
+
+Set it in Railway (it is read by both the browser bundle and the server, so a
+redeploy is needed after setting it).
+
+What it does:
+
+- `src/components/intake/acknowledgments.ts` holds the legal text verbatim
+  (two paragraphs: results not guaranteed; all payments final) and the checkbox
+  label, with a version string. The text already names InfinityU; do not
+  reword it without bumping `version`.
+- `questions.ts` appends step `results_acknowledgment` with one question of
+  type `acknowledgment` when the flag is on. `HealthAssessment.tsx` renders
+  the paragraphs in a box and a single checkbox; the step cannot be passed
+  until it is ticked.
+- On submit the browser sends `acknowledgments: [{id, version, title, text,
+  checkboxLabel, acceptedAt}]`. The API refuses the submission (400) if the
+  flag is on and the current version is missing, and stores the array verbatim
+  in `QuestionnaireSubmission.acknowledgments` (new nullable text column; add
+  it to the schema in 5.2).
+- The admin questionnaire view lists each acknowledgment with its version,
+  acceptance time, full text, and the ticked label, so a refund dispute can be
+  answered from the record.
+
+Files touched (all in the bundle): `src/components/intake/acknowledgments.ts`
+(new), `types.ts`, `questions.ts`, `HealthAssessment.tsx`,
+`src/app/api/intake/route.ts`, `src/app/api/admin/patients/[id]/questionnaires/route.ts`
+(reference), `prisma/migrations/20261003000000_questionnaire_acknowledgments/`.
+
+The legal text is English only; the Spanish and Thai translation files do not
+cover it (translation of legal text is a decision for the owner, not an
+automatic one). The step title and description fall back to English.
+
 ### 5.11 Launch checks
 
 Before `simulator_enabled` is turned on:

@@ -5,6 +5,7 @@ import { GoalCategory, Question, ContactInfo, ProductId } from './types';
 import { PRODUCTS } from './products';
 import { getQuestionnaireSteps, CONTACT_QUESTIONS } from './questions';
 import { calculateEligibility, prepareSubmissionData, type EligibilityResult, type ReasonRef } from './eligibility';
+import { acknowledgmentRecord } from './acknowledgments';
 import { LANGUAGES, useIntakeTranslation, type LanguageCode, type TranslationHelpers } from './i18n';
 import { FlagIcon } from './i18n/flags';
 import { Button } from '@/components/ui/Button';
@@ -110,6 +111,8 @@ export function HealthAssessment({ onSubmit, className = '' }: HealthAssessmentP
           return false;
         }
       }
+      // An acknowledgment is only satisfied by an explicit tick.
+      if (question.type === 'acknowledgment' && answer !== true) return false;
       // Numbers must be within the declared range (0 is a valid value, e.g. 0 inches).
       if (question.type === 'number' && typeof answer === 'number') {
         const { min, max } = question.validation || {};
@@ -252,9 +255,17 @@ export function HealthAssessment({ onSubmit, className = '' }: HealthAssessmentP
         languagesUsed,
       };
 
+      // Legal acknowledgments the person ticked, with the exact text and time.
+      const acceptedAt = new Date().toISOString();
+      const acknowledgments = steps
+        .flatMap((s) => s.questions)
+        .filter((q) => q.type === 'acknowledgment' && q.acknowledgment && answers[q.id] === true)
+        .map((q) => acknowledgmentRecord(q.acknowledgment!, acceptedAt));
+
       // Add SMS consent data to submission
       const fullPayload = {
         ...submissionWithMeta,
+        acknowledgments,
         smsConsent: {
           transactional: smsTransactionalConsent,
           marketing: smsMarketingConsent,
@@ -282,7 +293,7 @@ export function HealthAssessment({ onSubmit, className = '' }: HealthAssessmentP
     } finally {
       setIsSubmitting(false);
     }
-  }, [eligibilityResult, contactInfo, selectedGoals, answers, onSubmit, smsTransactionalConsent, smsMarketingConsent, t.language, languagesUsed]);
+  }, [eligibilityResult, contactInfo, selectedGoals, answers, onSubmit, smsTransactionalConsent, smsMarketingConsent, t.language, languagesUsed, steps]);
 
   // Render the input control for a question. Bilingual text is rendered by the
   // surrounding label, not here — these are pure input controls.
@@ -414,6 +425,36 @@ export function HealthAssessment({ onSubmit, className = '' }: HealthAssessmentP
                 </label>
               );
             })}
+          </div>
+        );
+      }
+
+      case 'acknowledgment': {
+        const ack = question.acknowledgment;
+        if (!ack) return null;
+        return (
+          <div className="space-y-4">
+            <div className="text-sm leading-relaxed text-[var(--color-text)] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] p-4 space-y-3">
+              {ack.paragraphs.map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))}
+            </div>
+            <label
+              className={cn(
+                'flex items-start gap-3 p-4 border rounded-[var(--radius-md)] cursor-pointer transition-colors',
+                value === true
+                  ? 'border-[var(--color-primary)] bg-[var(--color-primary)]/5'
+                  : 'border-[var(--color-border)] hover:border-[var(--color-text-muted)]'
+              )}
+            >
+              <input
+                type="checkbox"
+                className="mt-1 h-4 w-4"
+                checked={value === true}
+                onChange={(e) => handleAnswerChange(question.id, e.target.checked)}
+              />
+              <span className="text-sm font-medium text-[var(--color-text)]">{ack.checkboxLabel}</span>
+            </label>
           </div>
         );
       }
@@ -868,10 +909,12 @@ export function HealthAssessment({ onSubmit, className = '' }: HealthAssessmentP
             const helpTranslation = t.tQuestion(question.id, 'helpText');
             return (
               <div key={question.id}>
-                <label className="block text-sm font-medium text-[var(--color-text)] mb-2">
-                  <BilingualText english={question.text} translation={textTranslation} />
-                  {question.required && <span className="text-[var(--color-error)] ml-1">*</span>}
-                </label>
+                {question.type !== 'acknowledgment' && (
+                  <label className="block text-sm font-medium text-[var(--color-text)] mb-2">
+                    <BilingualText english={question.text} translation={textTranslation} />
+                    {question.required && <span className="text-[var(--color-error)] ml-1">*</span>}
+                  </label>
+                )}
                 {question.helpText && (
                   <p className="text-sm text-[var(--color-text-light)] mb-2">
                     <BilingualText english={question.helpText} translation={helpTranslation} />

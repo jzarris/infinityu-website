@@ -11,6 +11,7 @@ import { getContactNotificationEmail } from '@/lib/settings';
 import { cookies } from 'next/headers';
 import { SIM_ACCESS_COOKIE, issueSimAccessToken, simAccessCookieOptions } from '@/lib/sim-access';
 import { simulatorAvailability } from '@/lib/simulator-service';
+import { RESULTS_REFUND_ACKNOWLEDGMENT, isResultsAcknowledgmentEnabled } from '@/components/intake/acknowledgments';
 import { isAestheticIQConfigured, createClientFromLocalPatient } from '@/lib/aestheticiq';
 
 const SETTINGS_FILE = path.join(process.cwd(), 'data', 'config', 'settings.json');
@@ -151,6 +152,15 @@ const questionnaireSchema = z.object({
     reason: z.string(),
   })),
   timestamp: z.string(),
+  // Legal acknowledgments ticked on the final step, with the exact text shown.
+  acknowledgments: z.array(z.object({
+    id: z.string().min(1),
+    version: z.string().min(1),
+    title: z.string(),
+    text: z.string().min(1),
+    checkboxLabel: z.string().min(1),
+    acceptedAt: z.string(),
+  })).optional(),
   smsConsent: z.object({
     transactional: z.boolean(),
     marketing: z.boolean(),
@@ -223,7 +233,19 @@ export async function POST(request: NextRequest) {
     }
     console.log('Validation passed');
 
-    const { contactInfo, selectedGoals, answers, eligibleProducts, ineligibleProducts, smsConsent, submissionLanguage, languagesUsed } = validationResult.data;
+    const { contactInfo, selectedGoals, answers, eligibleProducts, ineligibleProducts, smsConsent, submissionLanguage, languagesUsed, acknowledgments } = validationResult.data;
+
+    // When the results & refund acknowledgment is enabled for this site, a
+    // submission without it is refused server-side, not just in the browser.
+    if (isResultsAcknowledgmentEnabled()) {
+      const ack = (acknowledgments || []).find((a) => a.id === RESULTS_REFUND_ACKNOWLEDGMENT.id);
+      if (!ack || ack.version !== RESULTS_REFUND_ACKNOWLEDGMENT.version) {
+        return NextResponse.json(
+          { success: false, message: 'Please read and accept the Results & Refund Acknowledgment to continue.' },
+          { status: 400 }
+        );
+      }
+    }
 
     // Log all raw answers for debugging
 
@@ -615,6 +637,7 @@ export async function POST(request: NextRequest) {
           submissionLanguage: submissionLanguage || 'en',
           languagesUsed: JSON.stringify(languagesUsed && languagesUsed.length > 0 ? languagesUsed : ['en']),
           healthSummary: healthInfo,
+          acknowledgments: acknowledgments && acknowledgments.length > 0 ? JSON.stringify(acknowledgments) : null,
           ipAddress: submissionIP,
           userAgent: submissionUA,
           zohoContactId,

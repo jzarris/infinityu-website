@@ -650,6 +650,11 @@ export const FINAL_QUESTIONS: Question[] = [
 // ============================================
 
 import { QuestionnaireStep } from './types';
+import {
+  RESULTS_ACKNOWLEDGMENT_QUESTION_ID,
+  RESULTS_REFUND_ACKNOWLEDGMENT,
+  isResultsAcknowledgmentEnabled,
+} from './acknowledgments';
 
 export function getQuestionnaireSteps(selectedGoals: GoalCategory[]): QuestionnaireStep[] {
   const steps: QuestionnaireStep[] = [
@@ -742,6 +747,25 @@ export function getQuestionnaireSteps(selectedGoals: GoalCategory[]): Questionna
     description: 'Almost done!',
     questions: FINAL_QUESTIONS,
   });
+
+  // Results & refund acknowledgment: the last questionnaire step, before the
+  // results screen and the simulator. Site-specific; see acknowledgments.ts.
+  if (isResultsAcknowledgmentEnabled()) {
+    steps.push({
+      id: 'results_acknowledgment',
+      title: RESULTS_REFUND_ACKNOWLEDGMENT.title,
+      description: RESULTS_REFUND_ACKNOWLEDGMENT.description,
+      questions: [
+        {
+          id: RESULTS_ACKNOWLEDGMENT_QUESTION_ID,
+          text: RESULTS_REFUND_ACKNOWLEDGMENT.checkboxLabel,
+          type: 'acknowledgment',
+          required: true,
+          acknowledgment: RESULTS_REFUND_ACKNOWLEDGMENT,
+        },
+      ],
+    });
+  }
 
   return steps;
 }

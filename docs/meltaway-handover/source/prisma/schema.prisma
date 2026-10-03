@@ -164,6 +164,11 @@ model QuestionnaireSubmission {
   // Computed summary for display
   healthSummary      String?  // Human-readable health info summary
 
+  // Legal acknowledgments ticked on the final step: JSON array of
+  // {id, version, title, text, checkboxLabel, acceptedAt}. The text is stored
+  // verbatim so later edits cannot change what was agreed to.
+  acknowledgments    String?
+
   // Metadata
   ipAddress          String?
   userAgent          String?
