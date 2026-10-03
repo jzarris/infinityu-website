@@ -10,9 +10,6 @@ import {
 import { generateSiteMetadata, generateLocalBusinessSchema } from '@/lib/seo';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { ThemeProvider } from '@/components/ThemeProvider';
-import { ThemeSwitcher } from '@/components/ThemeSwitcher';
-import { DEFAULT_THEME } from '@/lib/themes';
 import { DEFAULT_HEADLINE } from '@/lib/headlines';
 import { FaviconProvider } from '@/components/providers/FaviconProvider';
 import './globals.css';
@@ -57,18 +54,14 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = generateSiteMetadata();
 
-// Inline script: apply saved theme + headline before first paint to prevent FOUC
-const themeInitScript = `
+// Inline script: apply saved headline variant before first paint to prevent FOUC
+const headlineInitScript = `
 (function() {
-  var root = document.documentElement;
   try {
-    var t = localStorage.getItem('infinityu-theme') || '${DEFAULT_THEME}';
-    root.classList.add('theme-' + t);
     var h = localStorage.getItem('infinityu-headline') || '${DEFAULT_HEADLINE}';
-    root.setAttribute('data-headline', h);
+    document.documentElement.setAttribute('data-headline', h);
   } catch (e) {
-    root.classList.add('theme-${DEFAULT_THEME}');
-    root.setAttribute('data-headline', '${DEFAULT_HEADLINE}');
+    document.documentElement.setAttribute('data-headline', '${DEFAULT_HEADLINE}');
   }
 })();
 `;
@@ -90,24 +83,22 @@ export default function RootLayout({
   ].join(' ');
 
   return (
-    <html lang="en" className={fontClasses}>
+    <html lang="en" className={`theme-spa ${fontClasses}`}>
       <head>
         <meta name="theme-color" content="#FDF9FB" />
         {/* Preload puzzle image early — it's a CSS background-image so browsers discover it late */}
         <link rel="preload" as="image" href="/images/tilepuzzle.jpg" fetchPriority="high" />
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script dangerouslySetInnerHTML={{ __html: headlineInitScript }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: businessSchema }}
         />
       </head>
       <body className="antialiased">
-        <ThemeProvider />
         <FaviconProvider />
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />
-        <ThemeSwitcher />
       </body>
     </html>
   );
