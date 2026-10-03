@@ -474,6 +474,7 @@ export async function POST(request: NextRequest) {
     let simulatorAvailableFlag = false;
     if (patientUserId && process.env.NEXTAUTH_SECRET) {
       const availability = await simulatorAvailability();
+      console.log('Simulator availability:', JSON.stringify(availability), 'patientUserId:', patientUserId, 'NEXTAUTH_SECRET set:', !!process.env.NEXTAUTH_SECRET);
       if (availability.ok) {
         const cookieStore = await cookies();
         cookieStore.set(
