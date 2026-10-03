@@ -109,6 +109,10 @@ export function HealthAssessment({ onSubmit, className = '' }: HealthAssessmentP
             (Array.isArray(answer) && answer.length === 0)) {
           return false;
         }
+        // Consent questions must be explicitly checked (true), not just answered
+        if (question.type === 'consent' && answer !== true) {
+          return false;
+        }
       }
       // Numbers must be within the declared range (0 is a valid value, e.g. 0 inches).
       if (question.type === 'number' && typeof answer === 'number') {
@@ -461,6 +465,30 @@ export function HealthAssessment({ onSubmit, className = '' }: HealthAssessmentP
             </label>
           </div>
         );
+
+      case 'consent': {
+        const checked = value === true;
+        return (
+          <div className="space-y-4">
+            {question.legalText && (
+              <div className="max-h-56 overflow-y-auto rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 text-sm text-[var(--color-text-muted)] leading-relaxed whitespace-pre-line">
+                {question.legalText}
+              </div>
+            )}
+            <label className="flex items-start gap-3 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={checked}
+                onChange={(e) => handleAnswerChange(question.id, e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-[var(--color-border)] accent-[var(--color-primary)] cursor-pointer"
+              />
+              <span className="text-sm font-medium text-[var(--color-text)] group-hover:text-[var(--color-primary)] transition-colors">
+                {question.text}
+              </span>
+            </label>
+          </div>
+        );
+      }
 
       default:
         return null;

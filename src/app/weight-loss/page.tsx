@@ -52,11 +52,9 @@ export default function WeightLossPage() {
           <p className="text-white/80 text-lg max-w-2xl mx-auto mb-8">
             {weightLossProgram.subheadline}
           </p>
-          {BUSINESS.bookingUrl && (
-            <Button href={BUSINESS.bookingUrl} variant="accent" size="lg">
-              Book Your Consultation
-            </Button>
-          )}
+          <Button href="/intake" variant="accent" size="lg">
+            Start Your Journey
+          </Button>
         </div>
       </section>
 
@@ -157,11 +155,9 @@ export default function WeightLossPage() {
             Take the first step toward a healthier you. Book a consultation to
             learn how our medical weight loss program can help you reach your goals.
           </p>
-          {BUSINESS.bookingUrl && (
-            <Button href={BUSINESS.bookingUrl} variant="primary" size="lg">
-              Schedule Your Assessment
-            </Button>
-          )}
+          <Button href="/intake" variant="primary" size="lg">
+            Start Your Journey
+          </Button>
         </div>
       </section>
     </>

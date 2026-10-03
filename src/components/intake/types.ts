@@ -34,11 +34,12 @@ export interface Product {
 export interface Question {
   id: string;
   text: string;
-  type: 'text' | 'email' | 'phone' | 'date' | 'number' | 'select' | 'multiselect' | 'boolean' | 'scale';
+  type: 'text' | 'email' | 'phone' | 'date' | 'number' | 'select' | 'multiselect' | 'boolean' | 'scale' | 'consent';
   options?: { value: string; label: string }[];
   required: boolean;
   placeholder?: string;
   helpText?: string;
+  legalText?: string;
   validation?: {
     min?: number;
     max?: number;
