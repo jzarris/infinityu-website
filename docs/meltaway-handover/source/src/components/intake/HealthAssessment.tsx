@@ -432,11 +432,16 @@ export function HealthAssessment({ onSubmit, className = '' }: HealthAssessmentP
       case 'acknowledgment': {
         const ack = question.acknowledgment;
         if (!ack) return null;
+        // English is always shown and is what gets recorded; a translation, when
+        // the person chose another language, is stacked under each paragraph.
+        const ackTranslation = t.tAcknowledgment(ack.id);
         return (
           <div className="space-y-4">
             <div className="text-sm leading-relaxed text-[var(--color-text)] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] p-4 space-y-3">
               {ack.paragraphs.map((paragraph, i) => (
-                <p key={i}>{paragraph}</p>
+                <p key={i}>
+                  <BilingualText english={paragraph} translation={ackTranslation?.paragraphs[i]} translationClassName="text-[var(--color-text-muted)] mt-1" />
+                </p>
               ))}
             </div>
             <label
@@ -453,7 +458,9 @@ export function HealthAssessment({ onSubmit, className = '' }: HealthAssessmentP
                 checked={value === true}
                 onChange={(e) => handleAnswerChange(question.id, e.target.checked)}
               />
-              <span className="text-sm font-medium text-[var(--color-text)]">{ack.checkboxLabel}</span>
+              <span className="text-sm font-medium text-[var(--color-text)]">
+                <BilingualText english={ack.checkboxLabel} translation={ackTranslation?.checkboxLabel} translationClassName="text-[var(--color-text-muted)] font-normal mt-1" />
+              </span>
             </label>
           </div>
         );

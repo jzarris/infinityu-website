@@ -656,6 +656,18 @@ import {
   isResultsAcknowledgmentEnabled,
 } from './acknowledgments';
 
+// Defined unconditionally so the translation drift checker sees it; only
+// shown when the acknowledgment is enabled (see getQuestionnaireSteps).
+export const ACKNOWLEDGMENT_QUESTIONS: Question[] = [
+  {
+    id: RESULTS_ACKNOWLEDGMENT_QUESTION_ID,
+    text: RESULTS_REFUND_ACKNOWLEDGMENT.checkboxLabel,
+    type: 'acknowledgment',
+    required: true,
+    acknowledgment: RESULTS_REFUND_ACKNOWLEDGMENT,
+  },
+];
+
 export function getQuestionnaireSteps(selectedGoals: GoalCategory[]): QuestionnaireStep[] {
   const steps: QuestionnaireStep[] = [
     {
@@ -755,15 +767,7 @@ export function getQuestionnaireSteps(selectedGoals: GoalCategory[]): Questionna
       id: 'results_acknowledgment',
       title: RESULTS_REFUND_ACKNOWLEDGMENT.title,
       description: RESULTS_REFUND_ACKNOWLEDGMENT.description,
-      questions: [
-        {
-          id: RESULTS_ACKNOWLEDGMENT_QUESTION_ID,
-          text: RESULTS_REFUND_ACKNOWLEDGMENT.checkboxLabel,
-          type: 'acknowledgment',
-          required: true,
-          acknowledgment: RESULTS_REFUND_ACKNOWLEDGMENT,
-        },
-      ],
+      questions: ACKNOWLEDGMENT_QUESTIONS,
     });
   }
 

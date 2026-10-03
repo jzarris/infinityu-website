@@ -21,8 +21,10 @@ import {
   ANTI_AGING_QUESTIONS,
   ALLERGY_QUESTIONS,
   FINAL_QUESTIONS,
+  ACKNOWLEDGMENT_QUESTIONS,
 } from '../questions';
 import { PRODUCTS } from '../products';
+import { RESULTS_REFUND_ACKNOWLEDGMENT } from '../acknowledgments';
 import { EN_UI, type IntakeTranslation } from './index';
 import { TH } from './th';
 import { ES } from './es';
@@ -40,6 +42,7 @@ const ALL_QUESTIONS: Question[] = [
   ...ANTI_AGING_QUESTIONS,
   ...ALLERGY_QUESTIONS,
   ...FINAL_QUESTIONS,
+  ...ACKNOWLEDGMENT_QUESTIONS,
 ];
 
 const STEP_IDS = [
@@ -54,6 +57,7 @@ const STEP_IDS = [
   'anti_aging',
   'allergies',
   'confirmation',
+  'results_acknowledgment',
 ];
 
 // Reason keys hardcoded in eligibility.ts that are not on any disqualifier
@@ -83,6 +87,7 @@ function collectExpectedKeys() {
     steps: new Set(STEP_IDS),
     products: new Set(Object.keys(PRODUCTS)),
     ui: new Set(Object.keys(EN_UI)),
+    acknowledgments: new Set([RESULTS_REFUND_ACKNOWLEDGMENT.id]),
   };
 }
 
@@ -176,6 +181,23 @@ function checkLanguage(lang: string, translation: IntakeTranslation, expected: R
   }
   if (uDrift.orphan.length) {
     console.log(`  [${lang}] orphan UI keys: ${uDrift.orphan.join(', ')}`);
+    hasDrift = true;
+  }
+
+  // Acknowledgments (legal text; paragraph count must match the English source)
+  const actualAcks = new Set(Object.keys(translation.acknowledgments));
+  const aDrift = diff(expected.acknowledgments, actualAcks);
+  if (aDrift.missing.length) {
+    console.log(`  [${lang}] missing acknowledgment keys: ${aDrift.missing.join(', ')}`);
+    hasDrift = true;
+  }
+  if (aDrift.orphan.length) {
+    console.log(`  [${lang}] orphan acknowledgment keys: ${aDrift.orphan.join(', ')}`);
+    hasDrift = true;
+  }
+  const ack = translation.acknowledgments[RESULTS_REFUND_ACKNOWLEDGMENT.id];
+  if (ack && ack.paragraphs.length !== RESULTS_REFUND_ACKNOWLEDGMENT.paragraphs.length) {
+    console.log(`  [${lang}] acknowledgment "${RESULTS_REFUND_ACKNOWLEDGMENT.id}" has ${ack.paragraphs.length} paragraphs, English has ${RESULTS_REFUND_ACKNOWLEDGMENT.paragraphs.length}`);
     hasDrift = true;
   }
 
