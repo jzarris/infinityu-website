@@ -1,0 +1,7 @@
+# Local development and tests only. The GPU runtime is defined in modal_app.py.
+modal>=1.5
+numpy<2
+scipy
+opencv-python-headless
+pillow>=10.1
+pytest

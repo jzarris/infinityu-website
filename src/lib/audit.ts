@@ -9,13 +9,16 @@ export type AuditAction =
   | 'setting_updated' | 'setting_removed'
   | 'trusted_browser_added' | 'trusted_browser_revoked'
   | 'user_created' | 'user_updated' | 'user_deleted'
-  | 'contact_form_submitted';
+  | 'contact_form_submitted'
+  | 'otp_locked' | 'intake_submitted' | 'intake_failed'
+  | 'simulation_created' | 'simulation_viewed' | 'simulation_deleted' | 'simulation_rerun'
+  | 'photo_consent_given' | 'photo_consent_withdrawn' | 'photo_deleted';
 
 export interface AuditLogEntry {
   action: AuditAction;
   actor?: string;
   actorId?: string;
-  actorRole?: 'admin' | null;
+  actorRole?: 'admin' | 'patient' | null;
   target?: string;
   targetId?: string;
   ipAddress?: string;

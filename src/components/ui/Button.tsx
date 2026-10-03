@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { ButtonHTMLAttributes, AnchorHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, AnchorHTMLAttributes, ReactNode } from 'react';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'accent';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -9,6 +9,8 @@ interface BaseProps {
   variant?: ButtonVariant;
   size?: ButtonSize;
   className?: string;
+  isLoading?: boolean;
+  leftIcon?: ReactNode;
 }
 
 type ButtonAsButton = BaseProps &
@@ -21,7 +23,7 @@ type ButtonAsLink = BaseProps &
     href: string;
   };
 
-type ButtonProps = ButtonAsButton | ButtonAsLink;
+export type ButtonProps = ButtonAsButton | ButtonAsLink;
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: 'bg-primary text-white hover:bg-primary-light',
@@ -41,21 +43,38 @@ export function Button({
   variant = 'primary',
   size = 'md',
   className,
+  isLoading,
+  leftIcon,
+  children,
   ...props
 }: ButtonProps) {
   const classes = cn(
-    'inline-flex items-center justify-center rounded-lg font-medium transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+    'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50 disabled:cursor-not-allowed',
     variantStyles[variant],
     sizeStyles[size],
     className
   );
 
+  const content = (
+    <>
+      {isLoading ? (
+        <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+      ) : leftIcon}
+      {children}
+    </>
+  );
+
   if ('href' in props && props.href) {
-    const { href, ...rest } = props;
+    const { href, ...rest } = props as ButtonAsLink;
     return (
-      <Link href={href} className={classes} {...rest} />
+      <Link href={href} className={classes} {...rest}>{content}</Link>
     );
   }
 
-  return <button className={classes} {...(props as ButtonAsButton)} />;
+  const { disabled, ...rest } = props as ButtonAsButton;
+  return (
+    <button className={classes} disabled={isLoading || disabled} {...rest}>
+      {content}
+    </button>
+  );
 }

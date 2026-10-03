@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { getSettings, saveSettings, maskApiKey } from '@/lib/settings';
+import { getSettings, saveSettings, maskApiKey, SIMULATOR_TYPICAL_RESULTS_PLACEHOLDER } from '@/lib/settings';
 import { logAuditEvent, getRequestInfo } from '@/lib/audit';
 
 export async function GET() {
@@ -38,6 +38,36 @@ export async function GET() {
         source: settings.contact_notification_email ? 'admin' : process.env.CONTACT_EMAIL ? 'env' : null,
         maskedValue: settings.contact_notification_email || process.env.CONTACT_EMAIL || null,
       },
+      twilio_account_sid: {
+        configured: !!(settings.twilio_account_sid || process.env.TWILIO_ACCOUNT_SID),
+        source: settings.twilio_account_sid ? 'admin' : process.env.TWILIO_ACCOUNT_SID ? 'env' : null,
+        maskedValue: maskApiKey(settings.twilio_account_sid || process.env.TWILIO_ACCOUNT_SID),
+      },
+      twilio_auth_token: {
+        configured: !!(settings.twilio_auth_token || process.env.TWILIO_AUTH_TOKEN),
+        source: settings.twilio_auth_token ? 'admin' : process.env.TWILIO_AUTH_TOKEN ? 'env' : null,
+        maskedValue: maskApiKey(settings.twilio_auth_token || process.env.TWILIO_AUTH_TOKEN),
+      },
+      twilio_verify_service_sid: {
+        configured: !!(settings.twilio_verify_service_sid || process.env.TWILIO_VERIFY_SERVICE_SID),
+        source: settings.twilio_verify_service_sid ? 'admin' : process.env.TWILIO_VERIFY_SERVICE_SID ? 'env' : null,
+        maskedValue: maskApiKey(settings.twilio_verify_service_sid || process.env.TWILIO_VERIFY_SERVICE_SID),
+      },
+      twilio_from_phone: {
+        configured: !!(settings.twilio_from_phone || process.env.TWILIO_FROM_PHONE),
+        source: settings.twilio_from_phone ? 'admin' : process.env.TWILIO_FROM_PHONE ? 'env' : null,
+        value: settings.twilio_from_phone || process.env.TWILIO_FROM_PHONE || null,
+      },
+      admin_notification_phone: {
+        configured: !!(settings.admin_notification_phone || process.env.ADMIN_NOTIFICATION_PHONE),
+        source: settings.admin_notification_phone ? 'admin' : process.env.ADMIN_NOTIFICATION_PHONE ? 'env' : null,
+        value: settings.admin_notification_phone || process.env.ADMIN_NOTIFICATION_PHONE || null,
+      },
+      simulator_enabled: settings.simulator_enabled === 'true',
+      simulator_typical_results: settings.simulator_typical_results ?? SIMULATOR_TYPICAL_RESULTS_PLACEHOLDER,
+      simulator_max_loss_fraction: settings.simulator_max_loss_fraction ? parseFloat(settings.simulator_max_loss_fraction) : 0.2,
+      simulator_retention_days_lead: settings.simulator_retention_days_lead ? parseInt(settings.simulator_retention_days_lead, 10) : 30,
+      simulator_retention_days_patient: settings.simulator_retention_days_patient ? parseInt(settings.simulator_retention_days_patient, 10) : 365,
       updated_at: settings.updated_at,
     });
   } catch (error) {
@@ -54,13 +84,40 @@ export async function POST(request: NextRequest) {
     }
 
     const { key, value } = await request.json();
-    const validKeys = ['anthropic_api_key', 'resend_api_key', 'instagram_access_token', 'instagram_post_urls', 'contact_notification_email'];
+    const validKeys = [
+      'anthropic_api_key', 'resend_api_key', 'instagram_access_token', 'instagram_post_urls',
+      'contact_notification_email', 'twilio_account_sid', 'twilio_auth_token',
+      'twilio_verify_service_sid', 'twilio_from_phone', 'admin_notification_phone',
+      'simulator_enabled', 'simulator_typical_results', 'simulator_max_loss_fraction',
+      'simulator_retention_days_lead', 'simulator_retention_days_patient',
+    ];
     if (!validKeys.includes(key)) {
       return NextResponse.json({ error: 'Invalid setting key' }, { status: 400 });
     }
 
     const settings = await getSettings();
-    if (value === null || value === '') {
+
+    const booleanKeys = ['simulator_enabled'];
+    const numberKeys = ['simulator_retention_days_lead', 'simulator_retention_days_patient'];
+    const fractionKeys = ['simulator_max_loss_fraction'];
+
+    if (booleanKeys.includes(key)) {
+      settings[key] = value ? 'true' : 'false';
+    } else if (fractionKeys.includes(key)) {
+      const f = parseFloat(String(value));
+      if (isNaN(f) || f <= 0 || f > 0.35) {
+        delete settings[key];
+      } else {
+        settings[key] = String(f);
+      }
+    } else if (numberKeys.includes(key)) {
+      const n = parseInt(String(value), 10);
+      if (isNaN(n) || n < 1) {
+        delete settings[key];
+      } else {
+        settings[key] = String(n);
+      }
+    } else if (value === null || value === '') {
       delete settings[key];
     } else {
       settings[key] = value;

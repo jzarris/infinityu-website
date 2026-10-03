@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import {
-  LayoutDashboard, MessageSquare, FileText, Search, Shield, Settings, LogOut, Menu, X, ChevronLeft, ChevronRight, Users,
+  LayoutDashboard, MessageSquare, FileText, Search, Shield, Settings, LogOut, Menu, X, ChevronLeft, ChevronRight, Users, Camera,
 } from 'lucide-react';
 
 const navItems = [
@@ -16,6 +16,7 @@ const navItems = [
   { label: 'SEO', href: '/admin/seo', icon: Search },
   { label: 'Setup', href: '/admin/setup', icon: Settings },
   { label: 'Security', href: '/admin/security', icon: Shield },
+  { label: 'Simulator', href: '/admin/simulator', icon: Camera },
 ];
 
 interface AdminNavProps {
