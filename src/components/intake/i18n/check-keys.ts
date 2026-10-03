@@ -21,8 +21,10 @@ import {
   ANTI_AGING_QUESTIONS,
   ALLERGY_QUESTIONS,
   FINAL_QUESTIONS,
+  ACKNOWLEDGMENT_QUESTIONS,
 } from '../questions';
 import { PRODUCTS } from '../products';
+import { RESULTS_REFUND_ACKNOWLEDGMENT } from '../acknowledgments';
 import { EN_UI, type IntakeTranslation } from './index';
 import { TH } from './th';
 import { ES } from './es';
@@ -40,6 +42,7 @@ const ALL_QUESTIONS: Question[] = [
   ...ANTI_AGING_QUESTIONS,
   ...ALLERGY_QUESTIONS,
   ...FINAL_QUESTIONS,
+  ...ACKNOWLEDGMENT_QUESTIONS,
 ];
 
 const STEP_IDS = [
@@ -54,6 +57,7 @@ const STEP_IDS = [
   'anti_aging',
   'allergies',
   'confirmation',
+  'results_acknowledgment',
 ];
 
 // Reason keys hardcoded in eligibility.ts that are not on any disqualifier
@@ -65,11 +69,15 @@ function collectExpectedKeys() {
   const reasons = new Set<string>(ELIGIBILITY_ONLY_REASON_KEYS);
 
   for (const q of ALL_QUESTIONS) {
-    questions.add(q.id);
-    if (q.options) {
-      const opts = new Set<string>();
-      for (const opt of q.options) opts.add(opt.value);
-      questionOptions.set(q.id, opts);
+    // 'acknowledgment' type questions are translated via the acknowledgments block,
+    // not the questions block — skip them from the questions key check.
+    if (q.type !== 'acknowledgment') {
+      questions.add(q.id);
+      if (q.options) {
+        const opts = new Set<string>();
+        for (const opt of q.options) opts.add(opt.value);
+        questionOptions.set(q.id, opts);
+      }
     }
     if (q.disqualifiers) {
       for (const d of q.disqualifiers) reasons.add(d.reasonKey);
@@ -83,6 +91,7 @@ function collectExpectedKeys() {
     steps: new Set(STEP_IDS),
     products: new Set(Object.keys(PRODUCTS)),
     ui: new Set(Object.keys(EN_UI)),
+    acknowledgments: new Set([RESULTS_REFUND_ACKNOWLEDGMENT.id]),
   };
 }
 
@@ -115,7 +124,6 @@ function checkLanguage(lang: string, translation: IntakeTranslation, expected: R
   }
 
   // Question option keys — only check if the translation file partially defines options for the question.
-  // A question with no `options` field at all is treated as intentionally English-only (e.g. proper nouns).
   for (const [qid, expectedOpts] of expected.questionOptions) {
     const providedOpts = translation.questions[qid]?.options;
     if (!providedOpts) continue;
@@ -176,6 +184,23 @@ function checkLanguage(lang: string, translation: IntakeTranslation, expected: R
   }
   if (uDrift.orphan.length) {
     console.log(`  [${lang}] orphan UI keys: ${uDrift.orphan.join(', ')}`);
+    hasDrift = true;
+  }
+
+  // Acknowledgments (legal text; paragraph count must match the English source)
+  const actualAcks = new Set(Object.keys(translation.acknowledgments));
+  const aDrift = diff(expected.acknowledgments, actualAcks);
+  if (aDrift.missing.length) {
+    console.log(`  [${lang}] missing acknowledgment keys: ${aDrift.missing.join(', ')}`);
+    hasDrift = true;
+  }
+  if (aDrift.orphan.length) {
+    console.log(`  [${lang}] orphan acknowledgment keys: ${aDrift.orphan.join(', ')}`);
+    hasDrift = true;
+  }
+  const ack = translation.acknowledgments[RESULTS_REFUND_ACKNOWLEDGMENT.id];
+  if (ack && ack.paragraphs.length !== RESULTS_REFUND_ACKNOWLEDGMENT.paragraphs.length) {
+    console.log(`  [${lang}] acknowledgment "${RESULTS_REFUND_ACKNOWLEDGMENT.id}" has ${ack.paragraphs.length} paragraphs, English has ${RESULTS_REFUND_ACKNOWLEDGMENT.paragraphs.length}`);
     hasDrift = true;
   }
 

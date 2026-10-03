@@ -649,15 +649,19 @@ export const FINAL_QUESTIONS: Question[] = [
 // ACKNOWLEDGMENT (results + refund policy)
 // ============================================
 
+import {
+  RESULTS_REFUND_ACKNOWLEDGMENT,
+  RESULTS_ACKNOWLEDGMENT_QUESTION_ID,
+  isResultsAcknowledgmentEnabled,
+} from './acknowledgments';
+
 export const ACKNOWLEDGMENT_QUESTIONS: Question[] = [
   {
-    id: 'resultsRefundAcknowledgment',
-    type: 'consent',
+    id: RESULTS_ACKNOWLEDGMENT_QUESTION_ID,
+    text: RESULTS_REFUND_ACKNOWLEDGMENT.checkboxLabel,
+    type: 'acknowledgment',
     required: true,
-    legalText: `Results are not guaranteed. InfinityU, its medical director, providers, and staff make no promise, guarantee, or warranty about the results of GLP-based weight loss treatment, including how much weight you will lose, how quickly, whether you will lose any weight at all, or whether any weight lost will stay off. Results vary significantly from person to person, and some patients lose little or no weight even when following all instructions. Testimonials, before-and-after photos, and other patients' experiences do not predict your results. Weight regain is common if treatment is stopped.
-
-All payments are final. All payments for services provided and for medications dispensed or shipped are final and non-refundable. No refunds, credits, or exchanges will be given for any reason, including your results, lack of results, dissatisfaction with your results, side effects, a change or discontinuation of your medication, your decision to stop treatment, or medication you did not use. Dispensed or shipped medications cannot be returned for safety reasons.`,
-    text: 'I have read and understand that results are not guaranteed and that all payments for services provided and medications dispensed or shipped are final and non-refundable.',
+    acknowledgment: RESULTS_REFUND_ACKNOWLEDGMENT,
   },
 ];
 
@@ -760,12 +764,14 @@ export function getQuestionnaireSteps(selectedGoals: GoalCategory[]): Questionna
     questions: FINAL_QUESTIONS,
   });
 
-  steps.push({
-    id: 'acknowledgment',
-    title: 'Results & Refund Acknowledgment',
-    description: 'Before scheduling your visit, please read and acknowledge the following.',
-    questions: ACKNOWLEDGMENT_QUESTIONS,
-  });
+  if (isResultsAcknowledgmentEnabled()) {
+    steps.push({
+      id: 'results_acknowledgment',
+      title: RESULTS_REFUND_ACKNOWLEDGMENT.title,
+      description: RESULTS_REFUND_ACKNOWLEDGMENT.description,
+      questions: ACKNOWLEDGMENT_QUESTIONS,
+    });
+  }
 
   return steps;
 }

@@ -62,6 +62,9 @@ async function migrate() {
   await prisma.\$executeRawUnsafe(\`CREATE INDEX IF NOT EXISTS \"SmsConsent_email_idx\"     ON \"SmsConsent\"(\"email\")\`);
   await prisma.\$executeRawUnsafe(\`CREATE INDEX IF NOT EXISTS \"SmsConsent_createdAt_idx\" ON \"SmsConsent\"(\"createdAt\")\`);
 
+  // ── QuestionnaireSubmission — new column for acknowledgments ───────────
+  await prisma.\$executeRawUnsafe(\`ALTER TABLE "QuestionnaireSubmission" ADD COLUMN IF NOT EXISTS "acknowledgments" TEXT\`);
+
   // ── User — new columns added with intake-simulator ──────────────────────
   await prisma.\$executeRawUnsafe(\`ALTER TABLE \"User\" ADD COLUMN IF NOT EXISTS \"phone\"         TEXT\`);
   await prisma.\$executeRawUnsafe(\`ALTER TABLE \"User\" ADD COLUMN IF NOT EXISTS \"phoneVerified\" BOOLEAN NOT NULL DEFAULT false\`);

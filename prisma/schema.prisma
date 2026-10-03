@@ -131,6 +131,7 @@ model QuestionnaireSubmission {
   eligibleProducts   String
   ineligibleProducts String
   healthSummary      String?
+  acknowledgments    String?
   submissionLanguage String   @default("en")
   languagesUsed      String   @default("[\"en\"]")
   ipAddress          String?
