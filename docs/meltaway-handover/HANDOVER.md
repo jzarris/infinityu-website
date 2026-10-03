@@ -451,23 +451,25 @@ can POST once a day with the `x-cron-secret` header.
 
 ### 5.12 Results & Refund Acknowledgment step (Infinity-U specific; added 2026-10-03)
 
-The source now contains a configurable final questionnaire step, shown after
-"Review & Confirm" and before the results screen and the simulator. It is
-**off on meltawaymd.com** and **must be on for infinity-u.com**:
+The source contains a final questionnaire step, shown after "Review & Confirm"
+and before the results screen and the simulator. It is **on by default** on
+both sites. The company named in the text comes from an environment variable;
+set it in Railway for Infinity-U (read by both the browser bundle and the
+server, so a redeploy is needed after setting it):
 
 ```
-NEXT_PUBLIC_INTAKE_RESULTS_ACKNOWLEDGMENT=true
+NEXT_PUBLIC_COMPANY_NAME=InfinityU
 ```
 
-Set it in Railway (it is read by both the browser bundle and the server, so a
-redeploy is needed after setting it).
+(`NEXT_PUBLIC_INTAKE_RESULTS_ACKNOWLEDGMENT=false` turns the step off; do not
+set it for Infinity-U.)
 
 What it does:
 
 - `src/components/intake/acknowledgments.ts` holds the legal text verbatim
   (two paragraphs: results not guaranteed; all payments final) and the checkbox
-  label, with a version string. The text already names InfinityU; do not
-  reword it without bumping `version`.
+  label, with a version string. The text names `COMPANY_NAME`; do not reword
+  it without bumping `version`.
 - `questions.ts` appends step `results_acknowledgment` with one question of
   type `acknowledgment` when the flag is on. `HealthAssessment.tsx` renders
   the paragraphs in a box and a single checkbox; the step cannot be passed
