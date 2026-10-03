@@ -28,6 +28,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
+RUN apk add --no-cache su-exec
 
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
@@ -42,12 +43,12 @@ COPY --from=builder --chown=nextjs:nodejs /app/src/generated/prisma ./src/genera
 # Writable directories for branding uploads
 RUN mkdir -p /app/public/branding && chown -R nextjs:nodejs /app/public/branding
 
-# Startup script: runs prisma db push before starting the server
+# Startup scripts
 COPY --chown=nextjs:nodejs start.sh ./start.sh
-RUN chmod +x start.sh
+COPY docker-entrypoint.sh ./docker-entrypoint.sh
+RUN chmod +x start.sh docker-entrypoint.sh
 
-USER nextjs
-
+# Entrypoint runs as root to fix volume ownership, then drops to nextjs via su-exec
 EXPOSE 3000
 
 ENV PORT=3000
@@ -56,4 +57,4 @@ ENV HOSTNAME="0.0.0.0"
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD wget -q --spider http://localhost:3000/api/health || exit 1
 
-CMD ["./start.sh"]
+CMD ["./docker-entrypoint.sh"]
