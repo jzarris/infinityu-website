@@ -508,6 +508,39 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Forward to AestheticIQ CRM (fire-and-forget — never blocks or fails the response)
+    const aestheticIqUrl = process.env.AESTHETICIQ_WEBHOOK_URL;
+    const aestheticIqToken = process.env.AESTHETICIQ_API_TOKEN;
+    if (aestheticIqUrl && aestheticIqToken) {
+      const crmPayload = {
+        firstName: contactInfo.firstName,
+        lastName: contactInfo.lastName,
+        email: contactInfo.email,
+        phone: contactInfo.phone,
+        dateOfBirth: contactInfo.dateOfBirth,
+        state: contactInfo.state,
+        biologicalSex: contactInfo.biologicalSex,
+        selectedGoals,
+        eligibleProducts,
+        healthSummary: healthInfo,
+        answers,
+        acknowledgments,
+        smsConsent,
+        submissionLanguage: submissionLanguage || 'en',
+        timestamp: new Date().toISOString(),
+      };
+      fetch(aestheticIqUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${aestheticIqToken}`,
+        },
+        body: JSON.stringify(crmPayload),
+      }).catch((err) => {
+        console.error('AestheticIQ CRM webhook failed:', err instanceof Error ? err.message : String(err));
+      });
+    }
+
     console.log('=== INTAKE FORM SUBMISSION COMPLETE ===');
     return NextResponse.json({
       success: true,
