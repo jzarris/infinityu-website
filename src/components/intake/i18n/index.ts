@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import type { ProductId } from '../types';
+import { COMPANY_NAME } from '../acknowledgments';
 
 // ============================================
 // LANGUAGE REGISTRY
@@ -76,11 +77,18 @@ export interface UiStrings {
   submittedFooter: string;
 }
 
+/** Legal acknowledgment text. Paragraphs may contain a {company} token. */
+export interface AcknowledgmentTranslation {
+  paragraphs: string[];
+  checkboxLabel: string;
+}
+
 export interface IntakeTranslation {
   questions: Record<string, QuestionTranslation>;
   steps: Record<string, StepTranslation>;
   reasons: Record<string, string>; // reasonKey -> translated text (may include {param} tokens)
   productDescriptions: Partial<Record<ProductId, string>>;
+  acknowledgments: Record<string, AcknowledgmentTranslation>; // acknowledgment id -> text
   ui: UiStrings;
 }
 
@@ -121,6 +129,8 @@ export interface TranslationHelpers {
   tReason: (reasonKey: string, params?: Record<string, string | number>) => string | undefined;
   /** Translation of a product description, or undefined. */
   tProductDescription: (productId: ProductId) => string | undefined;
+  /** Translation of a legal acknowledgment (company name interpolated), or undefined. */
+  tAcknowledgment: (acknowledgmentId: string) => AcknowledgmentTranslation | undefined;
   /** UI string by key. Returns undefined when language is English or no translation exists — English comes from `enUi`. */
   tUi: <K extends keyof UiStrings>(key: K, params?: Record<string, string | number>) => string | undefined;
   /** Always English UI string (canonical source). */
@@ -232,6 +242,19 @@ export function useIntakeTranslation(): TranslationHelpers {
     [active]
   );
 
+  const tAcknowledgment = useCallback(
+    (acknowledgmentId: string) => {
+      const a = active?.acknowledgments[acknowledgmentId];
+      if (!a) return undefined;
+      const params = { company: COMPANY_NAME };
+      return {
+        paragraphs: a.paragraphs.map((p) => interpolate(p, params)),
+        checkboxLabel: interpolate(a.checkboxLabel, params),
+      };
+    },
+    [active]
+  );
+
   const tUi = useCallback(
     <K extends keyof UiStrings>(key: K, params?: Record<string, string | number>) => {
       const template = active?.ui[key];
@@ -256,6 +279,7 @@ export function useIntakeTranslation(): TranslationHelpers {
     tStep,
     tReason,
     tProductDescription,
+    tAcknowledgment,
     tUi,
     enUi,
   };

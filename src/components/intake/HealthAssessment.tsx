@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, ReactNode } from 'react';
 import { GoalCategory, Question, ContactInfo, ProductId } from './types';
 import { PRODUCTS } from './products';
 import { getQuestionnaireSteps, CONTACT_QUESTIONS } from './questions';
+import { acknowledgmentRecord } from './acknowledgments';
 import { calculateEligibility, prepareSubmissionData, type EligibilityResult, type ReasonRef } from './eligibility';
 import { LANGUAGES, useIntakeTranslation, type LanguageCode, type TranslationHelpers } from './i18n';
 import { FlagIcon } from './i18n/flags';
@@ -109,8 +110,8 @@ export function HealthAssessment({ onSubmit, className = '' }: HealthAssessmentP
             (Array.isArray(answer) && answer.length === 0)) {
           return false;
         }
-        // Consent questions must be explicitly checked (true), not just answered
-        if (question.type === 'consent' && answer !== true) {
+        // An acknowledgment is only satisfied by an explicit tick.
+        if (question.type === 'acknowledgment' && answer !== true) {
           return false;
         }
       }
@@ -256,9 +257,17 @@ export function HealthAssessment({ onSubmit, className = '' }: HealthAssessmentP
         languagesUsed,
       };
 
+      // Legal acknowledgments the person ticked, with the exact text and time.
+      const acceptedAt = new Date().toISOString();
+      const acknowledgments = steps
+        .flatMap((s) => s.questions)
+        .filter((q) => q.type === 'acknowledgment' && q.acknowledgment && answers[q.id] === true)
+        .map((q) => acknowledgmentRecord(q.acknowledgment!, acceptedAt));
+
       // Add SMS consent data to submission
       const fullPayload = {
         ...submissionWithMeta,
+        acknowledgments,
         smsConsent: {
           transactional: smsTransactionalConsent,
           marketing: smsMarketingConsent,
@@ -466,24 +475,37 @@ export function HealthAssessment({ onSubmit, className = '' }: HealthAssessmentP
           </div>
         );
 
-      case 'consent': {
-        const checked = value === true;
+      case 'acknowledgment': {
+        const ack = question.acknowledgment;
+        if (!ack) return null;
+        // English is always shown and is what gets recorded; a translation, when
+        // the person chose another language, is stacked under each paragraph.
+        const ackTranslation = t.tAcknowledgment(ack.id);
         return (
           <div className="space-y-4">
-            {question.legalText && (
-              <div className="max-h-56 overflow-y-auto rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 text-sm text-[var(--color-text-muted)] leading-relaxed whitespace-pre-line">
-                {question.legalText}
-              </div>
-            )}
-            <label className="flex items-start gap-3 cursor-pointer group">
+            <div className="text-sm leading-relaxed text-[var(--color-text)] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] p-4 space-y-3">
+              {ack.paragraphs.map((paragraph, i) => (
+                <p key={i}>
+                  <BilingualText english={paragraph} translation={ackTranslation?.paragraphs[i]} translationClassName="text-[var(--color-text-muted)] mt-1" />
+                </p>
+              ))}
+            </div>
+            <label
+              className={cn(
+                'flex items-start gap-3 p-4 border rounded-[var(--radius-md)] cursor-pointer transition-colors',
+                value === true
+                  ? 'border-[var(--color-primary)] bg-[var(--color-primary)]/5'
+                  : 'border-[var(--color-border)] hover:border-[var(--color-text-muted)]'
+              )}
+            >
               <input
                 type="checkbox"
-                checked={checked}
+                className="mt-1 h-4 w-4"
+                checked={value === true}
                 onChange={(e) => handleAnswerChange(question.id, e.target.checked)}
-                className="mt-0.5 h-4 w-4 shrink-0 rounded border-[var(--color-border)] accent-[var(--color-primary)] cursor-pointer"
               />
-              <span className="text-sm font-medium text-[var(--color-text)] group-hover:text-[var(--color-primary)] transition-colors">
-                {question.text}
+              <span className="text-sm font-medium text-[var(--color-text)]">
+                <BilingualText english={ack.checkboxLabel} translation={ackTranslation?.checkboxLabel} translationClassName="text-[var(--color-text-muted)] font-normal mt-1" />
               </span>
             </label>
           </div>

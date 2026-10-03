@@ -2,6 +2,8 @@
 // HEALTH ASSESSMENT QUESTIONNAIRE TYPES
 // ============================================
 
+import type { IntakeAcknowledgment } from './acknowledgments';
+
 export type GoalCategory =
   | 'weight_loss'
   | 'anti_aging'
@@ -34,12 +36,13 @@ export interface Product {
 export interface Question {
   id: string;
   text: string;
-  type: 'text' | 'email' | 'phone' | 'date' | 'number' | 'select' | 'multiselect' | 'boolean' | 'scale' | 'consent';
+  type: 'text' | 'email' | 'phone' | 'date' | 'number' | 'select' | 'multiselect' | 'boolean' | 'scale' | 'acknowledgment';
   options?: { value: string; label: string }[];
   required: boolean;
+  /** For type 'acknowledgment': the legal text and checkbox label shown. */
+  acknowledgment?: IntakeAcknowledgment;
   placeholder?: string;
   helpText?: string;
-  legalText?: string;
   validation?: {
     min?: number;
     max?: number;

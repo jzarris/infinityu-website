@@ -51,6 +51,23 @@ export const ES: IntakeTranslation = {
       title: 'Revisar y confirmar',
       description: '¡Casi terminamos!',
     },
+    results_acknowledgment: {
+      title: 'Reconocimiento de resultados y reembolsos',
+      description: 'Por favor lea lo siguiente y confirme antes de continuar.',
+    },
+  },
+
+  // Legal acknowledgments. Draft translation 2026-10-03, pending review.
+  // {company} is replaced with the site's company name.
+  acknowledgments: {
+    results_refund: {
+      paragraphs: [
+        'Los resultados no están garantizados. {company}, su director médico, sus proveedores y su personal no hacen ninguna promesa, garantía ni aseveración sobre los resultados del tratamiento para bajar de peso basado en GLP, incluyendo cuánto peso perderá, con qué rapidez, si perderá algo de peso o si el peso perdido se mantendrá. Los resultados varían significativamente de una persona a otra, y algunos pacientes pierden poco o nada de peso incluso siguiendo todas las indicaciones. Los testimonios, las fotos de antes y después y las experiencias de otros pacientes no predicen sus resultados. Recuperar el peso es común si se suspende el tratamiento.',
+        'Todos los pagos son definitivos. Todos los pagos por servicios prestados y por medicamentos dispensados o enviados son definitivos y no reembolsables. No se otorgarán reembolsos, créditos ni cambios por ningún motivo, incluyendo sus resultados, la falta de resultados, su insatisfacción con los resultados, los efectos secundarios, un cambio o la suspensión de su medicamento, su decisión de dejar el tratamiento o medicamento que no haya usado. Por razones de seguridad, los medicamentos dispensados o enviados no pueden devolverse.',
+      ],
+      checkboxLabel:
+        'He leído y entiendo que los resultados no están garantizados y que todos los pagos por servicios prestados y medicamentos dispensados o enviados son definitivos y no reembolsables.',
+    },
   },
 
   questions: {
