@@ -427,9 +427,9 @@ export const ES: IntakeTranslation = {
     selectOption: 'Seleccione una opción...',
     smsPreferencesTitle: 'Preferencias de comunicación por SMS',
     smsTransactionalConsent:
-      'Acepto recibir mensajes SMS de MeltAwayMD para recordatorios de citas, actualizaciones de cuenta y atención al cliente. Pueden aplicar tarifas de mensajes y datos. Responda STOP para darse de baja.',
+      'Acepto recibir mensajes SMS de InfinityU Med Spa para recordatorios de citas, actualizaciones de cuenta y atención al cliente. Pueden aplicar tarifas de mensajes y datos. Responda STOP para darse de baja.',
     smsMarketingConsent:
-      'Acepto recibir mensajes SMS promocionales de MeltAwayMD sobre ofertas especiales, consejos de salud y actualizaciones de programa. Pueden aplicar tarifas de mensajes y datos. Responda STOP para darse de baja.',
+      'Acepto recibir mensajes SMS promocionales de InfinityU Med Spa sobre ofertas especiales, consejos de salud y actualizaciones de programa. Pueden aplicar tarifas de mensajes y datos. Responda STOP para darse de baja.',
     verifyTitle: 'Verifique su teléfono',
     verifySubtitle: 'Enviamos un código de 6 dígitos a {phone}',
     verifyExplain:
@@ -464,6 +464,6 @@ export const ES: IntakeTranslation = {
     submittedNotice:
       'Un proveedor médico autorizado revisará su información y lo contactará a {email} dentro de 24-48 horas para discutir sus opciones.',
     submittedFooter:
-      '¿Preguntas? Contáctenos en support@meltawaymd.com',
+      '¿Preguntas? Contáctenos en services@infinity-u.com',
   },
 };

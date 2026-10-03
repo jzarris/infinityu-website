@@ -376,7 +376,7 @@ export async function POST(request: NextRequest) {
             ipAddress: consentIP,
             userAgent: consentUA,
             source: 'intake_form',
-            consentText: 'I agree to receive SMS messages from MeltAwayMD for appointment reminders, account updates, and customer support. Message and data rates may apply. Reply STOP to opt out.',
+            consentText: 'I agree to receive SMS messages from InfinityU Med Spa for appointment reminders, account updates, and customer support. Message and data rates may apply. Reply STOP to opt out.',
           },
         });
         console.log('Recorded transactional SMS consent:', smsConsent.transactional);
@@ -397,7 +397,7 @@ export async function POST(request: NextRequest) {
             ipAddress: consentIP,
             userAgent: consentUA,
             source: 'intake_form',
-            consentText: 'I agree to receive promotional SMS messages from MeltAwayMD about special offers, health tips, and program updates. Message and data rates may apply. Reply STOP to opt out.',
+            consentText: 'I agree to receive promotional SMS messages from InfinityU Med Spa about special offers, health tips, and program updates. Message and data rates may apply. Reply STOP to opt out.',
           },
         });
         console.log('Recorded marketing SMS consent:', smsConsent.marketing);

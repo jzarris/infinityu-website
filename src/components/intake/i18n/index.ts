@@ -17,7 +17,7 @@ export const LANGUAGES: { code: LanguageCode; label: string; nativeLabel: string
   { code: 'es', label: 'Spanish', nativeLabel: 'Español' },
 ];
 
-const STORAGE_KEY = 'meltawaymd.intake.language';
+const STORAGE_KEY = 'infinityu.intake.language';
 
 // ============================================
 // TRANSLATION SHAPE
@@ -138,9 +138,9 @@ export const EN_UI: UiStrings = {
   selectOption: 'Select an option...',
   smsPreferencesTitle: 'SMS Communication Preferences',
   smsTransactionalConsent:
-    'I agree to receive SMS messages from MeltAwayMD for appointment reminders, account updates, and customer support. Message and data rates may apply. Reply STOP to opt out.',
+    'I agree to receive SMS messages from InfinityU Med Spa for appointment reminders, account updates, and customer support. Message and data rates may apply. Reply STOP to opt out.',
   smsMarketingConsent:
-    'I agree to receive promotional SMS messages from MeltAwayMD about special offers, health tips, and program updates. Message and data rates may apply. Reply STOP to opt out.',
+    'I agree to receive promotional SMS messages from InfinityU Med Spa about special offers, health tips, and program updates. Message and data rates may apply. Reply STOP to opt out.',
   verifyTitle: 'Verify Your Phone',
   verifySubtitle: 'We sent a 6-digit code to {phone}',
   verifyExplain:
@@ -172,7 +172,7 @@ export const EN_UI: UiStrings = {
   submittedThanks: 'Thank you, {firstName}! Your health assessment has been received.',
   submittedNotice:
     'A licensed medical provider will review your information and contact you at {email} within 24-48 hours to discuss your options.',
-  submittedFooter: 'Questions? Contact us at support@meltawaymd.com',
+  submittedFooter: 'Questions? Contact us at services@infinity-u.com',
 };
 
 export function useIntakeTranslation(): TranslationHelpers {
