@@ -10,6 +10,25 @@ import { cookies } from 'next/headers';
 import { SIM_ACCESS_COOKIE, issueSimAccessToken, simAccessCookieOptions } from '@/lib/sim-access';
 import { simulatorAvailability } from '@/lib/simulator-service';
 
+// Module-level JWT cache for AestheticIQ token exchange.
+// On Railway (persistent process) this survives across requests; re-exchange only on expiry.
+let _aiqJwt: { token: string; expiresAt: number } | null = null;
+
+async function getAestheticIqJwt(webhookUrl: string, apiToken: string): Promise<string> {
+  const now = Date.now();
+  if (_aiqJwt && _aiqJwt.expiresAt > now + 60_000) return _aiqJwt.token;
+  const base = new URL(webhookUrl).origin;
+  const res = await fetch(`${base}/api/v1/tokens/exchange`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ apiToken }),
+  });
+  if (!res.ok) throw new Error(`AestheticIQ token exchange failed: ${res.status}`);
+  const data = await res.json() as { data: { accessToken: string; expiresIn: number } };
+  _aiqJwt = { token: data.data.accessToken, expiresAt: now + data.data.expiresIn * 1000 };
+  return _aiqJwt.token;
+}
+
 // Health Assessment questionnaire schema
 const questionnaireSchema = z.object({
   contactInfo: z.object({
@@ -529,16 +548,21 @@ export async function POST(request: NextRequest) {
         submissionLanguage: submissionLanguage || 'en',
         timestamp: new Date().toISOString(),
       };
-      fetch(aestheticIqUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${aestheticIqToken}`,
-        },
-        body: JSON.stringify(crmPayload),
-      }).catch((err) => {
-        console.error('AestheticIQ CRM webhook failed:', err instanceof Error ? err.message : String(err));
-      });
+      (async () => {
+        try {
+          const jwt = await getAestheticIqJwt(aestheticIqUrl, aestheticIqToken);
+          const crmRes = await fetch(aestheticIqUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${jwt}` },
+            body: JSON.stringify(crmPayload),
+          });
+          if (!crmRes.ok) {
+            console.error('AestheticIQ CRM webhook returned', crmRes.status);
+          }
+        } catch (err) {
+          console.error('AestheticIQ CRM webhook failed:', err instanceof Error ? err.message : String(err));
+        }
+      })();
     }
 
     console.log('=== INTAKE FORM SUBMISSION COMPLETE ===');
