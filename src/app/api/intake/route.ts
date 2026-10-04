@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { RESULTS_REFUND_ACKNOWLEDGMENT, isResultsAcknowledgmentEnabled } from '@/components/intake/acknowledgments';
 import { formatPhoneNumber } from '@/lib/twilio';
 import { logAuditEvent, getRequestInfo } from '@/lib/audit';
-import { sendWeightManagementAssessmentEmail, isEmailConfigured } from '@/lib/email';
+import { sendIntakeNotificationEmail, isEmailConfigured } from '@/lib/email';
 import { getContactNotificationEmail } from '@/lib/settings';
 import { cookies } from 'next/headers';
 import { SIM_ACCESS_COOKIE, issueSimAccessToken, simAccessCookieOptions } from '@/lib/sim-access';
@@ -448,51 +448,51 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Send weight management assessment email if weight_loss is a selected goal
-    if (selectedGoals.includes('weight_loss')) {
-      console.log('=== SENDING WEIGHT MANAGEMENT ASSESSMENT EMAIL ===');
-      try {
-        const emailConfigured = await isEmailConfigured();
-        const notificationEmail = await getContactNotificationEmail();
+    // Send intake notification email for every submission
+    console.log('=== SENDING INTAKE NOTIFICATION EMAIL ===');
+    try {
+      const emailConfigured = await isEmailConfigured();
+      const notificationEmail = await getContactNotificationEmail();
 
-        if (emailConfigured && notificationEmail) {
-          // Calculate BMI for the email
-          const heightFeet = (answers.heightFeet as number) || 0;
-          const heightInches = (answers.heightInches as number) || 0;
-          const weightLbs = (answers.currentWeight as number) || 0;
-          const totalInches = (heightFeet * 12) + heightInches;
-          const heightMeters = totalInches * 0.0254;
-          const weightKg = weightLbs * 0.453592;
-          const bmi = heightMeters > 0 ? weightKg / (heightMeters * heightMeters) : 0;
+      if (emailConfigured && notificationEmail) {
+        const heightFeet = (answers.heightFeet as number) || 0;
+        const heightInches = (answers.heightInches as number) || 0;
+        const weightLbs = (answers.currentWeight as number) || 0;
+        const totalInches = (heightFeet * 12) + heightInches;
+        const heightMeters = totalInches * 0.0254;
+        const weightKg = weightLbs * 0.453592;
+        const bmi = heightMeters > 0 ? weightKg / (heightMeters * heightMeters) : undefined;
 
-          const emailResult = await sendWeightManagementAssessmentEmail(
-            {
-              firstName: contactInfo.firstName,
-              lastName: contactInfo.lastName,
-              dateOfBirth: contactInfo.dateOfBirth,
-              biologicalSex: contactInfo.biologicalSex,
-              heightFeet,
-              heightInches,
-              weightLbs,
-              bmi,
-              wellnessGoals: selectedGoals.map(g => GOAL_LABELS[g] || g),
-              eligibleProducts,
-              ineligibleProducts,
-            },
-            notificationEmail
-          );
+        const emailResult = await sendIntakeNotificationEmail(
+          {
+            firstName: contactInfo.firstName,
+            lastName: contactInfo.lastName,
+            email: contactInfo.email,
+            phone: contactInfo.phone,
+            dateOfBirth: contactInfo.dateOfBirth,
+            state: contactInfo.state,
+            biologicalSex: contactInfo.biologicalSex,
+            selectedGoals,
+            eligibleProducts,
+            ineligibleProducts,
+            healthSummary: healthInfo,
+            submissionLanguage: submissionLanguage || 'en',
+            acknowledgmentSigned: !!(acknowledgments && acknowledgments.length > 0),
+            bmi,
+          },
+          notificationEmail
+        );
 
-          if (emailResult.success) {
-            console.log('Weight management assessment email sent');
-          } else {
-            console.error('Failed to send weight management assessment email:', emailResult.error);
-          }
+        if (emailResult.success) {
+          console.log('Intake notification email sent');
         } else {
-          console.log('Email not configured or no notification email set - skipping weight management email');
+          console.error('Failed to send intake notification email:', emailResult.error);
         }
-      } catch (emailError) {
-        console.error('Error sending weight management assessment email:', emailError);
+      } else {
+        console.log('Email not configured or no notification email set — skipping intake notification');
       }
+    } catch (emailError) {
+      console.error('Error sending intake notification email:', emailError);
     }
 
     // Audit log the successful submission
