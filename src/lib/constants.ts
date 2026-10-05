@@ -22,7 +22,8 @@ export const BUSINESS = {
   social: {
     instagram: 'https://www.instagram.com/infinityuhuntingtonbeach/',
     facebook: '',
-    line: 'https://line.me/R/ti/p/@105aoakp',
+    lineDesktop: 'line://ti/p/@105aoakp',
+    lineMobile: 'https://lin.ee/we3jdAv',
   },
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.infinity-u.com',
   bookingUrl: process.env.NEXT_PUBLIC_BOOKING_URL || '',

@@ -136,9 +136,9 @@ export function Header() {
                 <Instagram className="h-5 w-5 text-primary hover:text-accent" />
               </a>
             )}
-            {BUSINESS.social.line && (
+            {BUSINESS.social.lineDesktop && (
               <a
-                href={BUSINESS.social.line}
+                href={BUSINESS.social.lineDesktop}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Chat with our 24/7 assistant on Line"

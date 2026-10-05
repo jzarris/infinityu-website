@@ -143,9 +143,9 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
               </svg>
             </a>
           )}
-          {BUSINESS.social.line && (
+          {BUSINESS.social.lineMobile && (
             <a
-              href={BUSINESS.social.line}
+              href={BUSINESS.social.lineMobile}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Chat with our 24/7 assistant on Line"
