@@ -138,9 +138,17 @@ model QuestionnaireSubmission {
   userAgent          String?
   submittedAt        DateTime @default(now())
 
+  // AestheticIQ CRM sync status. crmSyncedAt is set on a successful push;
+  // crmSyncError holds the last failure message (cleared on success) so a
+  // failed sync is visible and retryable from the admin submissions page.
+  crmSyncedAt        DateTime?
+  crmSyncError       String?
+  crmSyncAttemptedAt DateTime?
+
   @@index([userId])
   @@index([email])
   @@index([submittedAt])
+  @@index([crmSyncedAt])
 }
 
 model RateLimitBucket {

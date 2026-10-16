@@ -11,6 +11,7 @@ export type AuditAction =
   | 'user_created' | 'user_updated' | 'user_deleted'
   | 'contact_form_submitted'
   | 'otp_locked' | 'intake_submitted' | 'intake_failed'
+  | 'intake_crm_sync_failed' | 'intake_crm_sync_retried'
   | 'simulation_created' | 'simulation_viewed' | 'simulation_deleted' | 'simulation_rerun'
   | 'photo_consent_given' | 'photo_consent_withdrawn' | 'photo_deleted';
 

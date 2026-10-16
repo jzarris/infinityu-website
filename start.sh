@@ -114,6 +114,11 @@ async function migrate() {
   await prisma.\$executeRawUnsafe(\`CREATE INDEX IF NOT EXISTS \"QuestionnaireSubmission_submittedAt_idx\" ON \"QuestionnaireSubmission\"(\"submittedAt\")\`);
   // Column added after initial table creation — safe no-op if already present
   await prisma.\$executeRawUnsafe(\`ALTER TABLE \"QuestionnaireSubmission\" ADD COLUMN IF NOT EXISTS \"acknowledgments\" TEXT\`);
+  // AestheticIQ CRM sync status — added with the intake→CRM sync fix
+  await prisma.\$executeRawUnsafe(\`ALTER TABLE \"QuestionnaireSubmission\" ADD COLUMN IF NOT EXISTS \"crmSyncedAt\"        TIMESTAMP(3)\`);
+  await prisma.\$executeRawUnsafe(\`ALTER TABLE \"QuestionnaireSubmission\" ADD COLUMN IF NOT EXISTS \"crmSyncError\"       TEXT\`);
+  await prisma.\$executeRawUnsafe(\`ALTER TABLE \"QuestionnaireSubmission\" ADD COLUMN IF NOT EXISTS \"crmSyncAttemptedAt\" TIMESTAMP(3)\`);
+  await prisma.\$executeRawUnsafe(\`CREATE INDEX IF NOT EXISTS \"QuestionnaireSubmission_crmSyncedAt_idx\" ON \"QuestionnaireSubmission\"(\"crmSyncedAt\")\`);
 
   // ── PhotoConsent ────────────────────────────────────────────────────────
   await prisma.\$executeRawUnsafe(\`

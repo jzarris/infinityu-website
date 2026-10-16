@@ -5,6 +5,7 @@ import {
   CheckCircle, XCircle, Globe, ChevronLeft, ChevronRight, ShieldCheck,
 } from 'lucide-react';
 import Link from 'next/link';
+import { RetrySyncButton } from './RetrySyncButton';
 
 const GOAL_LABELS: Record<string, string> = {
   weight_loss: 'Weight Management',
@@ -56,6 +57,9 @@ async function getSubmissions(page: number) {
         submissionLanguage: true,
         languagesUsed: true,
         submittedAt: true,
+        crmSyncedAt: true,
+        crmSyncError: true,
+        crmSyncAttemptedAt: true,
         user: { select: { id: true, name: true } },
       },
     }),
@@ -306,6 +310,28 @@ export default async function SubmissionsPage({
                           Multi-language session
                         </span>
                       )}
+
+                      {/* AestheticIQ sync status */}
+                      {s.crmSyncedAt ? (
+                        <span
+                          className="px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded-full"
+                          title={`Synced ${new Date(s.crmSyncedAt).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}`}
+                        >
+                          Synced to AestheticIQ
+                        </span>
+                      ) : s.crmSyncError ? (
+                        <span
+                          className="px-2 py-0.5 bg-red-50 text-red-700 border border-red-200 rounded-full"
+                          title={s.crmSyncError}
+                        >
+                          Sync failed
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 bg-gray-50 text-gray-500 border border-gray-200 rounded-full">
+                          Not synced
+                        </span>
+                      )}
+                      <RetrySyncButton submissionId={s.id} synced={!!s.crmSyncedAt} />
                     </div>
 
                   </CardContent>

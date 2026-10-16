@@ -9,25 +9,7 @@ import { getContactNotificationEmail } from '@/lib/settings';
 import { cookies } from 'next/headers';
 import { SIM_ACCESS_COOKIE, issueSimAccessToken, simAccessCookieOptions } from '@/lib/sim-access';
 import { simulatorAvailability } from '@/lib/simulator-service';
-
-// Module-level JWT cache for AestheticIQ token exchange.
-// On Railway (persistent process) this survives across requests; re-exchange only on expiry.
-let _aiqJwt: { token: string; expiresAt: number } | null = null;
-
-async function getAestheticIqJwt(webhookUrl: string, apiToken: string): Promise<string> {
-  const now = Date.now();
-  if (_aiqJwt && _aiqJwt.expiresAt > now + 60_000) return _aiqJwt.token;
-  const base = new URL(webhookUrl).origin;
-  const res = await fetch(`${base}/api/v1/tokens/exchange`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ apiToken }),
-  });
-  if (!res.ok) throw new Error(`AestheticIQ token exchange failed: ${res.status}`);
-  const data = await res.json() as { data: { accessToken: string; expiresIn: number } };
-  _aiqJwt = { token: data.data.accessToken, expiresAt: now + data.data.expiresIn * 1000 };
-  return _aiqJwt.token;
-}
+import { syncToAestheticIq } from '@/lib/aestheticiq';
 
 // Health Assessment questionnaire schema
 const questionnaireSchema = z.object({
@@ -370,6 +352,8 @@ export async function POST(request: NextRequest) {
     // Save questionnaire submission to database (always)
     console.log('=== SAVING QUESTIONNAIRE SUBMISSION ===');
     const { ipAddress: submissionIP, userAgent: submissionUA } = getRequestInfo(request);
+    let submissionId: string | null = null;
+    let submissionSubmittedAt: Date | null = null;
     try {
       const questionnaireSubmission = await prisma.questionnaireSubmission.create({
         data: {
@@ -393,6 +377,8 @@ export async function POST(request: NextRequest) {
           userAgent: submissionUA,
         },
       });
+      submissionId = questionnaireSubmission.id;
+      submissionSubmittedAt = questionnaireSubmission.submittedAt;
       console.log('Saved questionnaire submission:', questionnaireSubmission.id);
     } catch (questionnaireError) {
       console.error('Failed to save questionnaire submission:', questionnaireError);
@@ -527,42 +513,64 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Forward to AestheticIQ CRM (fire-and-forget — never blocks or fails the response)
-    const aestheticIqUrl = process.env.AESTHETICIQ_WEBHOOK_URL;
-    const aestheticIqToken = process.env.AESTHETICIQ_API_TOKEN;
-    if (aestheticIqUrl && aestheticIqToken) {
-      const crmPayload = {
-        firstName: contactInfo.firstName,
-        lastName: contactInfo.lastName,
-        email: contactInfo.email,
-        phone: contactInfo.phone,
-        dateOfBirth: contactInfo.dateOfBirth,
-        state: contactInfo.state,
-        biologicalSex: contactInfo.biologicalSex,
-        selectedGoals,
-        eligibleProducts,
-        healthSummary: healthInfo,
-        answers,
-        acknowledgments,
-        smsConsent,
-        submissionLanguage: submissionLanguage || 'en',
-        timestamp: new Date().toISOString(),
-      };
-      (async () => {
-        try {
-          const jwt = await getAestheticIqJwt(aestheticIqUrl, aestheticIqToken);
-          const crmRes = await fetch(aestheticIqUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${jwt}` },
-            body: JSON.stringify(crmPayload),
-          });
-          if (!crmRes.ok) {
-            console.error('AestheticIQ CRM webhook returned', crmRes.status);
-          }
-        } catch (err) {
-          console.error('AestheticIQ CRM webhook failed:', err instanceof Error ? err.message : String(err));
-        }
-      })();
+    // Forward to AestheticIQ CRM. Awaited so a failure is recorded against the
+    // submission (crmSyncError) and can be retried from the admin page — but it
+    // never fails the user's response or blocks the thank-you page.
+    const crmResult = await syncToAestheticIq({
+      firstName: contactInfo.firstName,
+      lastName: contactInfo.lastName,
+      email: contactInfo.email,
+      phone: contactInfo.phone,
+      dateOfBirth: contactInfo.dateOfBirth,
+      state: contactInfo.state,
+      biologicalSex: contactInfo.biologicalSex,
+      selectedGoals,
+      eligibleProducts,
+      healthSummary: healthInfo,
+      answers,
+      acknowledgments,
+      smsConsent,
+      submissionLanguage: submissionLanguage || 'en',
+      // Stable per-submission timestamp (not the push moment) so an admin
+      // "Retry sync" dedupes against the original on the AestheticIQ side.
+      timestamp: (submissionSubmittedAt ?? new Date()).toISOString(),
+    });
+
+    // "Not configured" is a no-op, not a failure: sites without an AestheticIQ
+    // integration stay "Not synced" with no error and no audit noise. Only a
+    // real failure against a configured integration is flagged for retry.
+    const crmConfigured = crmResult.ok ? true : crmResult.configured;
+    const crmFailed = !crmResult.ok && crmResult.configured;
+
+    if (submissionId && crmConfigured) {
+      try {
+        await prisma.questionnaireSubmission.update({
+          where: { id: submissionId },
+          data: {
+            crmSyncAttemptedAt: new Date(),
+            crmSyncedAt: crmResult.ok ? new Date() : null,
+            crmSyncError: crmResult.ok ? null : crmResult.error,
+          },
+        });
+      } catch (statusError) {
+        console.error('Failed to record CRM sync status:', statusError);
+      }
+    }
+
+    if (crmFailed) {
+      console.error('AestheticIQ CRM sync failed:', crmResult.error);
+      await logAuditEvent({
+        action: 'intake_crm_sync_failed',
+        target: contactInfo.email,
+        ipAddress,
+        userAgent,
+        details: {
+          submissionId,
+          status: 'status' in crmResult ? crmResult.status : undefined,
+          error: crmResult.error,
+        },
+        success: false,
+      });
     }
 
     console.log('=== INTAKE FORM SUBMISSION COMPLETE ===');
