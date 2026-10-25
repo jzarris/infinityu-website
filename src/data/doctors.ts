@@ -22,12 +22,13 @@ export const doctors: Doctor[] = [
     specializations: [
       'Bioidentical Hormone Replacement Therapy (BHRT)',
       'Regenerative Medicine',
+      'Hair Restoration',
       'Body Contouring',
       'Radio Frequency Treatments',
       'Sculptra & Dermal Fillers',
       'Medical Weight Loss',
     ],
-    bio: 'Dr. Mike is a dedicated aesthetic and regenerative medicine physician with expertise in Bioidentical Hormone Replacement Therapy (BHRT), body contouring, and advanced skin tightening technologies. As a Purepell Certified Provider, he specializes in precision hormone optimization for men and women alongside comprehensive weight management programs. His approach integrates the latest in regenerative and aesthetic medicine with a commitment to natural-looking results that enhance each patient\'s confidence and well-being.',
+    bio: 'Dr. Mike is a dedicated aesthetic and regenerative medicine physician with expertise in Bioidentical Hormone Replacement Therapy (BHRT), body contouring, advanced skin tightening technologies, and hair restoration. He performs FUE hair transplants and non-surgical hair restoration using PRP and exosome therapy — building personalized treatment plans based on each patient\'s pattern of loss and goals. As a Purepell Certified Provider, he also specializes in precision hormone optimization for men and women alongside comprehensive weight management programs. His approach integrates the latest in regenerative and aesthetic medicine with a commitment to natural-looking results that enhance each patient\'s confidence and well-being.',
     headshotUrl: '/images/doctors/dr_le.png',
   },
 ];

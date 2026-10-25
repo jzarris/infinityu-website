@@ -24,7 +24,7 @@ export default function HairResultsPage() {
           >
             ← Back to Hair Restoration
           </Link>
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">
             Before &amp; After Results
           </h1>
           <p className="text-white/80 text-lg max-w-xl">
