@@ -288,6 +288,22 @@ export default function HairRestorationPage() {
         </div>
       </Section>
 
+      {/* Results gallery link */}
+      <Section background="surface-alt">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div>
+            <p className="text-accent font-medium tracking-wider uppercase text-sm mb-2">Before &amp; After</p>
+            <h2 className="font-heading text-2xl font-bold text-primary mb-2">See the results</h2>
+            <p className="text-text-muted text-sm max-w-lg">
+              Browse AI-illustrated before and after examples across hair transplant, PRP, exosome therapy, and eyebrow restoration — filterable by treatment type and gender.
+            </p>
+          </div>
+          <Button href="/services/hair-restoration/results" variant="accent" className="shrink-0">
+            View Results Gallery
+          </Button>
+        </div>
+      </Section>
+
       <FAQSection
         subtitle={`Common questions about ${category.name.toLowerCase()} at InfinityU.`}
         faqs={category.faqs}
