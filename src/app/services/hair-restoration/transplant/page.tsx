@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Section } from '@/components/ui/Section';
 import { Button } from '@/components/ui/Button';
 import { BUSINESS } from '@/lib/constants';
@@ -82,38 +83,53 @@ export default function HairTransplantPage() {
 
       {/* What FUE is */}
       <Section>
-        <div className="max-w-3xl">
-          <p className="text-accent font-medium tracking-wider uppercase text-sm mb-3">The procedure</p>
-          <h2 className="font-heading text-3xl font-bold text-primary mb-4">
-            What makes FUE different from older transplant methods
-          </h2>
-          <p className="text-text-muted text-lg leading-relaxed mb-4">
-            Follicular Unit Extraction (FUE) is the modern standard in hair transplant surgery. Instead of cutting a strip of scalp (the older FUT method), FUE extracts individual follicular units one by one using a micro-punch device — leaving only tiny circular dots in the donor area that are nearly invisible even with short hair.
-          </p>
-          <p className="text-text-muted leading-relaxed mb-8">
-            The extracted follicles are then implanted into the recipient area at precise angles, directions, and densities determined during surgical planning. The result is permanent, natural-looking hair density — not a hairpiece, not a treatment that requires ongoing sessions to maintain.
-          </p>
-
-          {/* Dr. Le quote */}
-          <blockquote className="border-l-4 border-accent pl-6 py-2 mb-8">
-            <p className="text-primary text-lg leading-relaxed mb-3 italic">
-              &ldquo;The hairline we design together before the procedure is as important as the surgery itself. Getting the density, the angle, and the aesthetics right — that&apos;s what separates a result that looks natural from one that looks like a transplant.&rdquo;
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          <div>
+            <p className="text-accent font-medium tracking-wider uppercase text-sm mb-3">The procedure</p>
+            <h2 className="font-heading text-3xl font-bold text-primary mb-4">
+              What makes FUE different from older transplant methods
+            </h2>
+            <p className="text-text-muted text-lg leading-relaxed mb-4">
+              Follicular Unit Extraction (FUE) is the modern standard in hair transplant surgery. Instead of cutting a strip of scalp (the older FUT method), FUE extracts individual follicular units one by one using a micro-punch device — leaving only tiny circular dots in the donor area that are nearly invisible even with short hair.
             </p>
-            <cite className="text-text-muted text-sm not-italic">— Dr. Mike Le, Medical Director, InfinityU</cite>
-          </blockquote>
+            <p className="text-text-muted leading-relaxed mb-8">
+              The extracted follicles are then implanted into the recipient area at precise angles, directions, and densities determined during surgical planning. The result is permanent, natural-looking hair density — not a hairpiece, not a treatment that requires ongoing sessions to maintain.
+            </p>
 
-          <div className="grid sm:grid-cols-3 gap-4">
-            {[
-              { icon: '💉', title: 'No linear scar', body: 'Individual follicle extraction means no strip incision — wear your hair short without visible scarring' },
-              { icon: '🎯', title: 'Permanent', body: 'Donor follicles are DHT-resistant — once transplanted, they grow for life' },
-              { icon: '🔬', title: 'Your own tissue', body: 'No foreign material — your own follicles, relocated to where you need them' },
-            ].map((c) => (
-              <div key={c.title} className="bg-surface-alt rounded-xl p-5 text-center">
-                <div className="text-2xl mb-2">{c.icon}</div>
-                <h4 className="font-semibold text-primary text-sm mb-1">{c.title}</h4>
-                <p className="text-text-muted text-xs leading-relaxed">{c.body}</p>
-              </div>
-            ))}
+            {/* Dr. Le quote */}
+            <blockquote className="border-l-4 border-accent pl-6 py-2 mb-8">
+              <p className="text-primary text-lg leading-relaxed mb-3 italic">
+                &ldquo;The hairline we design together before the procedure is as important as the surgery itself. Getting the density, the angle, and the aesthetics right — that&apos;s what separates a result that looks natural from one that looks like a transplant.&rdquo;
+              </p>
+              <cite className="text-text-muted text-sm not-italic">— Dr. Mike Le, Medical Director, InfinityU</cite>
+            </blockquote>
+
+            <div className="grid sm:grid-cols-3 gap-4">
+              {[
+                { icon: '💉', title: 'No linear scar', body: 'Individual follicle extraction means no strip incision — wear your hair short without visible scarring' },
+                { icon: '🎯', title: 'Permanent', body: 'Donor follicles are DHT-resistant — once transplanted, they grow for life' },
+                { icon: '🔬', title: 'Your own tissue', body: 'No foreign material — your own follicles, relocated to where you need them' },
+              ].map((c) => (
+                <div key={c.title} className="bg-surface-alt rounded-xl p-5 text-center">
+                  <div className="text-2xl mb-2">{c.icon}</div>
+                  <h4 className="font-semibold text-primary text-sm mb-1">{c.title}</h4>
+                  <p className="text-text-muted text-xs leading-relaxed">{c.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-md">
+            <Image
+              src="/images/hair-results/81db1074-4ae5-44d5-80ba-2c85a4931f2c.jpg"
+              alt="FUE hair transplant before and after — hairline and crown restoration"
+              fill
+              className="object-cover"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
+            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent px-4 py-3">
+              <p className="text-white text-xs font-medium">Before &amp; After · Hair Transplant (FUE)</p>
+              <p className="text-white/60 text-xs">AI-generated illustration — not an actual patient result</p>
+            </div>
           </div>
         </div>
       </Section>

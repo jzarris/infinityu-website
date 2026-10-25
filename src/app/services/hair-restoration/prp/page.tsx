@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Section } from '@/components/ui/Section';
 import { Button } from '@/components/ui/Button';
 import { BUSINESS } from '@/lib/constants';
@@ -72,32 +73,47 @@ export default function PRPHairRestorationPage() {
 
       {/* What PRP does */}
       <Section>
-        <div className="max-w-3xl">
-          <p className="text-accent font-medium tracking-wider uppercase text-sm mb-3">The science</p>
-          <h2 className="font-heading text-3xl font-bold text-primary mb-4">
-            What PRP actually does to your follicles
-          </h2>
-          <p className="text-text-muted text-lg leading-relaxed mb-4">
-            Your blood contains platelets — cells whose primary job is healing. When concentrated and injected into the scalp, the growth factors platelets release (VEGF, PDGF, IGF-1, and others) signal hair follicle stem cells to shift from a resting state back into an active growth phase.
-          </p>
-          <p className="text-text-muted leading-relaxed mb-4">
-            PRP doesn&apos;t create new follicles. What it does is <strong className="text-primary">reactivate follicles that are still alive but dormant</strong>, slow the rate at which existing follicles miniaturize under DHT, and improve the quality and thickness of hair shafts from treated follicles. The result over 9–12 months is reduced shedding, noticeable new growth, and measurably thicker, denser hair.
-          </p>
-          <p className="text-text-muted leading-relaxed mb-8">
-            Because the plasma comes from your own blood, there is no risk of allergic reaction and no foreign substances are introduced. PRP is among the safest treatments in aesthetic medicine.
-          </p>
-          <div className="grid sm:grid-cols-3 gap-4">
-            {[
-              { icon: '🩸', title: 'Autologous', body: 'Derived from your own blood — zero foreign substances, zero rejection risk' },
-              { icon: '🧬', title: 'Growth factors', body: 'VEGF, PDGF, IGF-1, TGF — the signals that wake follicles up' },
-              { icon: '📈', title: 'Clinical evidence', body: 'Published studies confirm improvements in hair density, shaft diameter, and follicle count' },
-            ].map((c) => (
-              <div key={c.title} className="bg-surface-alt rounded-xl p-5 text-center">
-                <div className="text-2xl mb-2">{c.icon}</div>
-                <h4 className="font-semibold text-primary text-sm mb-1">{c.title}</h4>
-                <p className="text-text-muted text-xs leading-relaxed">{c.body}</p>
-              </div>
-            ))}
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          <div>
+            <p className="text-accent font-medium tracking-wider uppercase text-sm mb-3">The science</p>
+            <h2 className="font-heading text-3xl font-bold text-primary mb-4">
+              What PRP actually does to your follicles
+            </h2>
+            <p className="text-text-muted text-lg leading-relaxed mb-4">
+              Your blood contains platelets — cells whose primary job is healing. When concentrated and injected into the scalp, the growth factors platelets release (VEGF, PDGF, IGF-1, and others) signal hair follicle stem cells to shift from a resting state back into an active growth phase.
+            </p>
+            <p className="text-text-muted leading-relaxed mb-4">
+              PRP doesn&apos;t create new follicles. What it does is <strong className="text-primary">reactivate follicles that are still alive but dormant</strong>, slow the rate at which existing follicles miniaturize under DHT, and improve the quality and thickness of hair shafts from treated follicles. The result over 9–12 months is reduced shedding, noticeable new growth, and measurably thicker, denser hair.
+            </p>
+            <p className="text-text-muted leading-relaxed mb-8">
+              Because the plasma comes from your own blood, there is no risk of allergic reaction and no foreign substances are introduced. PRP is among the safest treatments in aesthetic medicine.
+            </p>
+            <div className="grid sm:grid-cols-3 gap-4">
+              {[
+                { icon: '🩸', title: 'Autologous', body: 'Derived from your own blood — zero foreign substances, zero rejection risk' },
+                { icon: '🧬', title: 'Growth factors', body: 'VEGF, PDGF, IGF-1, TGF — the signals that wake follicles up' },
+                { icon: '📈', title: 'Clinical evidence', body: 'Published studies confirm improvements in hair density, shaft diameter, and follicle count' },
+              ].map((c) => (
+                <div key={c.title} className="bg-surface-alt rounded-xl p-5 text-center">
+                  <div className="text-2xl mb-2">{c.icon}</div>
+                  <h4 className="font-semibold text-primary text-sm mb-1">{c.title}</h4>
+                  <p className="text-text-muted text-xs leading-relaxed">{c.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-md">
+            <Image
+              src="/images/hair-results/a4c097a3-2703-4191-b572-b1e23b035cfe.png"
+              alt="PRP hair restoration before and after — crown density improvement"
+              fill
+              className="object-cover"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
+            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent px-4 py-3">
+              <p className="text-white text-xs font-medium">Before &amp; After · PRP Hair Restoration</p>
+              <p className="text-white/60 text-xs">AI-generated illustration — not an actual patient result</p>
+            </div>
           </div>
         </div>
       </Section>

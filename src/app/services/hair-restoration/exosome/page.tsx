@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Section } from '@/components/ui/Section';
 import { Button } from '@/components/ui/Button';
 import { BUSINESS } from '@/lib/constants';
@@ -94,32 +95,47 @@ export default function ExosomeHairRestorationPage() {
 
       {/* Science */}
       <Section>
-        <div className="max-w-3xl">
-          <p className="text-accent font-medium tracking-wider uppercase text-sm mb-3">The science</p>
-          <h2 className="font-heading text-3xl font-bold text-primary mb-4">
-            Why exosomes outperform PRP
-          </h2>
-          <p className="text-text-muted text-lg leading-relaxed mb-4">
-            Exosomes are nano-sized signaling vesicles secreted by stem cells. They contain an exceptionally dense cargo of growth factors, cytokines, microRNA, and cell-signaling proteins that instruct hair follicle stem cells to shift from a dormant (telogen) to an active growth (anagen) state.
-          </p>
-          <p className="text-text-muted leading-relaxed mb-4">
-            At approximately 100–150 nanometers, exosomes are small enough to penetrate the scalp and reach follicle stem cells at a cellular level — delivering their cargo directly where it&apos;s needed. The result: a stronger, more coordinated biological response than PRP can achieve.
-          </p>
-          <p className="text-text-muted leading-relaxed mb-8">
-            Unlike PRP, exosome therapy doesn&apos;t require a blood draw. The exosomes used in treatment are derived from carefully screened mesenchymal stem cell donors, manufactured and quality-controlled for clinical use.
-          </p>
-          <div className="grid sm:grid-cols-3 gap-4">
-            {[
-              { icon: '🔬', title: 'Nano-scale delivery', body: 'At 100–150nm, exosomes penetrate follicle stem cells directly — PRP particles are too large for this' },
-              { icon: '⚡', title: '100× growth factors', body: 'Concentration of VEGF, PDGF, IGF-1 and others far exceeds what PRP can achieve' },
-              { icon: '🧬', title: 'Genetic signaling', body: 'microRNA in exosomes can influence gene expression — turning on follicle growth pathways' },
-            ].map((c) => (
-              <div key={c.title} className="bg-surface-alt rounded-xl p-5 text-center">
-                <div className="text-2xl mb-2">{c.icon}</div>
-                <h4 className="font-semibold text-primary text-sm mb-1">{c.title}</h4>
-                <p className="text-text-muted text-xs leading-relaxed">{c.body}</p>
-              </div>
-            ))}
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          <div>
+            <p className="text-accent font-medium tracking-wider uppercase text-sm mb-3">The science</p>
+            <h2 className="font-heading text-3xl font-bold text-primary mb-4">
+              Why exosomes outperform PRP
+            </h2>
+            <p className="text-text-muted text-lg leading-relaxed mb-4">
+              Exosomes are nano-sized signaling vesicles secreted by stem cells. They contain an exceptionally dense cargo of growth factors, cytokines, microRNA, and cell-signaling proteins that instruct hair follicle stem cells to shift from a dormant (telogen) to an active growth (anagen) state.
+            </p>
+            <p className="text-text-muted leading-relaxed mb-4">
+              At approximately 100–150 nanometers, exosomes are small enough to penetrate the scalp and reach follicle stem cells at a cellular level — delivering their cargo directly where it&apos;s needed. The result: a stronger, more coordinated biological response than PRP can achieve.
+            </p>
+            <p className="text-text-muted leading-relaxed mb-8">
+              Unlike PRP, exosome therapy doesn&apos;t require a blood draw. The exosomes used in treatment are derived from carefully screened mesenchymal stem cell donors, manufactured and quality-controlled for clinical use.
+            </p>
+            <div className="grid sm:grid-cols-3 gap-4">
+              {[
+                { icon: '🔬', title: 'Nano-scale delivery', body: 'At 100–150nm, exosomes penetrate follicle stem cells directly — PRP particles are too large for this' },
+                { icon: '⚡', title: '100× growth factors', body: 'Concentration of VEGF, PDGF, IGF-1 and others far exceeds what PRP can achieve' },
+                { icon: '🧬', title: 'Genetic signaling', body: 'microRNA in exosomes can influence gene expression — turning on follicle growth pathways' },
+              ].map((c) => (
+                <div key={c.title} className="bg-surface-alt rounded-xl p-5 text-center">
+                  <div className="text-2xl mb-2">{c.icon}</div>
+                  <h4 className="font-semibold text-primary text-sm mb-1">{c.title}</h4>
+                  <p className="text-text-muted text-xs leading-relaxed">{c.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-md">
+            <Image
+              src="/images/hair-results/7b3535e2-6386-4d1e-9252-0453c01644c7.jpg"
+              alt="Exosome hair restoration before and after"
+              fill
+              className="object-cover"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
+            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent px-4 py-3">
+              <p className="text-white text-xs font-medium">Before &amp; After · Exosome Hair Restoration</p>
+              <p className="text-white/60 text-xs">AI-generated illustration — not an actual patient result</p>
+            </div>
           </div>
         </div>
       </Section>
