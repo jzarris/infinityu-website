@@ -2,11 +2,16 @@ import { prisma } from '@/lib/prisma';
 import { TestimonialsCarouselClient } from './TestimonialsCarouselClient';
 
 export async function TestimonialsCarousel() {
-  const reviews = await prisma.testimonial.findMany({
-    where: { isActive: true },
-    orderBy: { sortOrder: 'asc' },
-    select: { id: true, name: true, rating: true, date: true, treatment: true, text: true },
-  });
+  let reviews: { id: string; name: string; rating: number; date: string; treatment: string; text: string }[] = [];
+  try {
+    reviews = await prisma.testimonial.findMany({
+      where: { isActive: true },
+      orderBy: { sortOrder: 'asc' },
+      select: { id: true, name: true, rating: true, date: true, treatment: true, text: true },
+    });
+  } catch {
+    return null;
+  }
 
   if (reviews.length === 0) return null;
 
