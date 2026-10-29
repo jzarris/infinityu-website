@@ -5,13 +5,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import {
-  LayoutDashboard, MessageSquare, FileText, Search, Shield, Settings, LogOut, Menu, X, ChevronLeft, ChevronRight, Users, Camera, ClipboardList,
+  LayoutDashboard, MessageSquare, FileText, Search, Shield, Settings, LogOut, Menu, X, ChevronLeft, ChevronRight, Users, Camera, ClipboardList, Star,
 } from 'lucide-react';
 
 const navItems = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { label: 'Users', href: '/admin/users', icon: Users },
   { label: 'Submissions', href: '/admin/submissions', icon: ClipboardList },
+  { label: 'Reviews', href: '/admin/reviews', icon: Star },
   { label: 'SMS Consents', href: '/admin/sms-consents', icon: MessageSquare },
   { label: 'Audit Log', href: '/admin/audit-log', icon: FileText },
   { label: 'SEO', href: '/admin/seo', icon: Search },

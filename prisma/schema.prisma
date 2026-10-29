@@ -247,3 +247,18 @@ model TrustedBrowser {
   @@index([tokenHash])
   @@index([expiresAt])
 }
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  rating    Int      @default(5)
+  date      String
+  treatment String
+  text      String
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, sortOrder])
+}
