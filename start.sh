@@ -206,6 +206,23 @@ async function migrate() {
   await prisma.\$executeRawUnsafe(\`CREATE INDEX IF NOT EXISTS \"TrustedBrowser_userId_idx\"    ON \"TrustedBrowser\"(\"userId\")\`);
   await prisma.\$executeRawUnsafe(\`CREATE INDEX IF NOT EXISTS \"TrustedBrowser_tokenHash_idx\" ON \"TrustedBrowser\"(\"tokenHash\")\`);
   await prisma.\$executeRawUnsafe(\`CREATE INDEX IF NOT EXISTS \"TrustedBrowser_expiresAt_idx\" ON \"TrustedBrowser\"(\"expiresAt\")\`);
+
+  // ── Testimonial ─────────────────────────────────────────────────────────
+  await prisma.\$executeRawUnsafe(\`
+    CREATE TABLE IF NOT EXISTS \"Testimonial\" (
+      \"id\"        TEXT         PRIMARY KEY,
+      \"name\"      TEXT         NOT NULL,
+      \"rating\"    INTEGER      NOT NULL DEFAULT 5,
+      \"date\"      TEXT         NOT NULL DEFAULT '',
+      \"treatment\" TEXT         NOT NULL DEFAULT '',
+      \"text\"      TEXT         NOT NULL,
+      \"isActive\"  BOOLEAN      NOT NULL DEFAULT true,
+      \"sortOrder\" INTEGER      NOT NULL DEFAULT 0,
+      \"createdAt\" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      \"updatedAt\" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+  \`);
+  await prisma.\$executeRawUnsafe(\`CREATE INDEX IF NOT EXISTS \"Testimonial_isActive_sortOrder_idx\" ON \"Testimonial\"(\"isActive\", \"sortOrder\")\`);
 }
 
 migrate()
