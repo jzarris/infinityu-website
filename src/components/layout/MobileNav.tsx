@@ -38,9 +38,9 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
       >
         <div className="flex items-center justify-between p-6 border-b border-border">
           <Image
-            src="/images/logo.png"
+            src="/images/infinity-u-logo-transparent.png"
             alt={BUSINESS.legalName}
-            width={600}
+            width={400}
             height={400}
             className="h-10 w-auto"
           />

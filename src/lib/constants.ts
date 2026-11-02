@@ -59,4 +59,5 @@ export const NAV_LINKS = [
   { label: 'Our Doctor', href: '/medical-professionals' },
   // { label: 'Gallery', href: '/gallery' },
   { label: 'Contact', href: '/contact' },
+  { label: 'Partner With Us', href: '/partner' },
 ] as const;

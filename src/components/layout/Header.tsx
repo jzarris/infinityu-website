@@ -43,13 +43,13 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center" aria-label={`${BUSINESS.legalName} home`}>
             <Image
-              src="/images/logo.png"
+              src="/images/infinity-u-logo-transparent.png"
               alt={BUSINESS.legalName}
-              width={600}
+              width={400}
               height={400}
               priority
-              sizes="200px"
-              className="h-[84px] w-auto"
+              sizes="80px"
+              className="h-20 w-auto"
             />
           </Link>
 
