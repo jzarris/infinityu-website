@@ -101,8 +101,8 @@ export default function FinancingPage() {
       {/* Eligible treatments */}
       <Section background="white">
         <div className="max-w-2xl mx-auto">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-center mb-3">Eligible treatments</h2>
-          <p className="text-text-muted text-center mb-8">Financing is available for the following services at InfinityU:</p>
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-center mb-3">Popular treatments to finance</h2>
+          <p className="text-text-muted text-center mb-8">Cherry financing can be used for any service at InfinityU. Here are some of the most common:</p>
           <ul className="grid sm:grid-cols-2 gap-3">
             {ELIGIBLE_TREATMENTS.map(({ name, href }) => (
               <li key={name}>
