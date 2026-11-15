@@ -69,6 +69,20 @@ export async function isTwilioConfigured(): Promise<boolean> {
   return !!(accountSid && authToken && verifyServiceSid);
 }
 
+export async function sendSmsToMany(
+  recipients: string[],
+  message: string
+): Promise<{ sent: number; failed: number }> {
+  let sent = 0;
+  let failed = 0;
+  for (const phone of recipients) {
+    const result = await sendSmsNotification(phone, message);
+    if (result.success) sent++;
+    else failed++;
+  }
+  return { sent, failed };
+}
+
 export async function sendSmsNotification(
   to: string,
   message: string

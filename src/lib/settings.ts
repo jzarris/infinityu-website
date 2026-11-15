@@ -11,6 +11,7 @@ export interface Settings {
   twilio_verify_service_sid?: string;
   twilio_from_phone?: string;
   admin_notification_phone?: string;
+  intake_alert_phones?: string;
   simulator_enabled?: string;
   simulator_typical_results?: string;
   simulator_max_loss_fraction?: string;
@@ -41,6 +42,7 @@ const VALID_KEYS = [
   'twilio_verify_service_sid',
   'twilio_from_phone',
   'admin_notification_phone',
+  'intake_alert_phones',
   'simulator_enabled',
   'simulator_typical_results',
   'simulator_max_loss_fraction',
@@ -93,6 +95,12 @@ export async function getContactNotificationEmail(): Promise<string | null> {
 export async function getAdminNotificationPhone(): Promise<string | null> {
   const settings = await getSettings();
   return settings.admin_notification_phone || process.env.ADMIN_NOTIFICATION_PHONE || null;
+}
+
+export async function getIntakeAlertPhones(): Promise<string[]> {
+  const settings = await getSettings();
+  const raw = settings.intake_alert_phones || process.env.INTAKE_ALERT_PHONES || '';
+  return raw.split(',').map((p) => p.trim()).filter(Boolean);
 }
 
 export async function getSimulatorSettings(): Promise<SimulatorSettings> {

@@ -5,7 +5,8 @@ import { RESULTS_REFUND_ACKNOWLEDGMENT, isResultsAcknowledgmentEnabled } from '@
 import { formatPhoneNumber } from '@/lib/twilio';
 import { logAuditEvent, getRequestInfo } from '@/lib/audit';
 import { sendIntakeNotificationEmail, isEmailConfigured } from '@/lib/email';
-import { getContactNotificationEmail } from '@/lib/settings';
+import { getContactNotificationEmail, getIntakeAlertPhones } from '@/lib/settings';
+import { sendSmsToMany } from '@/lib/twilio';
 import { cookies } from 'next/headers';
 import { SIM_ACCESS_COOKIE, issueSimAccessToken, simAccessCookieOptions } from '@/lib/sim-access';
 import { simulatorAvailability } from '@/lib/simulator-service';
@@ -479,6 +480,50 @@ export async function POST(request: NextRequest) {
       }
     } catch (emailError) {
       console.error('Error sending intake notification email:', emailError);
+    }
+
+    // Send SMS alert to configured staff phones
+    console.log('=== SENDING INTAKE SMS ALERTS ===');
+    try {
+      const alertPhones = await getIntakeAlertPhones();
+      if (alertPhones.length > 0) {
+        const heightFt = (answers.heightFeet as number) || 0;
+        const heightIn = (answers.heightInches as number) || 0;
+        const weightLbs = (answers.currentWeight as number) || 0;
+        const totalInches = (heightFt * 12) + heightIn;
+        const heightMeters = totalInches * 0.0254;
+        const weightKg = weightLbs * 0.453592;
+        const bmi = heightMeters > 0 ? weightKg / (heightMeters * heightMeters) : null;
+
+        const dob = new Date(contactInfo.dateOfBirth);
+        const today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+        const mDiff = today.getMonth() - dob.getMonth();
+        if (mDiff < 0 || (mDiff === 0 && today.getDate() < dob.getDate())) age--;
+
+        const goalLabels = selectedGoals.map(g => GOAL_LABELS[g] || g).join(', ') || '—';
+        const eligibleLabels = eligibleProducts.map(p => PRODUCT_LABELS[p] || p).join(', ') || 'None';
+        const heightStr = heightFt > 0 ? `${heightFt}'${heightIn}"` : '—';
+        const weightStr = weightLbs > 0 ? `${weightLbs} lbs` : '—';
+
+        const alertBody = [
+          'New Health Assessment — InfinityU',
+          '',
+          `NAME: ${contactInfo.firstName} ${contactInfo.lastName}`,
+          `AGE: ${age}`,
+          `WELLNESS GOALS: ${goalLabels}`,
+          `HEIGHT/WEIGHT: ${heightStr} / ${weightStr}`,
+          `CALCULATED BMI: ${bmi !== null ? bmi.toFixed(1) : '—'}`,
+          `POTENTIALLY ELIGIBLE FOR: ${eligibleLabels}`,
+        ].join('\n');
+
+        const { sent, failed } = await sendSmsToMany(alertPhones, alertBody);
+        console.log(`Intake SMS alerts: ${sent} sent, ${failed} failed`);
+      } else {
+        console.log('No intake alert phones configured — skipping SMS alert');
+      }
+    } catch (smsAlertError) {
+      console.error('Error sending intake SMS alerts:', smsAlertError);
     }
 
     // Audit log the successful submission
