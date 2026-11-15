@@ -38,7 +38,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: 'Password', type: 'password' },
         totpCode: { label: '2FA Code', type: 'text' },
       },
-      async authorize(credentials) {
+      async authorize(credentials, request) {
         if (!credentials?.email || !credentials?.password) return null;
 
         const user = await prisma.user.findUnique({
@@ -51,7 +51,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!isValidPassword) return null;
 
         if (user.totpEnabled && user.totpSecret) {
-          if (!credentials.totpCode) return null;
+          if (!credentials.totpCode) {
+            // No TOTP code — check if this browser is trusted via cookie
+            const cookieHeader = (request as Request)?.headers?.get('cookie') ?? '';
+            const match = cookieHeader.match(/(?:^|;\s*)infinityu_trusted_browser=([^;]+)/);
+            const trustedToken = match?.[1];
+            if (trustedToken) {
+              const { verifyTrustedBrowser } = await import('@/lib/trustedBrowser');
+              const isTrusted = await verifyTrustedBrowser(user.id, trustedToken);
+              if (isTrusted) {
+                return { id: user.id, email: user.email, name: user.name, role: user.role, totpEnabled: user.totpEnabled };
+              }
+            }
+            return null;
+          }
           const { verifyTOTP } = await import('@/lib/totp');
           const isValidTOTP = verifyTOTP(user.totpSecret, credentials.totpCode as string);
           if (!isValidTOTP) return null;
