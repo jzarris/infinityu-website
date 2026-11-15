@@ -63,6 +63,11 @@ export async function GET() {
         source: settings.admin_notification_phone ? 'admin' : process.env.ADMIN_NOTIFICATION_PHONE ? 'env' : null,
         value: settings.admin_notification_phone || process.env.ADMIN_NOTIFICATION_PHONE || null,
       },
+      intake_alert_phones: {
+        configured: !!(settings.intake_alert_phones || process.env.INTAKE_ALERT_PHONES),
+        source: settings.intake_alert_phones ? 'admin' : process.env.INTAKE_ALERT_PHONES ? 'env' : null,
+        value: settings.intake_alert_phones || process.env.INTAKE_ALERT_PHONES || '',
+      },
       simulator_enabled: settings.simulator_enabled === 'true',
       simulator_typical_results: settings.simulator_typical_results ?? SIMULATOR_TYPICAL_RESULTS_PLACEHOLDER,
       simulator_max_loss_fraction: settings.simulator_max_loss_fraction ? parseFloat(settings.simulator_max_loss_fraction) : 0.2,
@@ -87,7 +92,7 @@ export async function POST(request: NextRequest) {
     const validKeys = [
       'anthropic_api_key', 'resend_api_key', 'instagram_access_token', 'instagram_post_urls',
       'contact_notification_email', 'twilio_account_sid', 'twilio_auth_token',
-      'twilio_verify_service_sid', 'twilio_from_phone', 'admin_notification_phone',
+      'twilio_verify_service_sid', 'twilio_from_phone', 'admin_notification_phone', 'intake_alert_phones',
       'simulator_enabled', 'simulator_typical_results', 'simulator_max_loss_fraction',
       'simulator_retention_days_lead', 'simulator_retention_days_patient',
     ];

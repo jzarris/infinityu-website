@@ -217,6 +217,100 @@ function InstagramUrlsCard({ urls, onSave }: { urls: string; onSave: (value: str
   );
 }
 
+function AlertPhonesCard({ phones, onSave }: { phones: string; onSave: (value: string) => Promise<void> }) {
+  const [editing, setEditing] = useState(false);
+  const [phoneList, setPhoneList] = useState<string[]>([]);
+  const [newPhone, setNewPhone] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    setPhoneList(phones ? phones.split(',').map(p => p.trim()).filter(Boolean) : []);
+  }, [phones]);
+
+  const addPhone = () => {
+    const digits = newPhone.replace(/\D/g, '');
+    const formatted = digits.length === 10 ? `+1${digits}` : digits.length === 11 && digits.startsWith('1') ? `+${digits}` : newPhone.trim();
+    if (!formatted || phoneList.includes(formatted)) return;
+    setPhoneList([...phoneList, formatted]);
+    setNewPhone('');
+  };
+
+  const removePhone = (index: number) => setPhoneList(phoneList.filter((_, i) => i !== index));
+
+  const handleSave = async () => {
+    setSaving(true);
+    await onSave(phoneList.join(','));
+    setSaving(false);
+    setEditing(false);
+  };
+
+  const handleCancel = () => {
+    setEditing(false);
+    setPhoneList(phones ? phones.split(',').map(p => p.trim()).filter(Boolean) : []);
+  };
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="flex items-start justify-between mb-4">
+        <div>
+          <h3 className="font-semibold text-gray-900">Health Assessment Alert Numbers</h3>
+          <p className="text-sm text-gray-500">Phone numbers that receive an SMS when a Health Assessment is submitted.</p>
+        </div>
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${phoneList.length > 0 ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+          {phoneList.length > 0 ? `${phoneList.length} number${phoneList.length > 1 ? 's' : ''}` : 'Not configured'}
+        </span>
+      </div>
+
+      {phoneList.length > 0 && !editing && (
+        <ul className="space-y-2 mb-4">
+          {phoneList.map((phone, i) => (
+            <li key={i} className="text-sm text-gray-700 font-mono bg-gray-50 px-3 py-1.5 rounded border border-gray-200">
+              {phone}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {editing ? (
+        <div className="space-y-3">
+          <div className="space-y-2">
+            {phoneList.map((phone, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <code className="flex-1 px-3 py-1.5 border border-gray-200 rounded-lg text-sm bg-gray-50 font-mono">{phone}</code>
+                <button onClick={() => removePhone(i)} className="text-red-400 hover:text-red-600"><X className="h-4 w-4" /></button>
+              </div>
+            ))}
+          </div>
+          <div className="flex gap-2">
+            <input
+              value={newPhone}
+              onChange={(e) => setNewPhone(e.target.value)}
+              placeholder="+1 (555) 123-4567"
+              type="tel"
+              onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addPhone())}
+              className="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#2E2865] focus:border-transparent"
+            />
+            <button onClick={addPhone} disabled={!newPhone.trim()} className="px-3 py-1.5 border border-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-50 disabled:opacity-50 flex items-center gap-1">
+              <Plus className="h-3 w-3" /> Add
+            </button>
+          </div>
+          <div className="flex gap-2">
+            <button onClick={handleSave} disabled={saving} className="px-3 py-1.5 bg-[#2E2865] text-white text-sm rounded-lg hover:bg-[#231f50] disabled:opacity-50 flex items-center gap-1">
+              {saving ? <RefreshCw className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />} Save
+            </button>
+            <button onClick={handleCancel} className="px-3 py-1.5 border border-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-50">Cancel</button>
+          </div>
+          <p className="text-xs text-gray-400">US numbers: enter 10 digits and they&apos;ll be formatted automatically. International: include the + and country code.</p>
+        </div>
+      ) : (
+        <button onClick={() => setEditing(true)} className="px-3 py-1.5 border border-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-50">
+          {phoneList.length > 0 ? 'Edit' : 'Configure'}
+        </button>
+      )}
+    </div>
+  );
+}
+
 interface BrandingData {
   logo: string | null;
   favicon: string | null;
@@ -405,6 +499,15 @@ export default function AdminSetupPage() {
           <ApiKeyCard title="Contact Form Email" description="Email address to receive notifications when someone submits the contact form."
             settingKey="contact_notification_email" status={settings.contact_notification_email as SettingStatus} isEmail
             onSave={handleSave} onRemove={handleRemove} />
+        </section>
+
+        <section>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">📱 SMS Notifications</h2>
+          <p className="text-sm text-gray-500 mb-4">Requires Twilio to be configured. Alerts are sent using the From Phone number set in your Twilio credentials.</p>
+          <AlertPhonesCard
+            phones={(settings.intake_alert_phones as SettingStatus)?.value || ''}
+            onSave={(value) => handleSave('intake_alert_phones', value)}
+          />
         </section>
       </div>
     </div>
