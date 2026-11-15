@@ -54,7 +54,7 @@ const FAQ = [
   },
   {
     q: 'Which treatments qualify for financing?',
-    a: 'Financing is available for our higher-investment treatments: hair restoration (PRP, Exosome, and FUE transplant), body contouring, HIFU, hormone and wellness programs, and medical weight loss. It is not available for lower-cost single-session services.',
+    a: 'Cherry financing can be applied to any service at InfinityU — including combinations of treatments. We highlight it on our higher-investment services because that\'s where it\'s most useful, but there\'s no restriction on using it for any appointment.',
   },
 ];
 
