@@ -158,6 +158,12 @@ export default function WeightLossPage() {
           <Button href="/intake" variant="primary" size="lg">
             Start Your Journey
           </Button>
+          <p className="text-sm text-primary/60 mt-5">
+            Financing available through Cherry —{' '}
+            <a href={BUSINESS.cherryUrl} target="_blank" rel="noopener noreferrer" className="text-primary/80 hover:text-primary underline font-medium">
+              check your options →
+            </a>
+          </p>
         </div>
       </section>
     </>

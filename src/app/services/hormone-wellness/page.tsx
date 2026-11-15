@@ -168,7 +168,7 @@ export default function HormoneWellnessPage() {
         subtitle={`Common questions about ${category.name.toLowerCase()} at InfinityU.`}
         faqs={category.faqs}
       />
-      <ServiceCTA serviceName={category.name} />
+      <ServiceCTA serviceName={category.name} showFinancing />
     </>
   );
 }

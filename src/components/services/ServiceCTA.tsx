@@ -4,9 +4,10 @@ import { BUSINESS } from '@/lib/constants';
 
 interface ServiceCTAProps {
   serviceName: string;
+  showFinancing?: boolean;
 }
 
-export function ServiceCTA({ serviceName }: ServiceCTAProps) {
+export function ServiceCTA({ serviceName, showFinancing }: ServiceCTAProps) {
   return (
     <Section background="surface">
       <div className="text-center max-w-xl mx-auto">
@@ -27,6 +28,19 @@ export function ServiceCTA({ serviceName }: ServiceCTAProps) {
             Ask a Question
           </Button>
         </div>
+        {showFinancing && (
+          <p className="text-sm text-text-muted mt-5">
+            Financing available through Cherry —{' '}
+            <a
+              href={BUSINESS.cherryUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent hover:underline font-medium"
+            >
+              check your options →
+            </a>
+          </p>
+        )}
       </div>
     </Section>
   );

@@ -269,6 +269,12 @@ export default function HairTransplantPage() {
             {BUSINESS.bookingUrl && <Button href={BUSINESS.bookingUrl} variant="accent">Book Free Consultation</Button>}
             <Button href={`tel:${BUSINESS.phoneRaw}`} variant="outline">Call {BUSINESS.phone}</Button>
           </div>
+          <p className="text-sm text-text-muted mt-5">
+            Financing available through Cherry —{' '}
+            <a href={BUSINESS.cherryUrl} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline font-medium">
+              check your options →
+            </a>
+          </p>
         </div>
       </Section>
     </>

@@ -37,7 +37,7 @@ export default function BodyContouringPage() {
         subtitle="Common questions about non-invasive body contouring."
         faqs={category.faqs}
       />
-      <ServiceCTA serviceName={category.name} />
+      <ServiceCTA serviceName={category.name} showFinancing />
     </>
   );
 }

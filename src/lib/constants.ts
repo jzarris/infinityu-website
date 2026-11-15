@@ -27,6 +27,7 @@ export const BUSINESS = {
   },
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.infinity-u.com',
   bookingUrl: process.env.NEXT_PUBLIC_BOOKING_URL || '',
+  cherryUrl: 'https://pay.withcherry.com/infinityu-med-spa',
 } as const;
 
 export const NAV_LINKS = [
@@ -58,6 +59,7 @@ export const NAV_LINKS = [
   { label: 'Weight Loss', href: '/weight-loss' },
   { label: 'Our Doctor', href: '/medical-professionals' },
   // { label: 'Gallery', href: '/gallery' },
+  { label: 'Financing', href: '/financing' },
   { label: 'Contact', href: '/contact' },
   { label: 'Partner With Us', href: '/partner' },
 ] as const;

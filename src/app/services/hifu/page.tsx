@@ -37,7 +37,7 @@ export default function HifuPage() {
         subtitle="Everything you might want to know about HiFu before booking."
         faqs={category.faqs}
       />
-      <ServiceCTA serviceName={category.name} />
+      <ServiceCTA serviceName={category.name} showFinancing />
     </>
   );
 }

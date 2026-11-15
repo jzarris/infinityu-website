@@ -64,7 +64,7 @@ export const weightLossProgram = {
     },
     {
       question: 'Is the consultation covered by insurance?',
-      answer: 'Please contact our office to discuss insurance coverage and payment options. We strive to make our programs accessible and offer flexible payment plans.',
+      answer: 'Most medical weight loss treatments are not covered by insurance. We offer flexible financing through Cherry — apply in seconds, no hard credit pull to check eligibility. Visit our financing page or ask at your consultation.',
     },
     {
       question: 'What happens during the initial consultation?',
