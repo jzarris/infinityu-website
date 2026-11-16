@@ -519,6 +519,19 @@ export async function POST(request: NextRequest) {
 
         const { sent, failed } = await sendSmsToMany(alertPhones, alertBody);
         console.log(`Intake SMS alerts: ${sent} sent, ${failed} failed`);
+        await logAuditEvent({
+          action: 'intake_sms_alert_sent',
+          target: contactInfo.email,
+          ipAddress: submissionIP,
+          userAgent: submissionUA,
+          details: {
+            name: `${contactInfo.firstName} ${contactInfo.lastName}`,
+            recipients: alertPhones.length,
+            sent,
+            failed,
+          },
+          success: sent > 0,
+        });
       } else {
         console.log('No intake alert phones configured — skipping SMS alert');
       }
