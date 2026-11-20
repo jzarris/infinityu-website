@@ -42,12 +42,23 @@ export function Footer() {
             <ul className="space-y-3">
               {NAV_LINKS.map((link) => (
                 <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-white/70 hover:text-accent transition-colors text-sm"
-                  >
-                    {link.label}
-                  </Link>
+                  {link.href.startsWith('http') ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white/70 hover:text-accent transition-colors text-sm"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="text-white/70 hover:text-accent transition-colors text-sm"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

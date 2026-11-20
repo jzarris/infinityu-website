@@ -91,6 +91,15 @@ export function Header() {
                       </div>
                     )}
                   </>
+                ) : link.href.startsWith('http') ? (
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-medium text-primary hover:text-accent transition-colors py-2"
+                  >
+                    {link.label}
+                  </a>
                 ) : (
                   <Link
                     href={link.href}

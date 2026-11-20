@@ -82,6 +82,16 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
                     </div>
                   )}
                 </>
+              ) : link.href.startsWith('http') ? (
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={onClose}
+                  className="block py-3 text-primary font-medium hover:text-accent transition-colors"
+                >
+                  {link.label}
+                </a>
               ) : (
                 <Link
                   href={link.href}

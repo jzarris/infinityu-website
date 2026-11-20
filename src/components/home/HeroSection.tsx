@@ -51,6 +51,15 @@ export function HeroSection() {
               <Button href="/services" variant="outline" size="lg">
                 Explore Services
               </Button>
+              <a
+                href={BUSINESS.shopUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-medium underline underline-offset-4 hover:opacity-70 transition-opacity self-center"
+                style={{ color: 'var(--color-accent-dark)' }}
+              >
+                See our latest deals →
+              </a>
             </div>
           </div>
 
