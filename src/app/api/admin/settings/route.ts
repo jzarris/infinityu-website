@@ -68,6 +68,8 @@ export async function GET() {
         source: settings.intake_alert_phones ? 'admin' : process.env.INTAKE_ALERT_PHONES ? 'env' : null,
         value: settings.intake_alert_phones || process.env.INTAKE_ALERT_PHONES || '',
       },
+      announcement_enabled: settings.announcement_enabled === 'true',
+      announcement_html: settings.announcement_html || '',
       simulator_enabled: settings.simulator_enabled === 'true',
       simulator_typical_results: settings.simulator_typical_results ?? SIMULATOR_TYPICAL_RESULTS_PLACEHOLDER,
       simulator_max_loss_fraction: settings.simulator_max_loss_fraction ? parseFloat(settings.simulator_max_loss_fraction) : 0.2,
@@ -93,6 +95,7 @@ export async function POST(request: NextRequest) {
       'anthropic_api_key', 'resend_api_key', 'instagram_access_token', 'instagram_post_urls',
       'contact_notification_email', 'twilio_account_sid', 'twilio_auth_token',
       'twilio_verify_service_sid', 'twilio_from_phone', 'admin_notification_phone', 'intake_alert_phones',
+      'announcement_enabled', 'announcement_html',
       'simulator_enabled', 'simulator_typical_results', 'simulator_max_loss_fraction',
       'simulator_retention_days_lead', 'simulator_retention_days_patient',
     ];
@@ -102,7 +105,7 @@ export async function POST(request: NextRequest) {
 
     const settings = await getSettings();
 
-    const booleanKeys = ['simulator_enabled'];
+    const booleanKeys = ['simulator_enabled', 'announcement_enabled'];
     const numberKeys = ['simulator_retention_days_lead', 'simulator_retention_days_patient'];
     const fractionKeys = ['simulator_max_loss_fraction'];
 

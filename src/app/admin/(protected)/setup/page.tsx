@@ -311,6 +311,95 @@ function AlertPhonesCard({ phones, onSave }: { phones: string; onSave: (value: s
   );
 }
 
+function AnnouncementBarCard({
+  enabled,
+  html,
+  onSaveEnabled,
+  onSaveHtml,
+}: {
+  enabled: boolean;
+  html: string;
+  onSaveEnabled: (val: boolean) => Promise<void>;
+  onSaveHtml: (val: string) => Promise<void>;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(html);
+  const [saving, setSaving] = useState(false);
+  const [toggling, setToggling] = useState(false);
+
+  useEffect(() => { setDraft(html); }, [html]);
+
+  const handleToggle = async () => {
+    setToggling(true);
+    await onSaveEnabled(!enabled);
+    setToggling(false);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    await onSaveHtml(draft);
+    setSaving(false);
+    setEditing(false);
+  };
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
+      <div className="flex items-start justify-between">
+        <div>
+          <h3 className="font-semibold text-gray-900">Announcement Bar</h3>
+          <p className="text-sm text-gray-500">Shown at the top of every page. Supports HTML — use <code className="bg-gray-100 px-1 rounded text-xs">&lt;a href="..."&gt;</code> for links.</p>
+        </div>
+        <button
+          onClick={handleToggle}
+          disabled={toggling}
+          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${enabled ? 'bg-[#2E2865]' : 'bg-gray-200'}`}
+          aria-label={enabled ? 'Disable announcement bar' : 'Enable announcement bar'}
+        >
+          <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${enabled ? 'translate-x-6' : 'translate-x-1'}`} />
+        </button>
+      </div>
+
+      {editing ? (
+        <div className="space-y-3">
+          <textarea
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            rows={4}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-[#2E2865] focus:border-transparent resize-y"
+            placeholder={'Shop <a href="https://shop.infinity-u.com/" target="_blank">Black Friday Deals →</a>'}
+          />
+          {draft && (
+            <div className="p-3 rounded-lg bg-gray-50 border border-gray-200 text-sm">
+              <p className="text-xs text-gray-400 mb-1">Preview</p>
+              <div
+                className="[&_a]:underline [&_a]:font-semibold"
+                dangerouslySetInnerHTML={{ __html: draft }}
+              />
+            </div>
+          )}
+          <div className="flex gap-2">
+            <button onClick={handleSave} disabled={saving} className="px-3 py-1.5 bg-[#2E2865] text-white text-sm rounded-lg hover:bg-[#231f50] disabled:opacity-50 flex items-center gap-1">
+              {saving ? <RefreshCw className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />} Save
+            </button>
+            <button onClick={() => { setEditing(false); setDraft(html); }} className="px-3 py-1.5 border border-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-50">Cancel</button>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {html ? (
+            <div className="p-3 rounded-lg bg-gray-50 border border-gray-200 text-sm [&_a]:underline [&_a]:font-semibold" dangerouslySetInnerHTML={{ __html: html }} />
+          ) : (
+            <p className="text-sm text-gray-400 italic">No content set.</p>
+          )}
+          <button onClick={() => setEditing(true)} className="px-3 py-1.5 border border-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-50">
+            Edit Content
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 interface BrandingData {
   logo: string | null;
   favicon: string | null;
@@ -465,6 +554,16 @@ export default function AdminSetupPage() {
       </div>
 
       <div className="space-y-8">
+        <section>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">📢 Announcement Bar</h2>
+          <AnnouncementBarCard
+            enabled={((settings as Record<string, unknown>).announcement_enabled as boolean) === true}
+            html={((settings as Record<string, unknown>).announcement_html as string) || ''}
+            onSaveEnabled={(val) => handleSave('announcement_enabled', val ? 'true' : 'false')}
+            onSaveHtml={(val) => handleSave('announcement_html', val)}
+          />
+        </section>
+
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-4">🎨 Branding</h2>
           <p className="text-sm text-gray-500 mb-4">Upload a custom logo and favicon for your site. The logo will appear in the header next to your site name.</p>

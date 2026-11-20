@@ -12,6 +12,8 @@ export interface Settings {
   twilio_from_phone?: string;
   admin_notification_phone?: string;
   intake_alert_phones?: string;
+  announcement_enabled?: string;
+  announcement_html?: string;
   simulator_enabled?: string;
   simulator_typical_results?: string;
   simulator_max_loss_fraction?: string;
@@ -43,6 +45,8 @@ const VALID_KEYS = [
   'twilio_from_phone',
   'admin_notification_phone',
   'intake_alert_phones',
+  'announcement_enabled',
+  'announcement_html',
   'simulator_enabled',
   'simulator_typical_results',
   'simulator_max_loss_fraction',
