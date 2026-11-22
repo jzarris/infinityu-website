@@ -37,10 +37,10 @@ export function generateSiteMetadata(): Metadata {
       description: BUSINESS.description,
       images: [
         {
-          url: `${BUSINESS.url}/images/og-default.jpg`,
+          url: `${BUSINESS.url}/images/og-infinityu-v2.jpg`,
           width: 1200,
           height: 630,
-          alt: BUSINESS.legalName,
+          alt: 'InfinityU Med Spa, Huntington Beach',
         },
       ],
     },
@@ -48,7 +48,7 @@ export function generateSiteMetadata(): Metadata {
       card: 'summary_large_image',
       title: `${BUSINESS.legalName} | ${BUSINESS.address.city}, ${BUSINESS.address.state}`,
       description: BUSINESS.description,
-      images: [`${BUSINESS.url}/images/og-default.jpg`],
+      images: [`${BUSINESS.url}/images/og-infinityu-v2.jpg`],
     },
     robots: {
       index: true,

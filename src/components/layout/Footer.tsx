@@ -13,11 +13,11 @@ export function Footer() {
           <div>
             <Link href="/" className="inline-block mb-4 bg-white rounded-xl p-3">
               <Image
-                src="/images/logo.png"
+                src="/images/infinity-u-logo-transparent.png"
                 alt={BUSINESS.legalName}
-                width={600}
+                width={400}
                 height={400}
-                className="h-24 w-auto"
+                className="h-20 w-auto"
               />
             </Link>
             <p className="text-white/70 text-sm leading-relaxed mb-6">

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import {
   Playfair_Display,
   Inter,
@@ -99,6 +100,9 @@ export default function RootLayout({
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />
+        {process.env.NEXT_PUBLIC_AESTHETICIQ_WIDGET === 'true' && (
+          <Script src="https://app-staging.aestheticiq.app/api/v1/public/growth/chat/widget.js" data-aiq-chat="infinityu" strategy="afterInteractive" />
+        )}
       </body>
     </html>
   );
